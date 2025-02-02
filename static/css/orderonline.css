@@ -1,0 +1,98 @@
+/* Order Steps */
+.order-steps {
+    display: flex;
+    justify-content: center;
+    background: #ddd;
+    padding: 15px;
+    gap: 20px;
+    font-size: 18px;
+    text-align: center;
+}
+.step {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Image Slider */
+.slider {
+    width: 80%;
+    margin: 20px auto;
+}
+.slider img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* Menu Title */
+.menu-title {
+    text-align: center;
+}
+
+/* Menu Table (Grid Layout) */
+.menu-table {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    grid-template-rows: repeat(3, auto);
+    width: 100%;
+    max-width: 800px; 
+    margin: 20px auto; 
+    border: 1px solid #111111; 
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #fefefe;
+    gap: 20px; 
+}
+
+
+/* Individual Menu Box */
+.menu-box {
+    display: flex; 
+    justify-content:left;
+    border: 1px solid black; 
+    border-radius: 2px;
+    padding: 15px;
+}
+
+/* Menu Box Image */
+.menu-box img {
+    width: 150px;
+    height: 70px;
+    border-radius: 2px;
+    margin-right: 5rem;
+}
+
+/* View Menu Button */
+.menu-box .view-menu {
+    background: #99180d;
+    color: white;
+    border: none;
+    width: 120px; 
+    height: 35px; 
+    padding: 5px 10px; 
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 6%;
+}
+
+.menu-box .view-menu:hover {
+    background: #99190dea;
+}
+
+/* Responsive design for mobile view */
+@media (max-width: 768px) {
+    .menu-title {
+        text-align: center;
+    }
+    .menu-table {
+        grid-template-columns: repeat(1, 1fr); /  
+    }
+    
+    .menu-box {
+        width: 100%; 
+        
+    }
+}
+

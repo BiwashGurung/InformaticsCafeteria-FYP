@@ -1,3 +1,80 @@
-{% extends "base.html" %} {% load static %} {% block content %} 
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<head>
+  <title>Informatics Cafeteria - Menu</title>
+
+  <!-- Slick CSS for Slider -->
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"
+  />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/orderonline.css' %}" />
+</head>
+
+<!-- Order Steps -->
+<div class="order-steps">
+  <div class="step"><span class="icon">1</span> Select items from the menu</div>
+  <div class="step">
+    <span class="icon">2</span> Choose your dishes and pick-up time
+  </div>
+  <div class="step">
+    <span class="icon">3</span> Pay online or at the cafeteria counter
+  </div>
+</div>
+
+<!-- Image Slider -->
+<div class="slider">
+  <img src="../static/Images/college.jpg" alt="Food 1" />
+  <img src="../static/Images/college.jpg" alt="Food 2" />
+  <img src="../static/Images/college.jpg" alt="Food 3" />
+  <img src="../static/Images/college.jpg" alt="Food 4" />
+  <img src="../static/Images/college.jpg" alt="Food 5" />
+  <img src="../static/Images/college.jpg" alt="Food 6" />
+  <img src="../static/Images/college.jpg" alt="Food 7" />
+  <img src="../static/Images/college.jpg" alt="Food 8" />
+</div>
+
+<!-- Menu Section -->
+<h2 class="menu-title">Our Menu</h2>
+<div class="menu-table">
+  <div class="menu-box">
+    <img src="{% static 'Images/college.jpg' %}" alt="Breakfast" />
+    <button class="view-menu">View Menu</button>
+  </div>
+  <div class="menu-box">
+    <img src="{% static 'Images/appetizer.jpg' %}" alt="Appetizer" />
+    <button class="view-menu">View Menu</button>
+  </div>
+  <div class="menu-box">
+    <img src="{% static 'Images/maincourse.jpg' %}" alt="Main Course" />
+    <button class="view-menu">View Menu</button>
+  </div>
+  <div class="menu-box">
+    <img src="{% static 'Images/snacks.jpg' %}" alt="Snacks" />
+    <button class="view-menu">View Menu</button>
+  </div>
+  <div class="menu-box">
+    <img src="{% static 'Images/desserts.jpg' %}" alt="Desserts" />
+    <button class="view-menu">View Menu</button>
+  </div>
+  <div class="menu-box">
+    <img src="{% static 'Images/beverage.jpg' %}" alt="Beverage" />
+    <button class="view-menu">View Menu</button>
+  </div>
+</div>
+
+<!-- jQuery & Slick Carousel -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
+<script src="{% static 'javascript/slider.js' %}"></script>
 
 {% endblock content %}

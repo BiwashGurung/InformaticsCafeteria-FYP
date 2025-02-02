@@ -302,8 +302,14 @@
   }
 
   /* Responsive for Hero section */
-  @media (max-width: 700px) {
-    .text-box h1 {
+  @media (max-width: 768px) {
+
+  .hero-section {
+      background-attachment: scroll;
+      background-size: cover; 
+  }
+   
+  .text-box h1 {
       font-size: 20px;
     }
   }
