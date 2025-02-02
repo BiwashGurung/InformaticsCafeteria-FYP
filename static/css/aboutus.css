@@ -1,0 +1,216 @@
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .background-image {
+        background-image: url(../Images/about.png);
+        position: relative;
+        height: calc(100vh - 88px);
+        width: 100%;
+        background-position: center;
+        background-size: cover;
+        background-attachment: fixed;
+      }
+
+      .jumbotron {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 50px;
+        color: #fff;
+        height: 100%;
+        width: 50%;
+      }
+      .glass-container {
+        background: linear-gradient(
+          to bottom right,
+          rgba(0, 0, 0, 0.5),
+          rgba(0, 0, 0, 0.8)
+        );
+        backdrop-filter: blur(5px);
+        height: 100%;
+        width: 100%;
+        padding: 50px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 5s ease forwards;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .about-container {
+        width: 100%;
+        min-height: 100vh;
+        background-color: #fff;
+      }
+
+      .flex-2 {
+        width: 80%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: auto;
+        padding: 100px 0px;
+      }
+      .about-image {
+        width: 40%;
+      }
+
+      .about-image img {
+        width: 100%;
+        height: auto;
+        margin-left: 5rem;
+      }
+
+      .about-content {
+        width: 60%;
+      }
+
+      .about-content h1 {
+        color: red;
+        font-size: 40px;
+        font-weight: 600;
+      }
+      .about-content h2 {
+        color: 2a2a2a;
+        margin-top: 30px;
+        font-size: 40px;
+      }
+
+      .about-content p {
+        font-size: 22px;
+        line-height: 1.5;
+        color: #7e7e7e;
+        margin-top: 30px;
+        text-align: justify;
+      }
+      .about-content a {
+        text-decoration: none;
+        font-size: 22px;
+        display: inline-block;
+        background-color: transparent;
+        padding: 4px;
+        letter-spacing: 1.5px;
+        color: #111;
+        border: 1px solid;
+        border-radius: 5px;
+        margin-top: 30px;
+      }
+
+      .about-content a:hover {
+        background-color: #111;
+        color: #fff;
+        transition: 0.2s ease;
+      }
+
+      @media screen and (max-width: 768px) {
+        .flex-2 {
+          width: 100%;
+          flex-direction: column;
+          padding: 45px 0px;
+        }
+        .about-content {
+          width: 80%;
+          display: block;
+          margin: auto;
+        }
+        .about-content h1 {
+          font-size: 35px;
+        }
+        .about-content h2 {
+          font-size: 30px;
+        }
+        .about-content p {
+          font-size: 19px;
+          text-align: justify;
+        }
+        .about-content a {
+          font-size: 17px;
+          padding: 8px 8px;
+        }
+        .about-image {
+          width: 80%;
+          margin: 40px auto;
+          display: block;
+        }
+      }
+      /*************Our Team Section  *************/
+
+      #ourTeam-Container {
+        margin-top: 1rem;
+        padding: 25px;
+        width: 100%;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        background-color: #fff;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 35px;
+      }
+      #ourTeam-Container h2 {
+        grid-column: 1 / -1;
+        text-align: center;
+        margin: 2rem 0;
+        font-weight: 200;
+      }
+      .ourTeamDetails {
+        position: relative;
+        background-color: #d8d2d299;
+        border-radius: 6px;
+      }
+
+      .ourTeamDetails img {
+        max-width: 100%;
+        padding: 1.3rem;
+        height: auto;
+        border-radius: 5px 5px 0 0;
+      }
+
+      .ourTeamDetails:hover {
+        cursor: pointer;
+        opacity: 0.5;
+        transition: 0.5s;
+      }
+
+      .ourTeam-description {
+        padding: 20px;
+      }
+
+      .ourTeam-description h3 {
+        font-size: 28px;
+        margin-bottom: 6px;
+      }
+
+      .ourTeam-description p {
+        color: #222;
+        line-height: 1.5;
+      }
+
+      /* Responsive for our team container */
+      @media screen and (max-width: 800px) {
+        #ourTeam-Container {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media screen and (max-width: 600px) {
+        #ourTeam-Container {
+          grid-template-columns: 1fr;
+        }
+      }

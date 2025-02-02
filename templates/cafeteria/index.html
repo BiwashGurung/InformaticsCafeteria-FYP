@@ -1,0 +1,209 @@
+{% extends "base.html" %} 
+{% block content %}
+{% load static %}
+
+  <head>
+    <title>Informatics Cafeteria - Home</title>
+  </head>
+      <section id="hero">
+        <div class="bg">
+          <div class="hero-container">
+            <div class="hero-text">
+              <h1>Welcome to Informatics Cafeteria</h1>
+              <p>Delicious meals just a click away!</p>
+              <a href="menu.html" class="btn btn-transparent">Order Online</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about-banner">
+        <div class="banner">
+          <div class="banner-content">
+            <h2>
+              &nbsp; &nbsp; &nbsp;We cook the finest <br />
+              Food for your college.
+            </h2>
+
+            <p>
+              High-quality food at an affordable price, served fresh and hot.
+            </p>
+            <a href="aboutus.html" class="btn btn-danger"
+              >Discover more about us</a
+            >
+          </div>
+
+          <div class="border-banner">
+            <div class="border-banner-row">
+              <div class="img">
+                <img src="Images/bannerImg1.png" alt="" />
+                <p>We use natural ingredients for our freshly baked food</p>
+              </div>
+              <div class="img">
+                <img src="Images/bannerImg2.png" alt="" />
+                <p>Employ highly experienced cooks <br />and staff</p>
+              </div>
+            </div>
+            <div class="border-banner-row">
+              <div class="img">
+                <img src="Images/bannerImg3.png" alt="" />
+                <p>Prepare orders quickly</p>
+              </div>
+              <div class="img">
+                <img src="Images/bannerImg4.png" alt="" />
+                <p>Offer easy pickup options</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="featuredMenu-Container">
+        <h1>Featured Menu</h1>
+        <div class="featuredMenu">
+          <span class="top-sales">Top Sales</span>
+          <img src="../static/Images/about.png" alt="" />
+          <div class="menu-content">
+            <h3>Chicken Roll</h3>
+            <price>rs 120</price>
+            <p>Lorem ipsum dolor sit amet.</p>
+          </div>
+        </div>
+        <div class="featuredMenu">
+          <img src="Images/about.png" alt="" />
+          <div class="menu-content">
+            <h3>Featured Menu 2</h3>
+            <p>Lorem ipsum dolor sit amet.</p>
+          </div>
+        </div>
+        <div class="featuredMenu">
+          <img src="Images/bannerImg1.png" alt="" />
+          <div class="menu-content">
+            <h3>Featured Menu 3</h3>
+            <p>Lorem ipsum dolor sit amet.</p>
+          </div>
+        </div>
+        <div class="featuredMenu">
+          <img src="Images/bannerImg1.png" alt="" />
+          <div class="menu-content">
+            <h3>Featured Menu 4</h3>
+            <p>Lorem ipsum dolor sit amet.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Call to Action -->
+      <div class="callToAction">
+        <div class="text-center">
+          <div class="row justify-content-center">
+            <div class="col-md-3 px-3 border-line">
+              <p class="text-black fw-bold">Fresh Ingredients</p>
+              <p class="small mt-2 text-black">
+                We prioritize freshness, quality, and nutrition in every dish we serve.
+              </p>
+            </div>
+            <div class="col-md-3 px-3 border-line">
+              <p class="text-black fw-bold">Convenient Ordering</p>
+              <p class="small mt-2 text-black">
+                Place orders and make payments online with our user-friendly platform.
+              </p>
+            </div>
+            <div class="col-md-3 px-3 border-line">
+              <p class="text-black fw-bold">Delicious Meals</p>
+              <p class="small mt-2 text-black">
+                Enjoy a variety of mouthwatering dishes prepared with care and precision
+              </p>
+            </div>
+            <div class="col-md-3 px-3">
+              <p class="text-black fw-bold">Fast Service</p>
+              <p class="small mt-2 text-black">
+                Experience quick and efficient service that gets your food to you without delay.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Call to Action -->
+
+      <!-- Food Gallery-->
+      <section id="gallery">
+        <h1>Food Gallery</h1>
+        <div class="food-gallery">
+          <!-- Left Image -->
+          <img class="side-img" src="Images/about.png" alt="" />
+          <!-- Center Column -->
+          <div class="center-img-container">
+            <img class="center-img" src="Images/Carousel.png" alt="" />
+            <img class="center-img" src="Images/Carousel.png" alt="" />
+          </div>
+          <!-- Right Image -->
+          <img class="side-img" src="Images/about.png" alt="" />
+        </div>
+      </section>
+      <!-- Food Gallery-->
+
+      <!-- Order Process Section-->
+      <section id="order-process">
+        <h1>How to Order</h1>
+        <div class="order-steps">
+          <div class="steps">
+            <img src="Images/signup.png" alt="Sign In" />
+            <div class="Process-1">
+              <h2>1. Sign In</h2>
+              <p>
+                Sign in with your college-provided email to access personalized
+                features and order history.
+              </p>
+            </div>
+          </div>
+          <div class="steps">
+            <img src="Images/browsemenu.png" alt="Browse Menu" />
+            <div class="Process-2">
+              <h2>2. Browse Menu</h2>
+              <p>
+                Browse through the menu items listed on the website.
+              </p>
+            </div>
+          </div>
+          <div class="steps">
+            <img src="Images/placeanorder.png" alt="Place Order" />
+            <div class="Process-3">
+              <h2>3. Place Order</h2>
+              <p>
+                Add items to your cart and review your selections.
+              </p>
+            </div>
+          </div>
+          <div class="steps">
+            <img src="Images/paymentmethod.png" alt="Payment Methods" />
+            <div class="Process-4">
+              <h2>4. Payment Methods</h2>
+              <span>Choose your payment method:</span>
+                <ul>
+                  <li>Online Payment: Pay online by scanning the provided QR code.</li>
+                  <li>Cash Payment: Pay cash directly at the canteen counter.</li>
+                </ul>
+            </div>
+          </div>
+          <div class="steps">
+            <img src="Images/pickup.png" alt="Pick Up" />
+            <div class="Process-5">
+              <h2>5. Pick Up</h2>
+              <p>
+                Pick up your order from the canteen at the specified time.
+              </p>
+            </div>
+          </div>
+        </div>
+        </div>
+      </section>
+      <!--End of Order Description Section-->
+ 
+{% endblock content %}
+
+
+ 
+   
+
+    
+   

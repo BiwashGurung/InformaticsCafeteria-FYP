@@ -1,0 +1,103 @@
+{% extends "base.html" %} {% block content %} {% load static %}
+<head>
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="{% static 'css/registration.css' %}"
+  />
+  <title>Informatics Cafeteria - SignUp</title>
+</head>
+
+<div class="reg-container">
+  <!-- Left side image -->
+  <div class="reg-left">
+    <img src="../static/Images/Sign.png" alt="Image" />
+  </div>
+
+  <!-- Right side form box -->
+  <div class="reg-right">
+    <div class="form-container">
+      <h2 class="title">SignUp</h2>
+
+      {% if messages %}
+      <div>
+        {% for message in messages %}
+        <div
+          class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
+        >
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form action="" method="POST" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <!-- User Name -->
+        <label for="username">User Name</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Enter your user name"
+          required
+        />
+
+        <!-- Email -->
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Enter your email"
+          required
+        />
+
+        <!-- Phone Number -->
+        <label for="phone">Phone Number</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          placeholder="Enter your phone number"
+          required
+        />
+        <div id="phone-error" class="error"></div>
+
+        <!-- Password -->
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter your password"
+          required
+        />
+
+        <!-- Confirm Password -->
+        <label for="confirm_password">Confirm Password</label>
+        <input
+          type="password"
+          id="confirm_password"
+          name="confirm_password"
+          placeholder="Confirm your password"
+          required
+        />
+        <div id="password-error" class="error"></div>
+
+        <!-- Signup Button -->
+        <button type="submit" class="signup-btn">Sign Up</button>
+      </form>
+      <div class="footer">
+        <hr />
+        <p>
+          Already have an account?
+          <a href="{% url 'login' %}" class="login-link">Login Now</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'javascript/registration.js' %}"></script>
+{% endblock content %}

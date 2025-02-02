@@ -1,0 +1,67 @@
+{% extends "base.html" %} {% block content %} {% load static %}
+
+<head>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}" />
+
+  <title>Informatics Cafeteria - Login</title>
+</head>
+
+
+<div  id="login" class="login-container">
+  <div class="login-box">
+    <h2>Login</h2>
+    {% if messages %}
+    <div>
+      {% for message in messages %}
+      <div
+        class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
+      >
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+      <label for="username">Username</label>
+      <input
+        type="text"
+        id="username"
+        placeholder="Enter your username"
+        name="username"
+        required
+      />
+
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Enter your password"
+        name="password"
+        required
+      />
+
+      <div class="options">
+        <label>
+          <input type="checkbox" name="remember_me" /> Remember me?
+        </label>
+        <a href="{% url 'password_reset' %}" class="forgot-password"
+          >Forgot password?</a
+        >
+      </div>
+
+      <button type="submit" class="login-button">Login</button>
+    </form>
+
+    <hr />
+
+    <p class="signup-text">
+      Don’t have an account?
+      <a href="{% url 'signup' %}" class="signup-link">Sign Up Now</a>
+    </p>
+  </div>
+</div>
+
+
+{% endblock content %}

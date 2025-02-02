@@ -1,0 +1,187 @@
+/* Her osection */
+.hero-section {
+    height: calc(70vh - 64px);
+    width: 100%;
+    background-image: linear-gradient(
+        rgba(4, 9, 30, 0.7),
+        rgba(4, 9, 30, 0.7)
+      ),
+      url(../Images/canteen.jpg);
+    background-position: center;  
+    background-size: cover;
+    position: relative;
+    background-attachment: fixed;
+  }
+  .text-box {
+    width: 90%;
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .text-box h1 {
+    font-size: 42px;
+  }
+
+  .text-box p {
+    margin: 10px 0 40px;
+    font-size: 14px;
+    color: #fff;
+  }
+
+  
+/* Opening hour section */
+.hour-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+p {
+    font-size: 1rem;
+
+}
+
+.hours, .contact-info {
+    margin-top: 15px;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* MAP section */
+.map-container {
+    text-align: center;
+    margin: 50px auto;
+    max-width: 90%;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.map iframe {
+    width: 100%;
+    max-width: 1300px;
+    height: 450px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+
+/* FAQ section */
+.faq-container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.faq-container h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.faq {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 15px;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.faq-question:hover {
+    background-color: #f7f7f7;
+}
+
+.faq-answer {
+    padding: 15px;
+    font-size: 1rem;
+    display: none;
+    text-align: left;
+    border-top: 1px solid #ddd;
+}
+
+.arrow {
+    transition: transform 0.3s ease-in-out;
+   
+}
+
+/* Rotate arrow when active in FAQ */
+.faq.active .arrow {
+    transform: rotate(180deg);
+}
+
+
+
+/* Mobile Responsive  of FAQ section */
+@media (max-width: 600px) {
+    .faq-container {
+        width: 90%;
+    }
+
+    .faq-question {
+        font-size: 1rem;
+    }
+}
+
+
+/* Mobile Responsive for opening hour section */
+@media (max-width: 600px) {
+    .hour-container {
+        padding: 15px;
+        width: 90%;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    p, .hours {
+        font-size: 0.95rem;
+    }
+}
+
+/* Mobile Responsive for map section */
+@media (max-width: 768px) {
+    .map-container {
+        max-width: 100%;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .map iframe {
+        height: 300px;
+    }
+}

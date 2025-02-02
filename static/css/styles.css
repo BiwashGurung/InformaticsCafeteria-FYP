@@ -1,0 +1,682 @@
+
+/* Import Google Font */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+/* Global Styles */
+* {
+margin: 0px;
+padding: 0px;
+box-sizing: border-box;
+font-family: "Poppins", sans-serif;
+}
+
+body {
+background-color: #fff;
+}
+
+/**************************** Nav BAr Css Start From Here *******************/
+nav.navbar {
+    background-color: #1b1b1bf9 !important; 
+    /* This is for For Safari Browser */
+    position: -webkit-sticky ; 
+    position: sticky; 
+    top: 0;
+    z-index: 1; 
+  }
+
+
+  /*For   Mobile  Navbar Toggler Icon (Hamburger menu) */
+.navbar-toggler i {
+    color: white !important; 
+    font-size: 1.5rem; 
+}
+
+/*For   Mobile  Close Button (X icon in offcanvas) */
+.offcanvas .lni-cross-circle {
+    color: white !important;
+    font-size: 1.8rem; 
+}
+
+/*For  Mobile Navigation Offcanvas Styling */
+.offcanvas {
+    background-color: #1b1b1bf9 !important; 
+}
+  
+/* Styling for images in the navbar */
+img {
+    max-width: 150px;
+    width: 100%;
+}
+  
+/* Styling Navigation link */
+.nav-link {
+    font-weight: 700;
+    color: #fff;
+}
+  
+/* Hover effect for nav links */
+.nav-link:hover {
+    color: #1729ea;
+}
+  
+/* Styling for logged-in user text */
+.logged-in-user {
+    font-weight: bold;
+    background: linear-gradient(
+      to right,
+      #9a5916,
+      #e4b04d,
+      #fff1a3,
+      #e7b14f,
+      #ae6f27,
+      #f8c65d
+    );
+    background-clip: text;
+    color: transparent; 
+     /* For Safari and older WebKit browsers */
+    -webkit-background-clip: text;
+}
+
+  
+  
+  
+/* Order Online Button Styles */
+.order-btn {
+    border: 1px solid #111;
+    border-radius: 16px;
+    font-weight: 400;
+    padding: 3px 5px;
+    display: flex;
+    align-items: center;
+    background-color: #ffff00;
+    color: #000;
+}
+  
+/* Styling Icon in order button */
+.order-btn .lni-cart {
+    margin-right: 8px;
+    font-size: 1.2rem;
+}
+  
+/* Hover effect for order button */
+.order-btn:hover {
+    background-color: rgb(160, 231, 18);
+    color: #090909;
+}
+
+/* Highlighting active navigation link */
+.nav-link.active {
+    color: #99180d !important;  
+    font-weight: 900; 
+}
+  
+
+ /**************************** Nav BAr Css ENDS From Here *******************/ 
+  
+
+/**************************** Crousel(Hero Section) Start From Here *******************/
+
+/* Background container for the hero section */
+.bg {
+height: 700px;
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+}
+
+/* Background image blur effect */
+.bg::before {
+content: "";
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-image: url(../Images/Carousel.png);
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+background-attachment: fixed;
+filter: blur(10px);
+}
+
+/* Hero text container */
+.hero-container {
+text-align: center;
+color: #fff;
+position: relative;
+margin-top: -1%;
+}
+
+.hero-text h1,
+.text p {
+margin-bottom: 20px;
+}
+
+/* Transparent button styles */
+.btn-transparent {
+background-color: transparent;
+border-radius: 0;
+border: 1px solid #4d32d2;
+color: #fff;
+padding: 10px 20px;
+text-decoration: none;
+transition: background-color 0.2s ease-in;
+}
+
+.btn-transparent:hover {
+background-color: #111;
+border: 1px solid #fff;
+}
+
+/*************** About Banner  ************/
+
+/* About section banner layout */
+#about-banner {
+display: flex;
+background-color: #fff;
+padding: 20px;
+margin: 30px;
+border: 1px solid #fff;
+border-radius: 4px;
+box-sizing: border-box;
+}
+
+.banner {
+display: flex;
+align-items: center;
+height: 400px;
+}
+
+/* Text content area for banner */
+.banner-content {
+flex: 1;
+max-width: 70%;
+padding-right: 20px;
+box-sizing: border-box;
+}
+
+.banner-content h2 {
+margin-top: -10%;
+font-weight: 600;
+font-size: 3rem;
+}
+
+.banner-content p {
+color: #af9d9d;
+font-weight: 400;
+font-size: 1.9rem;
+margin-bottom: 20px;
+}
+
+/* Styles for 'Discover more' button */
+.btn-danger {
+background-color: #ff0000;
+color: #fff;
+margin: 1rem 5rem;
+padding: 8px;
+border: 2px solid #111;
+border-radius: 16px;
+font-size: 12px;
+}
+
+.btn-danger:hover {
+background-color: #c30518;
+border: 2px solid #111;
+}
+
+.border-banner {
+flex: 1;
+display: flex;
+padding: 1.5rem;
+flex-direction: column;
+border: 1px solid #111;
+border-radius: 20px;
+box-sizing: border-box;
+max-width: 100%;
+overflow: hidden;
+}
+
+/* Row layout for border boxes */
+.border-banner-row {
+display: flex;
+justify-content: space-between;
+margin-top: 10px;
+margin-bottom: 10px;
+gap: 10px;
+}
+
+/* Styling Individual boxes within the row */
+.border-banner-row div {
+flex: 1;
+text-align: center;
+box-sizing: border-box;
+overflow: hidden;
+padding: 10px;
+max-width: 100%;
+}
+
+/* Image inside the boxes */
+.border-banner-row img {
+max-width: 100px;
+height: auto;
+display: block;
+margin: 0 auto;
+}
+
+/* Text inside the boxes */
+.border-banner-row p {
+display: block;
+margin: 5px auto;
+white-space: normal;
+max-width: 100%;
+}
+
+/************* Featured Menu *************/
+
+/* Styling Featured menu container  */
+#featuredMenu-Container {
+margin-top: 1rem;
+padding: 25px;
+width: 100%;
+border: 1px solid #fff;
+border-radius: 4px;
+background-color: #fff;
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+grid-gap: 35px;
+}
+
+/* Centered heading for featured menu */
+#featuredMenu-Container h1 {
+grid-column: 1 / -1;
+text-align: center;
+margin: 2rem 0;
+font-weight: 200;
+}
+
+.featuredMenu {
+position: relative;
+background-color: #d8d2d299;
+border-radius: 6px;
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Images in menu items */
+.featuredMenu img {
+max-width: 100%;
+padding: 1.3rem;
+height: auto;
+border-radius: 5px 5px 0 0;
+}
+.featuredMenu:hover {
+cursor: pointer;
+opacity: 0.5;
+transition: 0.5s;
+}
+
+/* Styling 'Top Sales' badge on menu items */
+.top-sales {
+position: absolute;
+background-color: #ff0000;
+color: white;
+padding: 5px 10px;
+font-size: 0.9rem;
+font-weight: bold;
+border-radius: 4px;
+border: 1px solid #111;
+}
+/* Content inside menu items */
+.menu-content {
+padding: 20px;
+}
+
+.menu-content h3 {
+font-size: 28px;
+margin-bottom: 6px;
+}
+
+.menu-content p {
+color: #222;
+line-height: 1.5;
+}
+
+/******** Call to Action ***********/
+.callToAction {
+max-width: 100%;
+margin-top: 1rem;
+border-radius: 4px;
+background-color: #fff;
+padding: 10px;
+}
+
+.callToAction .border-line {
+border-right: 1px solid #5e5d5d9f;
+}
+
+/* Food Gallery */
+#gallery,
+.food-gallery {
+display: flex;
+margin-top: 1rem;
+max-width: 100%;
+width: 100%;
+padding: 0.5rem;
+justify-content: center;
+align-items: center;
+flex-wrap: wrap;
+background-color: #fff;
+gap: 20px;
+border: 1px solid #fff;
+border-radius: 4px;
+}
+#gallery h1 {
+font-weight: 200;
+}
+#gallery img {
+border: 2px solid #000;
+}
+
+.center-img-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+flex: 1 1 100%;
+max-width: 600px;
+gap: 15px;
+}
+
+.side-img {
+flex: 1 1 45%;
+max-width: 200px;
+height: 250px;
+object-fit: cover;
+margin: 0 -13%;
+}
+
+.center-img {
+width: 100%;
+height: 200px;
+object-fit: cover;
+padding: 10px;
+}
+
+.food-gallery img:hover {
+cursor: pointer;
+opacity: 0.5;
+transition: 0.5s;
+}
+
+/*************** Order Process *********************/
+#order-process,
+.order-steps {
+position: relative;
+display: flex;
+margin-top: 1rem;
+max-width: 100%;
+width: 100%;
+padding: 0.5rem;
+justify-content: center;
+align-items: center;
+flex-wrap: wrap;
+background-color: #fff;
+gap: 20px;
+border: 1px solid #fff;
+border-radius: 4px;
+}
+
+#order-process h1 {
+font-weight: 200;
+margin-top: 1rem;
+}
+
+.steps {
+display: flex;
+width: 90%;
+border: 1px solid #af9d9d;
+background-color: #f6f4f4;
+border-radius: 4px;
+margin: 5px;
+}
+
+.steps img {
+max-width: 150px;
+height: auto;
+padding: 1rem;
+}
+
+.steps h2 {
+flex-direction: column;
+display: flex;
+font-size: 1.5rem;
+color: #1729ea;
+font-weight: 500;
+margin-top: 20px;
+}
+.steps p {
+margin-top: 0.2rem;
+}
+
+/* Footer */
+footer {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 25px 100px;
+    background-color: #1b1b1bf9;
+    margin-top: 1rem;
+}
+
+footer .footer-holder {
+width: 100%;
+display: grid;
+grid-template-columns: 2fr 1fr 1fr 1fr;
+grid-gap: 20px;
+}
+
+.footer-aboutus h2 {
+position: relative;
+color: #ffffff;
+font-weight: 600;
+margin-bottom: 15px;
+}
+
+.footer-aboutus p {
+text-align: justify;
+color: #b0b0b0;
+}
+
+.footer-aboutus .section-links {
+margin-top: 20px;
+display: grid;
+grid-template-columns: repeat(4, 50px);
+}
+
+.footer-aboutus .section-links li {
+list-style: none;
+}
+
+.footer-aboutus .section-links li a {
+display: inline-block;
+width: 36px;
+height: 36px;
+/* background: #333; */
+display: grid;
+align-content: center;
+justify-content: center;
+text-decoration: none;
+}
+/* Adding background color and hover effects for icons in footer */
+
+/* For Instagram */
+footer .footer-aboutus .section-links li a .lni-instagram-original {
+background: linear-gradient(45deg, #833ab4, #fd1d1d, #f77737, #e1306c);
+color: #fff;
+font-size: 30px;
+border-radius: 7px;
+}
+footer .footer-aboutus .section-links li a .lni-instagram-original:hover {
+background: linear-gradient(45deg, #833ab4ce, #fd1d1db9, #f777379c, #e1306c);
+}
+
+/* For Facebook */
+footer .footer-aboutus .section-links li a .lni-facebook-original {
+background-color: #1877f2;
+color: white;
+font-size: 30px;
+border-radius: 2px;
+}
+footer .footer-aboutus .section-links li a .lni-facebook-original:hover {
+background-color: #1876f2d1;
+}
+
+/* For Website */
+footer .footer-aboutus .section-links li a .lni-website {
+margin-top: 0.5rem;
+color: #ff0000;
+font-size: 30px;
+}
+footer .footer-aboutus .section-links li a .lni-website:hover {
+color: #de0303c7;
+}
+
+/* For Youtube */
+footer .footer-aboutus .section-links li a .lni-youtube {
+color: #ff0000;
+font-size: 30px;
+}
+footer .footer-aboutus .section-links li a .lni-youtube:hover {
+color: #ff0000ab;
+}
+
+footer .footer-holder .footer-quicklinks {
+position: relative;
+color: #ffffff;
+}
+
+footer .footer-holder .footer-quicklinks ul li {
+list-style: none;
+}
+
+footer .footer-holder .footer-quicklinks ul li a {
+color: #b0b0b0;
+text-decoration: none;
+margin-bottom: 10px;
+display: inline-block;
+}
+
+footer .footer-holder .footer-contact {
+    color: #ffffff;
+    font-size: 18px;
+}    
+    
+footer .footer-holder .footer-contact .info {
+position: relative;
+}
+footer .footer-holder .footer-contact .info li {
+display: grid;
+grid-template-columns: 30px 1fr;
+margin-bottom: 16px;
+}
+
+footer .footer-holder .footer-contact .info li span {
+color: #b0b0b0;
+font-size: 20px;
+}
+
+footer .footer-holder .footer-contact .info li a {
+color: #b0b0b0;
+text-decoration: none;
+}
+
+.copyrightText { 
+width: 100%;
+height: 10px;
+margin: 40px;
+padding-top: 15px;
+text-align: center;
+color: #b0b0b0;
+border-top: 1px solid #b0b0b0;
+}
+
+/* Whats app icon CSS  */
+.whatsapp_float {
+position: fixed;
+width: 60px;
+height: 60px;
+bottom: 20px;
+right: 40px;
+background-color: #25d366;
+color: #fff;
+border-radius: 50px;
+text-align: center;
+font-size: 30px;
+box-shadow: 2px 2px 3px #999;
+z-index: 100;
+}
+.whatsapp-icon {
+margin-top: 16px;
+}
+
+
+/* Fallback for browsers that do not support text clipping */
+@supports not (--css: variables) {
+    .logged-in-user {
+      color: #ffcc00; 
+    }
+  }
+  
+
+/*Whatsapp  for mobile */
+@media screen and (max-width: 767px) {
+.whatsapp-icon {
+margin-top: 10px;
+}
+.whatsapp_float {
+width: 40px;
+height: 40px;
+bottom: 20px;
+right: 10px;
+font-size: 22px;
+}
+}
+
+/*For responsive Footer  */
+@media (max-width: 991px) {
+footer {
+padding: 40px;
+}
+footer .footer-holder {
+width: 100%;
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+grid-gap: 20px;
+}
+
+.copyrightText {
+padding: 20px 40px 30px;
+}
+}
+
+@media (max-width: 768px) {
+footer .footer-holder {
+width: 100%;
+display: grid;
+grid-template-columns: repeat(1, 1fr);
+grid-gap: 20px;
+}
+}
+
+/* Responsive for feature menu home page */
+@media screen and (max-width: 800px) {
+#featuredMenu-Container {
+grid-template-columns: repeat(2, 1fr);
+}
+}
+@media screen and (max-width: 600px) {
+#featuredMenu-Container {
+grid-template-columns: repeat(2, 1fr);
+}
+}

@@ -1,0 +1,104 @@
+{% extends "base.html" %} {% block content %} {% load static %}
+
+<head>
+  <title>Informatics Cafeteria - Contact Us</title>
+  <link rel="stylesheet" href="{% static 'css/contactus.css' %}" />
+</head>
+
+<section class="hero-section">
+  <div class="text-box">
+    <h1>Contact Us</h1>
+    <p>Refreshing Breaks for Brighter Ideas and Sharper Minds.</p>
+  </div>
+</section>
+<div class="hour-container">
+  <h1>WE ARE OPEN</h1>
+  <p>
+    Bringing You the Taste of Excellence, Right in the Heart of Informatics
+    College Pokhara.
+  </p>
+  <div class="hours">
+    <p>Sun - Fri 07:00 AM - 15:00 PM</p>
+    <p><strong>Saturday Closed</strong></p>
+  </div>
+</div>
+
+<div class="hour-container">
+  <h1>Contact Us</h1>
+  <div class="contact-info">
+    <p><strong>Contact Information</strong></p> 
+    <p>Email: info@informaticscanteen.com</p>
+    <p>Phone: +977-123-456789</p>
+    <p>Address: Informatics College Pokhara, Nepal Block</p>
+  </div>
+</div>
+
+<div class="map-container">
+  <h1>Find Us</h1>
+  <p>Our Informatics Cafeteria is in front of the parking area.</p>
+  <div class="map">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3533.5241073189183!2d84.000375!3d28.214822!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39959434ad2a5bf9%3A0xf4e7f9c749f63113!2sInformatics%20College%20Pokhara!5e0!3m2!1sen!2snp!4v1706798706000!5m2!1sen!2snp"
+      width="100%"
+      height="450"
+      style="border: 0"
+      allowfullscreen=""
+      loading="lazy"
+    >
+    </iframe>
+  </div>
+</div>
+
+<div class="faq-container">
+  <h1>Frequently Asked Questions (FAQ)</h1>
+  <div class="faq">
+    <button class="faq-question">
+      What are the cafeteria's opening hours? <span class="arrow">▼</span>
+    </button>
+    <div class="faq-answer">
+      <p>
+        We are open from Sunday to Friday, 07:00 AM - 03:00 PM. We are closed on
+        Saturdays.
+      </p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-question">
+      Do you offer vegetarian options? <span class="arrow">▼</span>
+    </button>
+    <div class="faq-answer">
+      <p>
+        Yes! We have a variety of vegetarian meals and snacks available every
+        day.
+      </p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-question">
+      Is online ordering available? <span class="arrow">▼</span>
+    </button>
+    <div class="faq-answer">
+      <p>
+        Currently, we do not offer online ordering, but we are working on it!
+      </p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-question">
+      Where is the cafeteria located? <span class="arrow">▼</span>
+    </button>
+    <div class="faq-answer">
+      <p>
+        Our cafeteria is located in front of the parking area at Informatics
+        College Pokhara.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'javascript/faq.js'%} "></script>
+
+{% endblock content %}
