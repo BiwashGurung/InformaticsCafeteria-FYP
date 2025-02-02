@@ -16,6 +16,18 @@
 }
 
 
+.image-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .image-row img {
+    flex: 1 1 calc(25% - 10px); 
+    max-width: calc(25% - 10px);
+    margin: 5px 5px 30px 5px;
+    height: 120px; 
+  }
 
 
 
@@ -81,6 +93,21 @@
 }
 
 /* Responsive design for mobile view */
+
+@media (max-width: 768px) {
+    .image-row img {
+      flex: 1 1 calc(50% - 10px); 
+      max-width: calc(50% - 10px);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .image-row img {
+      flex: 1 1 100%; 
+      max-width: 100%;
+    }
+  }
+
 @media (max-width: 768px) {
     .menu-title {
         text-align: center;

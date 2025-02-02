@@ -2,9 +2,6 @@
 
 <head>
   <title>Informatics Cafeteria - Menu</title>
-
- 
-  <!-- Custom CSS -->
   <link rel="stylesheet" href="{% static 'css/orderonline.css' %}" />
 </head>
 
@@ -21,7 +18,13 @@
   </div>
 </div>
 
-
+<!-- Image Row -->
+<div class="image-row">
+  <img src="{% static 'Images/college.jpg' %}" alt="Image 1" />
+  <img src="{% static 'Images/canteen.jpg' %}" alt="Image 2" />
+  <img src="{% static 'Images/college.jpg' %}" alt="Image 3" />
+  <img src="{% static 'Images/canteen.jpg' %}" alt="Image 4" />
+</div>
 
 <!-- Menu Section -->
 <h2 class="menu-title">Our Menu</h2>
@@ -51,6 +54,5 @@
     <button class="view-menu">View Menu</button>
   </div>
 </div>
-
 
 {% endblock content %}
