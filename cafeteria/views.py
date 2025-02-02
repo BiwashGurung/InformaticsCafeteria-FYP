@@ -73,3 +73,6 @@ def AboutUsPage(request):
 
 def ContactUsPage(request):
     return render(request, 'cafeteria/contactus.html')
+
+def OrderOnline(request):
+    return render(request, 'cafeteria/orderonline.html')

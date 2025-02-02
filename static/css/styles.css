@@ -9,6 +9,10 @@ padding: 0px;
 box-sizing: border-box;
 font-family: "Poppins", sans-serif;
 }
+/* For better smoothess also to enhance user experience */
+html {
+  scroll-behavior: smooth;
+}
 
 body {
 background-color: #fff;
