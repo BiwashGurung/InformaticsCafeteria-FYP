@@ -1,53 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Informatics Cafeteria - Admin Login</title>
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'admin_css/admin_login.css' %}" />
-</head>
-<body>
-<div id="login" class="login-container">
-  <div class="login-box">
-    <h2>Login</h2>
-    {% if messages %}
-    <div>
-      {% for message in messages %}
-      <div
-        class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
-      >
-        {{ message }}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'admin_css/admin_login.css' %}"
+    />
+  </head>
+  <body>
+    <div id="login" class="login-container">
+      <div class="login-box">
+        <h2>Admin - Login</h2>
+        {% if messages %}
+        <div>
+          {% for message in messages %}
+          <div
+            class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
+          >
+            {{ message }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+          {% csrf_token %}
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="Enter your username"
+            name="username"
+            required
+          />
+
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            name="password"
+            required
+          />
+
+          <button type="submit" class="login-button">Login</button>
+        </form>
+
+        <hr />
       </div>
-      {% endfor %}
     </div>
-    {% endif %}
-
-    <form method="POST">
-      {% csrf_token %}
-      <label for="username">Username</label>
-      <input
-        type="text"
-        id="username"
-        placeholder="Enter your username"
-        name="username"
-        required
-      />
-
-      <label for="password">Password</label>
-      <input
-        type="password"
-        id="password"
-        placeholder="Enter your password"
-        name="password"
-        required
-      />
-
-      <button type="submit" class="login-button">Login</button>
-    </form>
-
-    <hr />
-  </div>
-</div>
-</body>
+  </body>
 </html>
