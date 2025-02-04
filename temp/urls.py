@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth import views as auth_views  
 from cafeteria import views
 
@@ -13,6 +13,7 @@ urlpatterns = [
     path('contactus/', views.ContactUsPage, name='contactus'),
     path('logout/', views.LogoutPage, name='logout'),
     path('order_online/', views.OrderOnline, name='orderonline'),
+    path('cafeteria_admin/', include('cafeteria_admin.urls')),
     
     # Password reset views
     path('reset_password/', auth_views.PasswordResetView.as_view(), name='password_reset'),
