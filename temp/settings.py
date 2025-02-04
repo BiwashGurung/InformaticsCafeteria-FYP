@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #My apps
     'cafeteria',
-    'custom_admin',
+    'admin',
 ]
 
 MIDDLEWARE = [
