@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'admin_css/dashboard.css' %}" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <header>
+        <h1>Admin Dashboard</h1>
+      </header>
+      <nav>
+        <ul>
+          <li><a href="">Home</a></li>
+          <li><a href="">Manage Users</a></li>
+          <li><a href="">Manage Orders</a></li>
+          <li><a href="">Manage Menu</a></li>
+          <li><a href="">Reports</a></li>
+          <li><a href="{% url 'logout_admin' %}">Logout</a></li>
+        </ul>
+      </nav>
+      <main>
+        <section class="stats">
+          <h2>Statistics</h2>
+          <div class="stat-item">
+            <h3>Total Users</h3>
+            <p>{{ total_users }}</p>
+          </div>
+          <div class="stat-item">
+            <h3>Total Orders</h3>
+            <p>{{ total_orders }}</p>
+          </div>
+          <div class="stat-item">
+            <h3>Total Revenue</h3>
+            <p>{{ total_revenue }}</p>
+          </div>
+        </section>
+        <section class="recent-activity">
+          <h2>Recent Activity</h2>
+          <ul>
+            {% for activity in recent_activities %}
+            <li>{{ activity }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

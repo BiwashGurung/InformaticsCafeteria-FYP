@@ -123,6 +123,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
+#For messages
 from django.contrib.messages import constants as messages
 
 MESSAGE_TAGS = {
