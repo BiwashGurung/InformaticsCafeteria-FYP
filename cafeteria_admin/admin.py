@@ -1,4 +1,4 @@
 from django.contrib import admin
-# from .models import Admin
+from .models import EventPopup
 
-# admin.site.register(Admin)
+admin.site.register(EventPopup)

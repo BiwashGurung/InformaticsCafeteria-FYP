@@ -4,6 +4,9 @@ from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
+from .models import EventPopup
+from .forms import EventPopupForm
+from django.utils.timezone import now
 
 def is_admin(user):
     return user.is_staff
@@ -31,3 +34,21 @@ def cafeteria_admin_login(request):
 def logout_admin(request):
 
     return redirect('/cafeteria_admin/admin_login/')
+
+
+def admin_upload_popup(request):
+    if request.method == 'POST':
+        form = EventPopupForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_upload_popup')  
+    else:
+        form = EventPopupForm()
+
+    return render(request, 'cafeteria_admin/event_popup.html', {'form': form})
+
+def show_popup(request):
+    current_time = now()
+    event = EventPopup.objects.filter(start_date__lte=current_time, end_date__gte=current_time).last()
+    
+    return render(request, 'cafeteria/index.html', {'event': event})    

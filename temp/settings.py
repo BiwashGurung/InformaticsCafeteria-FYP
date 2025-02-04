@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -135,6 +136,11 @@ MESSAGE_TAGS = {
 }
 
 
+
+# URL for serving media files
+MEDIA_URL = '/media/'
+# Directory where media files are stored  
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  
 
 
 
