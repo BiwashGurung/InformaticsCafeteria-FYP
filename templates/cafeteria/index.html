@@ -4,45 +4,22 @@
 
   <head>
     <title>Informatics Cafeteria - Home</title>
-    <style>
-      .popup-container {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0, 0, 0, 0.5);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 1000;
-      }
-      .popup {
-          background: white;
-          padding: 20px;
-          border-radius: 5px;
-          text-align: center;
-          max-width: 80%;
-      }
-      .popup img {
-          max-width: 100%;
-          height: auto;
-      }
-      </style>
+
   </head>
  
-  
+  {% if event %}
+<div class="popup-container">
+    <div class="popup">
+        <img src="{{ event.image.url }}" alt="{{ event.event_title }}">
+        <button onclick="closePopup()">Close</button>
+    </div>
+</div>
+{% endif %}
+
   
   
   <section id="hero">
-        {% if event %}
-        <div class="popup-container">
-            <div class="popup">
-                <img src="{{ event.image.url }}" alt="{{ event.event_title }}">
-                <button onclick="closePopup()">Close</button>
-            </div>
-        </div>
-        {% endif %}  
+  
         <div class="bg">
           <div class="hero-container">
             <div class="hero-text">
@@ -249,3 +226,4 @@
 
     
    
+ 
