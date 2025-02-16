@@ -8,18 +8,21 @@
   </head>
  
   {% if event %}
-<div class="popup-container">
-    <div class="popup">
-        <img src="{{ event.image.url }}" alt="{{ event.event_title }}">
-        <button onclick="closePopup()">Close</button>
-    </div>
-</div>
+  <div class="popup-container">
+      <div class="popup">
+          <img src="{{ event.image.url }}" alt="{{ event.event_title }}">
+          <button onclick="closePopup()">Close</button>
+      </div>
+  </div>
 {% endif %}
 
   
   
-  <section id="hero">
+
   
+  
+  <section id="hero">
+  {{event.image.url}}
         <div class="bg">
           <div class="hero-container">
             <div class="hero-text">
@@ -172,7 +175,7 @@
             </div>
           </div>
           <div class="steps">
-            <img src="Images/browsemenu.png" alt="Browse Menu" />
+            <img src="{% static 'Images/browsemenu.png' %}" alt="Browse Menu" />
             <div class="Process-2">
               <h2>2. Browse Menu</h2>
               <p>
@@ -181,7 +184,7 @@
             </div>
           </div>
           <div class="steps">
-            <img src="Images/placeanorder.png" alt="Place Order" />
+            <img src="{% static 'Images/placeanorder.png' %}" alt="Place Order" />
             <div class="Process-3">
               <h2>3. Place Order</h2>
               <p>
@@ -190,7 +193,7 @@
             </div>
           </div>
           <div class="steps">
-            <img src="Images/paymentmethod.png" alt="Payment Methods" />
+            <img src="{% static 'Images/paymentmethod.png' %}" alt="Payment Methods" />
             <div class="Process-4">
               <h2>4. Payment Methods</h2>
               <span>Choose your payment method:</span>
@@ -201,7 +204,7 @@
             </div>
           </div>
           <div class="steps">
-            <img src="Images/pickup.png" alt="Pick Up" />
+            <img src="{% static 'Images/pickup.png' %}" alt="Pick Up" />
             <div class="Process-5">
               <h2>5. Pick Up</h2>
               <p>

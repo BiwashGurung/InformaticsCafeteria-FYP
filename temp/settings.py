@@ -139,8 +139,7 @@ MESSAGE_TAGS = {
 
 # URL for serving media files
 MEDIA_URL = '/media/'
-# Directory where media files are stored  
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 

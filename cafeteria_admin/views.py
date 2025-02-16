@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from .models import EventPopup
 from .forms import EventPopupForm
-from django.utils.timezone import now
+from datetime import datetime
 
 def is_admin(user):
     return user.is_staff
@@ -48,7 +48,6 @@ def admin_upload_popup(request):
     return render(request, 'cafeteria_admin/event_popup.html', {'form': form})
 
 def show_popup(request):
-    current_time = now()
-    event = EventPopup.objects.filter(start_date__lte=current_time, end_date__gte=current_time).last()
-    
-    return render(request, 'cafeteria/index.html', {'event': event})    
+    current_time = datetime.now()
+    event = EventPopup.objects.filter(start_date__lte=current_time, end_date__gte=current_time).order_by('-start_date').first()  
+    return render(request, 'cafeteria/index.html', {'event': event})
