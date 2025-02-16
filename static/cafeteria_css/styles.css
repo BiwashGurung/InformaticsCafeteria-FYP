@@ -122,7 +122,19 @@ nav.navbar {
 
 /* For event popup */
 .popup-main{
-    background-color: #090909;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 50%;  
+    left: 50%;
+    transform: translate(-50%, -50%);  
+    width: 100%;  
+    max-width: 1600px;  
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: 10px; 
 }
 .popup-container {
     position: fixed;
