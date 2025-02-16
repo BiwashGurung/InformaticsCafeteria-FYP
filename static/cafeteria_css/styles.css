@@ -121,6 +121,9 @@ nav.navbar {
 /**************************** Crousel(Hero Section) Start From Here *******************/
 
 /* For event popup */
+.popup-main{
+    background-color: #090909;
+}
 .popup-container {
     position: fixed;
     top: 50%;  
@@ -128,12 +131,12 @@ nav.navbar {
     transform: translate(-50%, -50%);  
     width: 100%;  
     max-width: 600px;  
-    background: rgba(0, 0, 0, 0.5);
+    background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 99999;
-    padding: 20px; 
+    padding: 10px; 
 }
 
 .popup {
@@ -146,7 +149,7 @@ nav.navbar {
 }
 
 .popup img {
-    width: 100% !important;  
+    width: 100% ;  
     height: 500px; 
     object-fit: fill;
     display: block;
@@ -636,6 +639,11 @@ padding-top: 15px;
 text-align: center;
 color: #b0b0b0;
 border-top: 1px solid #b0b0b0;
+}
+
+.copyrightText p img{
+    max-width: 150px;
+    width: 100%; 
 }
 
 /* Whats app icon CSS  */

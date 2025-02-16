@@ -10,13 +10,14 @@
 
 
   {% if event %}
-  <div class="popup-container">
-      <div class="popup">
-
-          <img src="{{ event.image.url }}" alt="{{ event.event_title }}">
-          <button onclick="closePopup()">Close</button>
-      </div>
-  </div>
+  <div class="popup-main">
+    <div class="popup-container">
+        <div class="popup">
+            <img src="{{ event.image.url }}" alt="{{ event.event_title }}">
+            {% comment %} <button onclick="closePopup()">Close</button> {% endcomment %}
+        </div>
+    </div>
+  </div>  
 {% endif %}
 
   <section id="hero">
