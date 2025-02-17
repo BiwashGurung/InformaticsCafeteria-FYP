@@ -148,7 +148,8 @@ nav.navbar {
     align-items: center;
     justify-content: center;
     z-index: 99999;
-    padding: 10px; 
+    padding: 5px; 
+    border-radius: 4px;
 }
 .close-button {
     position: absolute;
