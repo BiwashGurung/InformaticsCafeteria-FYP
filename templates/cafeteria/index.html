@@ -8,7 +8,7 @@
   </head>
  
 
-
+{% comment %} Event Popup {% endcomment %}
   {% if event %}
   <div class="popup-main" id="popup-main">
     <div class="popup-container">
@@ -151,11 +151,11 @@
           <img class="side-img" src="{% static 'Images/about.png' %}" alt="" />
           <!-- Center Column -->
           <div class="center-img-container">
-            <img class="center-img" src="Images/Carousel.png" alt="" />
-            <img class="center-img" src="Images/Carousel.png" alt="" />
+            <img class="center-img" src="{% static 'Images/about.png' %}" alt="" />
+            <img class="center-img" src="{% static 'Images/abstract.png' %}" alt="" />
           </div>
           <!-- Right Image -->
-          <img class="side-img" src="Images/about.png" alt="" />
+          <img class="side-img" src="{% static 'Images/about.png' %}" alt="" />
         </div>
       </section>
       <!-- Food Gallery-->

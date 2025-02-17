@@ -449,6 +449,13 @@ font-weight: 200;
 border: 2px solid #000;
 }
 
+.side-img {
+flex: 1 1 45%;
+max-width: 200px;
+height: 250px;
+object-fit: cover;
+margin: 0 -13%;
+}
 .center-img-container {
 display: flex;
 flex-direction: column;
@@ -458,16 +465,9 @@ max-width: 600px;
 gap: 15px;
 }
 
-.side-img {
-flex: 1 1 45%;
-max-width: 200px;
-height: 250px;
-object-fit: cover;
-margin: 0 -13%;
-}
 
 .center-img {
-width: 100%;
+width: 40%;
 height: 200px;
 object-fit: cover;
 padding: 10px;
