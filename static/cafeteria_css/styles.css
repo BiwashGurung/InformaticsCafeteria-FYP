@@ -287,11 +287,11 @@ border: 1px solid #99180d;
 
 /* Discover more button */
 .btn-danger {
-    background-color: #ff0000;
+    background-color: #99180d;
     color: #fff;
-    margin: 1rem auto;
+    /* margin: 1rem auto; */
     padding: 8px 16px;
-    border: 2px solid #111;
+    /* border: 2px solid #111; */
     border-radius: 16px;
     font-size: 14px;
     display: block;
@@ -300,7 +300,7 @@ border: 1px solid #99180d;
 }
 
 .btn-danger:hover {
-    background-color: #c30518;
+    background-color: #99190de9;
 }
 
 /* Border box layout */
@@ -531,7 +531,7 @@ padding: 1rem;
 flex-direction: column;
 display: flex;
 font-size: 1.5rem;
-color: #1729ea;
+color: #99180d;
 font-weight: 500;
 margin-top: 20px;
 }
