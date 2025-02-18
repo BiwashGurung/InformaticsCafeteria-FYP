@@ -18,6 +18,7 @@ urlpatterns = [
     path('contactus/', views.ContactUsPage, name='contactus'),
     path('logout/', views.LogoutPage, name='logout'),
     path('order_online/', views.OrderOnline, name='orderonline'),
+    path('view_menu/', views.ViewMenu, name='viewmenu'),
     
     # Password reset views
     path('reset_password/', auth_views.PasswordResetView.as_view(), name='password_reset'),

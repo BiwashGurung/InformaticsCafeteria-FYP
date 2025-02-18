@@ -37,19 +37,19 @@
     <div class="footer-quicklinks">
       <h2>Support</h2>
       <ul class="section-links">
-        <li><a href="#">FAQ</a></li>
+        <li><a href="{% url 'contactus' %}#faq-section">FAQ</a></li>
+
         <li><a href="#">Privacy Policy</a></li>
         <li><a href="#">Help</a></li>
-        <li><a href="#">Contact</a></li>
       </ul>
     </div>
     <div class="footer-quicklinks">
       <h2>Quick Links</h2>
       <ul class="section-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="college.html">College</a></li>
-        <li><a href="aboutus.html">About Us</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'college' %}">College</a></li>
+        <li><a href="{% url 'aboutus' %}">About Us</a></li>
+        <li><a href="{% url 'contactus' %}">Contact</a></li>
       </ul>
     </div>
     <div class="footer-contact">

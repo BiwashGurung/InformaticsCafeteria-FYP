@@ -51,3 +51,6 @@ def show_popup(request):
     current_time = datetime.now()
     event = EventPopup.objects.filter(start_date__lte=current_time, end_date__gte=current_time).order_by('-start_date').first()  
     return render(request, 'cafeteria/index.html', {'event': event})
+
+
+  
