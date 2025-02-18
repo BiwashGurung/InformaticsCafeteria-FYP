@@ -305,6 +305,9 @@
     text-align: center;
   }
 
+
+  
+
   /* Responsive for Hero section */
   @media (max-width: 768px) {
 
@@ -319,9 +322,15 @@
   }
 
   /* Responsive for Course */
+   @media screen and (max-width:700px){
+    .course .course-row .course-column{
+      width: 141%;
+
+    }
+  }
   @media screen and (max-width: 1250px) {
     .course .course-row {
-      margin-left: 25%;
+      margin-left:14% !important;
       width: 50%;
       justify-content: center;
       flex-direction: column;
@@ -362,6 +371,29 @@
       font-weight: 300;
       margin-top: 0;
     }
+
+    .course .course-row .course-column .bit-description .btn {
+      padding: 10px 69px;
+      background-color: #fff;
+      color: #99180d;
+      border: none;
+      border-radius:10px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .course .course-row .course-column .bba-description .btn {
+      padding: 10px 69px;
+      background-color: #fff;
+      color: #464646;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+    }
+  
   }
 
 
@@ -404,17 +436,17 @@
   }
 
   .college-year .college-experience .college-center h1 {
-      font-size: 8vw;
+      font-size: 45vw;
   }
 
   .college-year .college-experience p {
-      font-size: 14px;
+      font-size: 17px;
       padding: 5px;
   }
 
   .college-year .college-experience .college-left h2,
   .college-year .college-experience .college-right h2 {
-      font-size: 6vw;
+      font-size: 14vw;
   }
 }
 
@@ -428,42 +460,5 @@
   }
 
 
-  @media screen and (max-width:700px){
-    .course .course-row .course-column{
-      width: 141%;
+ 
 
-    }
-  }
-
-  @media screen and (max-width: 1250px) {
-    .course .course-row {
-        margin-left: 25%;
-        width: 50%;
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-    }
-    .course .course-row .course-column .bit-description .btn {
-      padding: 10px 80px;
-      background-color: #fff;
-      color: #99180d;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 12px;
-    }
-
-    .course .course-row .course-column .bba-description .btn {
-      padding: 10px 80px;
-      background-color: #fff;
-      color: #464646;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 12px;
-    }
-  
-  } 
