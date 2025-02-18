@@ -245,104 +245,114 @@ border: 1px solid #99180d;
 
 /* About section banner layout */
 #about-banner {
-display: flex;
-background-color: #fff;
-padding: 20px;
-margin: 30px;
-border: 1px solid #fff;
-border-radius: 4px;
-box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    padding: 20px;
+    margin: 20px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
+
 
 .banner {
-display: flex;
-align-items: center;
-height: 400px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: auto; 
+    flex-wrap: wrap; 
 }
 
-/* Text content area for banner */
+
 .banner-content {
-flex: 1;
-max-width: 70%;
-padding-right: 20px;
-box-sizing: border-box;
+    flex: 1;
+    max-width: 70%;
+    padding-right: 20px;
+    box-sizing: border-box;
 }
 
 .banner-content h2 {
-margin-top: -10%;
-font-weight: 600;
-font-size: 3rem;
+    margin-top: -10%;
+    font-weight: 600;
+    font-size: 3rem;
 }
 
 .banner-content p {
-color: #af9d9d;
-font-weight: 400;
-font-size: 1.9rem;
-margin-bottom: 20px;
+    color: #af9d9d;
+    font-weight: 400;
+    font-size: 1.9rem;
+    margin-bottom: 20px;
 }
 
-/* Styles for 'Discover more' button */
+/* Discover more button */
 .btn-danger {
-background-color: #ff0000;
-color: #fff;
-margin: 1rem 5rem;
-padding: 8px;
-border: 2px solid #111;
-border-radius: 16px;
-font-size: 12px;
+    background-color: #ff0000;
+    color: #fff;
+    margin: 1rem auto;
+    padding: 8px 16px;
+    border: 2px solid #111;
+    border-radius: 16px;
+    font-size: 14px;
+    display: block;
+    text-align: center;
+    width: max-content;
 }
 
 .btn-danger:hover {
-background-color: #c30518;
-border: 2px solid #111;
+    background-color: #c30518;
 }
 
+/* Border box layout */
 .border-banner {
-flex: 1;
-display: flex;
-padding: 1.5rem;
-flex-direction: column;
-border: 1px solid #111;
-border-radius: 20px;
-box-sizing: border-box;
-max-width: 100%;
-overflow: hidden;
+    flex: 1;
+    display: flex;
+    padding: 1.5rem;
+    flex-direction: column;
+    border: 1px solid #111;
+    border-radius: 20px;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow: hidden;
 }
 
-/* Row layout for border boxes */
+/* Row layout for boxes */
 .border-banner-row {
-display: flex;
-justify-content: space-between;
-margin-top: 10px;
-margin-bottom: 10px;
-gap: 10px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-/* Styling Individual boxes within the row */
+/* Styling for boxes */
 .border-banner-row div {
-flex: 1;
-text-align: center;
-box-sizing: border-box;
-overflow: hidden;
-padding: 10px;
-max-width: 100%;
+    flex: 1;
+    text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding: 10px;
+    max-width: 100%;
 }
 
 /* Image inside the boxes */
 .border-banner-row img {
-max-width: 100px;
-height: auto;
-display: block;
-margin: 0 auto;
+    max-width: 100px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
 /* Text inside the boxes */
 .border-banner-row p {
-display: block;
-margin: 5px auto;
-white-space: normal;
-max-width: 100%;
+    display: block;
+    margin: 5px auto;
+    white-space: normal;
+    max-width: 100%;
 }
+
+
 
 /************* Featured Menu *************/
 
@@ -755,6 +765,77 @@ margin-top: 16px;
         background-size: cover; 
     }
 }  
+
+
+
+
+
+/* Tablets view of about section */
+@media (max-width: 768px) {
+    #about-banner {
+        flex-direction: column; 
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .banner {
+        flex-direction: column; 
+        text-align: center;
+        height: auto;
+    }
+
+    .banner-content {
+        max-width: 100%;
+        padding-right: 0;
+    }
+
+    .banner-content h2 {
+        font-size: 2.5rem;
+    }
+
+    .banner-content p {
+        font-size: 1.5rem;
+    }
+
+    .border-banner {
+        padding: 1rem;
+    }
+
+    .border-banner-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+/* Mobile Devices view of about section */
+@media (max-width: 480px) {
+    .banner-content h2 {
+        font-size: 2rem;
+        margin-top: 0;
+    }
+
+    .banner-content p {
+        font-size: 1.3rem;
+    }
+
+    .btn-danger {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .border-banner {
+        padding: 0.8rem;
+    }
+
+    .border-banner-row {
+        flex-direction: column;
+    }
+
+    .border-banner-row img {
+        max-width: 80px;
+    }
+}
+
 
 /*Whatsapp  for mobile */
 @media screen and (max-width: 767px) {

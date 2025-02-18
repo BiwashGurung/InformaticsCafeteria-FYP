@@ -368,7 +368,7 @@
   }
 
 
-  @media (max-width:700px){
+  @media screen and (max-width:700px){
     .course .course-row .course-column{
       width: 141%;
 
@@ -377,7 +377,7 @@
 
   @media screen and (max-width: 1250px) {
     .course .course-row {
-        margin-left: 15%;
+        margin-left: 25%;
         width: 50%;
         justify-content: center;
         flex-direction: column;
