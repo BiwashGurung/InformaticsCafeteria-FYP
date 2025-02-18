@@ -76,3 +76,6 @@ def ContactUsPage(request):
 
 def OrderOnline(request):
     return render(request, 'cafeteria/orderonline.html')
+
+def ViewMenu(request):
+    return render(request, 'cafeteria/view_menu.html')      
