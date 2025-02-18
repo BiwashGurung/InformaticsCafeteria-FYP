@@ -134,6 +134,7 @@ h1 {
 .arrow {
     transition: transform 0.3s ease-in-out;
    
+   
 }
 
 /* Rotate arrow when active in FAQ */
@@ -151,6 +152,7 @@ h1 {
 
     .faq-question {
         font-size: 1rem;
+        color: #111;
     }
 }
 
