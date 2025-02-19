@@ -1,4 +1,5 @@
 from django.db import models
+from cafeteria.models import FoodItem
 
 class EventPopup(models.Model):
     event_id = models.AutoField(primary_key=True) 

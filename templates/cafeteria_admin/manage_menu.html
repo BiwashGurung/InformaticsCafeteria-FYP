@@ -1,0 +1,35 @@
+{% extends "admin_base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'admin_css/manage_menu.css' %}">
+
+<h2>Manage Menu</h2>
+<a href="{% url 'add_food_item' %}" class="add-button">Add Food Item</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in food_items %}
+        <tr>
+            <td><img src="{{ item.image.url }}" alt="{{ item.name }}"></td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.category }}</td>
+            <td>Rs. {{ item.price }}</td>
+            <td>
+                <a href="#">Edit</a> |
+                <a href="#" onclick="return confirm('Are you sure?');">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

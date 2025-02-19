@@ -4,12 +4,15 @@ from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from .models import EventPopup
-from .forms import EventPopupForm
+from .forms import EventPopupForm, FoodItemForm
 from datetime import datetime
 # Importing Profile from cafeteria app
 from cafeteria.models import Profile  
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from cafeteria.models import FoodItem
+
+
 
 def is_admin(user):
     return user.is_staff
@@ -124,7 +127,24 @@ def update_user_password(request, user_id):
         messages.success(request, f"Password for {user.username} updated successfully.")
         return redirect('manage_users')
 
-    return render(request, 'cafeteria_admin/update_password.html', {'user': user})    
+    return render(request, 'cafeteria_admin/update_password.html', {'user': user})   
+
+
+
+
+def manage_menu(request):
+    food_items = FoodItem.objects.all()  
+    return render(request, 'cafeteria_admin/manage_menu.html', {'food_items': food_items})
+
+def add_food_item(request):
+    if request.method == 'POST':
+        form = FoodItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_menu') 
+    else:
+        form = FoodItemForm()
+    return render(request, 'cafeteria_admin/add_food.html', {'form': form})
 
 
   
