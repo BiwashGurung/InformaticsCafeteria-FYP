@@ -1,12 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from .models import EventPopup
 from .forms import EventPopupForm
 from datetime import datetime
+# Importing Profile from cafeteria app
+from cafeteria.models import Profile  
+from django.contrib.auth.models import User
 
 def is_admin(user):
     return user.is_staff
@@ -51,6 +53,32 @@ def show_popup(request):
     current_time = datetime.now()
     event = EventPopup.objects.filter(start_date__lte=current_time, end_date__gte=current_time).order_by('-start_date').first()  
     return render(request, 'cafeteria/index.html', {'event': event})
+
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def manage_users(request):
+    # Fetching all users
+    users = Profile.objects.all()  
+    return render(request, 'cafeteria_admin/manage_users.html', {'users': users})
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def edit_user(request, user_id):
+    user = get_object_or_404(Profile, id=user_id)
+    if request.method == 'POST':
+        user.username = request.POST['username']
+        user.phone = request.POST['phone']
+        user.email = request.POST['email']
+        user.save()
+        messages.success(request, 'User updated successfully!')
+        return redirect('manage_users')
+    return render(request, 'cafeteria_admin/edit_user.html', {'user': user})
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def delete_user(request, user_id):
+    user = get_object_or_404(Profile, id=user_id)
+    user.delete()
+    messages.success(request, 'User deleted successfully!')
+    return redirect('manage_users')
 
 
   

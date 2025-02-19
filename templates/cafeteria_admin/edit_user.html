@@ -1,0 +1,20 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+<h2>Edit User</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <label>Username:</label>
+    <input type="text" name="username" value="{{ user.username }}" required><br>
+
+    <label>Email:</label>
+    <input type="email" name="email" value="{{ user.email }}" required><br>
+
+    <label>Phone:</label>
+    <input type="text" name="phone" value="{{ user.phone }}"><br>
+
+    <button type="submit">Update</button>
+</form>
+
+<a href="{% url 'manage_users' %}">Back to Users</a>
+{% endblock %}
