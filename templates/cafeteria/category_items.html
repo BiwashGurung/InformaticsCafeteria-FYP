@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<head>
+  <title>{{ category.name }} - Informatics Cafeteria</title>
+  <link rel="stylesheet" href="{% static 'cafeteria_css/view_menu.css' %}" />
+</head>
+
+<h2 class="menu-title">{{ category.name }}</h2>
+
+<div class="menu-container">
+  {% if items %}
+    <table class="menu-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Image</th>
+          <th>Price</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td>{{ item.name }}</td>
+          <td><img src="{{ item.image.url }}" alt="{{ item.name }}" class="menu-item-image"></td>
+          <td>{{ item.price }}</td>
+          <td>
+            <form method="post" action="{% url 'add_to_cart' item.id %}">
+              {% csrf_token %}
+              <button type="submit">Add to Cart</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No items available in this category.</p>
+  {% endif %}
+</div>
+
+<a href="{% url 'view_menu' %}" class="back-button">← Back to Menu</a>
+
+{% endblock content %}

@@ -11,7 +11,7 @@ urlpatterns = [
     path('cafeteria_admin/', include('cafeteria_admin.urls')),
     path('signup/', views.SignupPage, name='signup'),
     path('login/', views.LoginPage, name='login'),
-    # path('', show_popup, name='show_popup'),
+    path('', show_popup, name='show_popup'),
     path('', show_popup, name='home'),
     path('college/', views.CollegePage, name='college'),
     path('aboutus/', views.AboutUsPage, name='aboutus'),
