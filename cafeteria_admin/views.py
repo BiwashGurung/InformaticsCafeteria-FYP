@@ -16,7 +16,17 @@ def is_admin(user):
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def cafeteria_admin_dashboard(request):
-    return render(request, 'cafeteria_admin/dashboard.html')
+    # Counting the total number of users
+    total_users = Profile.objects.count()  
+
+    context = {
+        'total_users': total_users,
+        'total_orders': 0,  
+        'total_revenue': 0,  
+        'recent_activities': []  
+    }
+
+    return render(request, 'cafeteria_admin/dashboard.html', context)
 
 
 def cafeteria_admin_login(request):
