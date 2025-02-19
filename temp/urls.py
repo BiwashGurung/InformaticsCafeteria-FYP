@@ -5,20 +5,22 @@ from cafeteria import views
 from cafeteria_admin.views import show_popup
 from django.conf import settings
 from django.conf.urls.static import static
+from cafeteria.views import food_list
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('cafeteria_admin/', include('cafeteria_admin.urls')),
     path('signup/', views.SignupPage, name='signup'),
     path('login/', views.LoginPage, name='login'),
-    path('', show_popup, name='show_popup'),
+    # path('', show_popup, name='show_popup'),
     path('', show_popup, name='home'),
     path('college/', views.CollegePage, name='college'),
     path('aboutus/', views.AboutUsPage, name='aboutus'),
     path('contactus/', views.ContactUsPage, name='contactus'),
     path('logout/', views.LogoutPage, name='logout'),
     path('order_online/', views.OrderOnline, name='orderonline'),
-    path('view_menu/', views.ViewMenu, name='viewmenu'),
+   
+    path('menu/<str:category>/', food_list, name='food_list'),
     
     # Password reset views
     path('reset_password/', auth_views.PasswordResetView.as_view(), name='password_reset'),

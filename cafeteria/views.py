@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, FoodItem 
 
 
 def HomePage(request):
@@ -77,5 +77,6 @@ def ContactUsPage(request):
 def OrderOnline(request):
     return render(request, 'cafeteria/orderonline.html')
 
-def ViewMenu(request):
-    return render(request, 'cafeteria/view_menu.html')      
+def food_list(request, category):
+    food_items = FoodItem.objects.filter(category=category)
+    return render(request, 'cafeteria/food_list.html', {'food_items': food_items, 'category': category})    

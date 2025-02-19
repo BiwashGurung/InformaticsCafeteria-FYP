@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<head>
+  <title>{{ category }} - Informatics Cafeteria</title>
+  <link rel="stylesheet" href="{% static 'cafeteria_css/food_list.css' %}" />
+</head>
+
+<h2 class="menu-title">{{ category }} Menu</h2>
+
+<div class="food-container">
+  {% for food in food_items %}
+  <div class="food-item">
+    <img src="{{ food.image.url }}" alt="{{ food.name }}" />
+    <h3>{{ food.name }}</h3>
+    <p>{{ food.description }}</p>
+    <p class="price">Price: Rs. {{ food.price }}</p>
+    <button class="add-to-cart">Add to Cart</button>
+  </div>
+  {% empty %}
+  <p>No items available in this category.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

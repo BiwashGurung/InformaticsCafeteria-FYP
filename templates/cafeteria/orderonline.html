@@ -31,27 +31,39 @@
 <div class="menu-table">
   <div class="menu-box">
     <img src="{% static 'Images/Breakfast.png' %}" alt="Breakfast" />
-    <button class="view-menu" >View Menu</button>
+    <a href="{% url 'food_list' category='Breakfast' %}">
+      <button class="view-menu">View Menu</button>
+    </a>
   </div>
   <div class="menu-box">
     <img src="{% static 'Images/Appetizer.png' %}" alt="Appetizer" />
-    <button class="view-menu">View Menu</button>
+    <a href="{% url 'food_list' category='Appetizer' %}">
+      <button class="view-menu">View Menu</button>
+    </a>
   </div>
   <div class="menu-box">
     <img src="{% static 'Images/MainCourse.png' %}" alt="Main Course" />
-    <button class="view-menu">View Menu</button>
+    <a href="{% url 'food_list' category='MainCourse' %}">
+      <button class="view-menu">View Menu</button>
+    </a>
   </div>
   <div class="menu-box">
     <img src="{% static 'Images/Snacks.png' %}" alt="Snacks" />
-    <button class="view-menu">View Menu</button>
+    <a href="{% url 'food_list' category='Snacks' %}">
+      <button class="view-menu">View Menu</button>
+    </a>
   </div>
   <div class="menu-box">
     <img src="{% static 'Images/Desserts.png' %}" alt="Desserts" />
-    <button class="view-menu">View Menu</button>
+    <a href="{% url 'food_list' category='Desserts' %}">
+      <button class="view-menu">View Menu</button>
+    </a>
   </div>
   <div class="menu-box">
     <img src="{% static 'Images/Beverages.png' %}" alt="Beverage" />
-    <button class="view-menu">View Menu</button>
+    <a href="{% url 'food_list' category='Beverage' %}">
+      <button class="view-menu">View Menu</button>
+    </a>
   </div>
 </div>
 
