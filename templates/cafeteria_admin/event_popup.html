@@ -1,16 +1,69 @@
-{% extends 'admin_base.html' %} {% block content %}
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'admin_css/event_popup.css' %}"
+/>
 
 <div class="event-form-container">
   <h2>Upload Event Popup</h2>
+  <div class="button-container">
+    <a href="{% url 'view_event_history' %}" class="view-history-btn">
+      View Event History
+    </a>
+  </div>
+
 
   <form method="POST" enctype="multipart/form-data" class="event-form">
-    {% csrf_token %} {{ form.as_p }}
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="{{ form.event_title.id_for_label }}">Event Title</label>
+      {{ form.event_title }}
+      <div class="error">{{ form.event_title.errors }}</div>
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.image.id_for_label }}">Image</label>
+      {{ form.image }}
+      <div class="error">{{ form.image.errors }}</div>
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.start_date.id_for_label }}">Start Date</label>
+      <input
+        type="date"
+        name="start_date"
+        id="{{ form.start_date.id_for_label }}"
+        value="{{ form.start_date.value|default:'' }}"
+        class="form-control"
+      />
+      <div class="error">{{ form.start_date.errors }}</div>
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.end_date.id_for_label }}">End Date</label>
+      <input
+        type="date"
+        name="end_date"
+        id="{{ form.end_date.id_for_label }}"
+        value="{{ form.end_date.value|default:'' }}"
+        class="form-control"
+      />
+      <div class="error">{{ form.end_date.errors }}</div>
+    </div>
+
     <button type="submit" class="submit-btn">Save Event</button>
   </form>
 
-  <a href="{% url 'cafeteria_admin_dashboard' %}" class="back-link"
-    ><i class="fa-solid fa-arrow-left"></i> Back to Events</a
-  >
+
+ 
+  <a href="{% url 'cafeteria_admin_dashboard' %}" class="back-link">
+    <i class="fa-solid fa-arrow-left"></i> Back to Events
+  </a>
 </div>
 
 {% endblock %}

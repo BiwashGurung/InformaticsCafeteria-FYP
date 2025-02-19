@@ -1,0 +1,44 @@
+{% extends 'admin_base.html' %} {% load static %} {% block content %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'admin_css/view_event_history.css' %}"
+/>
+
+<div class="event-form-container">
+  <h2>View Event History</h2>
+
+  <!-- Table displaying all events -->
+  <table class="event-history-table">
+    <thead>
+      <tr>
+        <th>Event Title</th>
+        <th>Image</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+      <tr>
+        <td>{{ event.event_title }}</td>
+        <td>
+          <img
+            src="{{ event.image.url }}"
+            alt="Event Image"
+            class="event-image"
+          />
+        </td>
+        <td>{{ event.start_date }}</td>
+        <td>{{ event.end_date }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="{% url 'admin_upload_popup' %}" class="back-link">
+    <i class="fa-solid fa-arrow-left"></i> Back to Upload Event
+  </a>
+</div>
+
+{% endblock %}

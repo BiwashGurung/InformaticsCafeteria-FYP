@@ -55,6 +55,15 @@ def show_popup(request):
     event = EventPopup.objects.filter(start_date__lte=current_time, end_date__gte=current_time).order_by('-start_date').first()  
     return render(request, 'cafeteria/index.html', {'event': event})
 
+def view_event_history(request):
+    #Fetching all events
+    events = EventPopup.objects.all() 
+    return render(request, 'cafeteria_admin/view_event_history.html', {'events': events})
+
+
+    
+
+
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def manage_users(request):
