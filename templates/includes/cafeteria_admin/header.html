@@ -1,0 +1,20 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'admin_css/dashboard.css' %}" />
+<header>
+    <span>Welcome Admin, {{ user.username }}</span>
+
+    <h1>Admin Dashboard</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="{% url 'cafeteria_admin_dashboard' %}">Home</a></li>
+      <li><a href="{% url 'admin_upload_popup' %}">Events</a></li>
+      <li><a href="{% url 'manage_users' %}">Manage Users</a></li>
+
+      <li><a href="">Manage Menu</a></li>
+      <li><a href="">Manage Orders</a></li>
+      <li><a href="">Reports</a></li>
+      <li><a href="{% url 'logout_admin' %}">Logout</a></li>
+    </ul>
+  </nav>

@@ -82,18 +82,5 @@
     background-color: #45a049;
   }
   
-  .back-link {
-    display: inline-block;
-    margin-top: 20px;
-    font-size: 16px;
-    text-decoration: none;
-    color: #007bff;
-    text-align: center; 
-    width: 100%; 
-    text-align: center; 
-  }
   
-  .back-link:hover {
-    text-decoration: underline;
-  }
   
