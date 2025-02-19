@@ -1,10 +1,16 @@
-{% extends "base.html" %}
+{% extends 'admin_base.html' %} {% block content %}
 
-{% block content %}
-<h2>Upload Event Popup</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload</button>
-</form>
+<div class="event-form-container">
+  <h2>Upload Event Popup</h2>
+
+  <form method="POST" enctype="multipart/form-data" class="event-form">
+    {% csrf_token %} {{ form.as_p }}
+    <button type="submit" class="submit-btn">Save Event</button>
+  </form>
+
+  <a href="{% url 'cafeteria_admin_dashboard' %}" class="back-link"
+    ><i class="fa-solid fa-arrow-left"></i> Back to Events</a
+  >
+</div>
+
 {% endblock %}
