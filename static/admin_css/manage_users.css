@@ -1,0 +1,69 @@
+.title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.table-container {
+    width: 90%;
+    margin: auto;
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    background: white;
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+thead {
+    background: #111;
+    color: white;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+
+tbody tr:hover {
+    background: #f4f6f9;
+}
+
+.actions a {
+    padding: 6px 12px;
+    margin: 4px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.edit-btn {
+    background: #2ecc71;
+    color: white;
+}
+
+.delete-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.password-btn {
+    background: #f1c40f;
+    color: white;
+}
+
+.actions a:hover {
+    opacity: 0.8;
+}

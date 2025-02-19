@@ -9,6 +9,7 @@ from datetime import datetime
 # Importing Profile from cafeteria app
 from cafeteria.models import Profile  
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 
 def is_admin(user):
     return user.is_staff
@@ -79,6 +80,24 @@ def delete_user(request, user_id):
     user.delete()
     messages.success(request, 'User deleted successfully!')
     return redirect('manage_users')
+
+def update_user_password(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    
+    if request.method == 'POST':
+        new_password = request.POST['new_password']
+        confirm_password = request.POST['confirm_password']
+
+        if new_password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect('manage_users')
+
+        user.password = make_password(new_password)
+        user.save()
+        messages.success(request, f"Password for {user.username} updated successfully.")
+        return redirect('manage_users')
+
+    return render(request, 'cafeteria_admin/update_password.html', {'user': user})    
 
 
   

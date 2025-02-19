@@ -1,20 +1,32 @@
 {% extends 'admin_base.html' %}
+{% load static %}
 {% block content %}
-<h2>Edit User</h2>
+<head>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'admin_css/edit_user.css' %}"
+    />
+</head>    
 
-<form method="POST">
-    {% csrf_token %}
-    <label>Username:</label>
-    <input type="text" name="username" value="{{ user.username }}" required><br>
+<div class="edit-user-container">
+    <h2>Edit User For for {{ user.username }}</h2>
 
-    <label>Email:</label>
-    <input type="email" name="email" value="{{ user.email }}" required><br>
+    <form method="POST" class="edit-user-form">
+        {% csrf_token %}
 
-    <label>Phone:</label>
-    <input type="text" name="phone" value="{{ user.phone }}"><br>
+        <label>Username:</label>
+        <input type="text" name="username" value="{{ user.username }}" required>
 
-    <button type="submit">Update</button>
-</form>
+        <label>Email:</label>
+        <input type="email" name="email" value="{{ user.email }}" required>
 
-<a href="{% url 'manage_users' %}">Back to Users</a>
+        <label>Phone:</label>
+        <input type="text" name="phone" value="{{ user.phone }}">
+
+        <button type="submit" class="update-btn">Update</button>
+    </form>
+
+    <a href="{% url 'manage_users' %}" class="back-link">← Back to Users</a>
+</div>
 {% endblock %}
