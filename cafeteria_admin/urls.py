@@ -10,6 +10,7 @@ urlpatterns = [
     path('admin_logout/',views.logout_admin,name='logout_admin'),
     path('upload-popup/', admin_upload_popup, name='admin_upload_popup'),
     path('view-event-history/', views.view_event_history, name='view_event_history'),
+    path('delete_event/<int:event_id>/', views.delete_event, name='delete_event'),
     path('manage_users/', manage_users, name='manage_users'),
     path('edit_user/<int:user_id>/', edit_user, name='edit_user'),
     path('delete_user/<int:user_id>/', delete_user, name='delete_user'),
