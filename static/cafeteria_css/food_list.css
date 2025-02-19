@@ -1,0 +1,123 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Page title */
+.menu-title {
+    text-align: center;
+    font-size: 28px;
+    color: #333;
+    margin-top: 20px;
+}
+
+/* Food container */
+.food-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Food item layout */
+.food-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.food-item:last-child {
+    border-bottom: none;
+}
+
+/* Food image */
+.food-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Food details */
+.food-details {
+    flex: 1;
+}
+
+.food-details h3 {
+    font-size: 18px;
+    color: #333;
+    margin: 0;
+}
+
+.food-details p {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+}
+
+/* Price styling */
+.price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    min-width: 120px;
+    text-align: right;
+}
+
+/* Quantity selector */
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #f1f1f1;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.quantity button {
+    border: none;
+    background: #ddd;
+    padding: 5px 8px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 3px;
+}
+
+.quantity input {
+    width: 30px;
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    background: transparent;
+}
+
+/* Add to Cart button */
+.add-to-cart {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.add-to-cart:hover {
+    background-color: darkred;
+}
+
+/* Align price, quantity selector, and button */
+.food-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}

@@ -3,7 +3,7 @@
 {% block content %}
 
 <head>
-  <title>{{ category }} - Informatics Cafeteria</title>
+  <title> Informatics Cafeteria - {{ category }} </title>
   <link rel="stylesheet" href="{% static 'cafeteria_css/food_list.css' %}" />
 </head>
 
@@ -13,14 +13,39 @@
   {% for food in food_items %}
   <div class="food-item">
     <img src="{{ food.image.url }}" alt="{{ food.name }}" />
-    <h3>{{ food.name }}</h3>
-    <p>{{ food.description }}</p>
-    <p class="price">Price: Rs. {{ food.price }}</p>
-    <button class="add-to-cart">Add to Cart</button>
+    <div class="food-details">
+      <h3>{{ food.name }}</h3>
+      <p>{{ food.description }}</p>
+    </div>
+    <div class="food-actions">
+      <p class="price">NPR: {{ food.price }} /-</p>
+      <div class="quantity">
+        <button onclick="decreaseQuantity(this)">-</button>
+        <input type="text" value="1" readonly>
+        <button onclick="increaseQuantity(this)">+</button>
+      </div>
+      <button class="add-to-cart">Add To Cart</button>
+    </div>
   </div>
   {% empty %}
   <p>No items available in this category.</p>
   {% endfor %}
 </div>
+
+<script>
+function decreaseQuantity(button) {
+    let input = button.nextElementSibling;
+    let value = parseInt(input.value);
+    if (value > 1) {
+        input.value = value - 1;
+    }
+}
+
+function increaseQuantity(button) {
+    let input = button.previousElementSibling;
+    let value = parseInt(input.value);
+    input.value = value + 1;
+}
+</script>
 
 {% endblock %}
