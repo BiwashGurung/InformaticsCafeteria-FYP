@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from .import views
-from .views import admin_upload_popup, show_popup, manage_users, edit_user, delete_user, update_user_password, manage_menu, add_food_item
+from .views import admin_upload_popup, show_popup, manage_users, edit_user, delete_user, update_user_password, manage_menu, add_food_item , edit_food_item, delete_food_item
 
 
 urlpatterns = [
@@ -18,5 +18,7 @@ urlpatterns = [
     path('update-password/<int:user_id>/', update_user_password, name='update_user_password'),
     path('manage-menu/', manage_menu, name='manage_menu'),
     path('add-food/', add_food_item, name='add_food_item'),
+    path('edit-food/<int:food_id>/', edit_food_item, name='edit_food_item'),
+    path('delete-food/<int:food_id>/', delete_food_item, name='delete_food_item'),
 
 ]

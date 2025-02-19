@@ -146,5 +146,19 @@ def add_food_item(request):
         form = FoodItemForm()
     return render(request, 'cafeteria_admin/add_food.html', {'form': form})
 
+def edit_food_item(request, food_id):
+    food_item = get_object_or_404(FoodItem, id=food_id)
+    if request.method == 'POST':
+        form = FoodItemForm(request.POST, request.FILES, instance=food_item)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_menu')
+    else:
+        form = FoodItemForm(instance=food_item)
+    return render(request, 'cafeteria_admin/edit_food.html', {'form': form})
 
+def delete_food_item(request, food_id):
+    food_item = get_object_or_404(FoodItem, id=food_id)
+    food_item.delete()
+    return redirect('manage_menu')
   

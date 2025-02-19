@@ -1,10 +1,9 @@
 {% extends "admin_base.html" %}
 {% load static %}
-
 {% block content %}
-<link rel="stylesheet" href="{% static 'admin_css/add_food.css' %}">
-<div class="add-food-form">
-    <h2>Add Food Item</h2>
+<link rel="stylesheet" href="{% static 'admin_css/edit_food.css' %}" />
+<div class="edit-food-form">
+    <h2>Edit Food Item  {{ form.name }}</h2>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
@@ -20,10 +19,10 @@
         <label for="id_price">Price (Rs.):</label>
         {{ form.price }}
 
-        <label for="id_image">Upload Image:</label>
+        <label for="id_image">Upload New Image (optional):</label>
         {{ form.image }}
 
-        <button type="submit">Add Food Item</button>
+        <button type="submit">Update Food Item</button>
     </form>
     <a href="{% url 'manage_menu' %}" class="back-link">
         <i class="fa-solid fa-arrow-left"></i> Back to Manage Menu
