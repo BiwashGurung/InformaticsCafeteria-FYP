@@ -1,4 +1,4 @@
-/* General Styling */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
@@ -6,7 +6,7 @@ body {
     padding: 0;
 }
 
-/* Page title */
+
 .menu-title {
     text-align: center;
     font-size: 28px;
@@ -14,7 +14,7 @@ body {
     margin-top: 20px;
 }
 
-/* Food container */
+
 .food-container {
     max-width: 900px;
     margin: 0 auto;
@@ -24,7 +24,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Food item layout */
+
 .food-item {
     display: flex;
     align-items: center;
@@ -38,7 +38,6 @@ body {
     border-bottom: none;
 }
 
-/* Food image */
 .food-item img {
     width: 80px;
     height: 80px;
@@ -46,7 +45,7 @@ body {
     border-radius: 8px;
 }
 
-/* Food details */
+
 .food-details {
     flex: 1;
 }
@@ -63,7 +62,7 @@ body {
     margin: 5px 0;
 }
 
-/* Price styling */
+
 .price {
     font-size: 18px;
     font-weight: bold;
@@ -72,7 +71,7 @@ body {
     text-align: right;
 }
 
-/* Quantity selector */
+
 .quantity {
     display: flex;
     align-items: center;
@@ -99,7 +98,7 @@ body {
     background: transparent;
 }
 
-/* Add to Cart button */
+
 .add-to-cart {
     background-color: red;
     color: white;
@@ -115,7 +114,7 @@ body {
     background-color: darkred;
 }
 
-/* Align price, quantity selector, and button */
+
 .food-actions {
     display: flex;
     align-items: center;
