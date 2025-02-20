@@ -47,7 +47,7 @@
     background-color: #0056b3;
 }
 
-/* Out of Stock section */
+
 .out-of-stock-section {
     margin-top: 15px;
     background-color: #f8d7da;
@@ -75,12 +75,12 @@
     transition: all 0.3s ease;
 }
 
-/* Hover effect for checkbox */
+
 .out-of-stock-section input[type="checkbox"]:hover {
     border-color: #0056b3;
 }
 
-/* When the checkbox is checked */
+
 .out-of-stock-section input[type="checkbox"]:checked {
     background-color: #721c24; 
     border-color: #721c24; 
@@ -101,7 +101,7 @@
 }
 
 
-/* Back link style */
+
 .back-link {
     display: inline-block;
     margin-top: 20px;
