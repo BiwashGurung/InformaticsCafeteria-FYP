@@ -10,7 +10,7 @@
 <h2 class="menu-title">{{ category }} Menu</h2>
 
 <div class="food-container">
-  {% for food in food_items %}
+ {% for food in food_items %}
   <div class="food-item">
      {% if not food.is_in_stock %}
     <p class="out-of-stock">Out of Stock</p>  
@@ -23,7 +23,7 @@
       <p>{{ food.description }}</p>
     </div>
     <div class="food-actions">
-      <p class="price">NPR: {{ food.price }} /-</p>
+      <p class="price">NPR: {{ food.price }} /-</p> 
     
       <div class="quantity">
         <button onclick="decreaseQuantity(this)"  {% if not food.is_in_stock %} disabled {% endif %}>-</button>
