@@ -91,9 +91,17 @@ def delete_event(request, event_id):
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def manage_users(request):
-    # Fetching all users
-    users = Profile.objects.all()  
-    return render(request, 'cafeteria_admin/manage_users.html', {'users': users})
+    query = request.GET.get('q', '')  
+    if query:
+     
+        users = Profile.objects.filter(username__icontains=query) | \
+                Profile.objects.filter(email__icontains=query)
+    else:
+   
+        users = Profile.objects.all()
+
+    return render(request, 'cafeteria_admin/manage_users.html', {'users': users, 'query': query})
+
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def edit_user(request, user_id):
