@@ -24,7 +24,21 @@
     gap: 15px;
     padding: 15px;
     border-bottom: 1px solid #ddd;
+    position: relative; 
 }
+
+.out-of-stock {
+    color: red; 
+    font-weight: bold; 
+    font-size: 1.2em;
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    margin-top: 0; 
+    border: 1px solid red; 
+    padding: 5px; 
+}
+
 
 .food-item:last-child {
     border-bottom: none;
@@ -112,14 +126,9 @@
     align-items: center;
     gap: 15px;
 }
-.out-of-stock {
-    color: red; 
-    font-weight: bold; 
-    font-size: 1.2em;
-    margin-top: 10px;
-  }
+
   
-  .food-actions .add-to-cart:disabled {
+.food-actions .add-to-cart:disabled {
     background-color: gray; 
     cursor: not-allowed;
   }

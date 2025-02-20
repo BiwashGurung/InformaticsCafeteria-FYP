@@ -12,18 +12,19 @@
 <div class="food-container">
   {% for food in food_items %}
   <div class="food-item">
+    {% if not food.is_in_stock %}
+    <p class="out-of-stock">Out of Stock</p>  
+    {% endif %}
+
     <img src="{{ food.image.url }}" alt="{{ food.name }}" />
     <div class="food-details">
+
       <h3>{{ food.name }}</h3>
       <p>{{ food.description }}</p>
     </div>
     <div class="food-actions">
       <p class="price">NPR: {{ food.price }} /-</p>
-
-      {% if not food.is_in_stock %}
-      <p class="out-of-stock">Out of Stock</p>  
-      {% endif %}
-
+    
       <div class="quantity">
         <button onclick="decreaseQuantity(this)">-</button>
         <input type="text" value="1" readonly>
