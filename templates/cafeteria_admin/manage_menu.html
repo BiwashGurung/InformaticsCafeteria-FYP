@@ -5,6 +5,13 @@
 <link rel="stylesheet" href="{% static 'admin_css/manage_menu.css' %}">
 
 <h2>Manage Menu</h2>
+
+<!-- Search Form -->
+<form method="GET" action="{% url 'manage_menu' %}">
+    <input type="text" name="q" placeholder="Search by name or category" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+</form>
+
 <a href="{% url 'add_food_item' %}" class="add-button">Add Food Item</a>
 
 <table>

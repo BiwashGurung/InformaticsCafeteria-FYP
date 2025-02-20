@@ -137,8 +137,15 @@ def update_user_password(request, user_id):
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def manage_menu(request):
-    food_items = FoodItem.objects.all()  
-    return render(request, 'cafeteria_admin/manage_menu.html', {'food_items': food_items})
+    query = request.GET.get('q', '')  
+    if query:
+        food_items = FoodItem.objects.filter(name__icontains=query) | FoodItem.objects.filter(category__icontains=query)
+    else:
+        food_items = FoodItem.objects.all()
+
+    return render(request, 'cafeteria_admin/manage_menu.html', {'food_items': food_items, 'query': query})
+
+
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def add_food_item(request):
