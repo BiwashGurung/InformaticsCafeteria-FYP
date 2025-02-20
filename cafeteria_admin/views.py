@@ -13,7 +13,7 @@ from django.contrib.auth.hashers import make_password
 from cafeteria.models import FoodItem
 
 
-
+#Helper function to check whether the user is an admin or not
 def is_admin(user):
     return user.is_staff
 
@@ -32,6 +32,7 @@ def cafeteria_admin_login(request):
             messages.error(request, 'Invalid admin username or password.')
     return render(request, 'cafeteria_admin/admin_login.html')
 
+# Admin dashboard view
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def cafeteria_admin_dashboard(request):
     # Counting the total number of users
@@ -45,34 +46,41 @@ def cafeteria_admin_dashboard(request):
     }
 
     return render(request, 'cafeteria_admin/dashboard.html', context)
-
+#Logout View
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def logout_admin(request):
     return redirect('/cafeteria_admin/admin_login/')
 
 
-
+#Allowing admin to upload events
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def admin_upload_popup(request):
     if request.method == 'POST':
+        #Processing  the form data
         form = EventPopupForm(request.POST, request.FILES)
         if form.is_valid():
+            #Saving the form if valid
             form.save()
+            #Redirecting after successful submisson of event
             return redirect('admin_upload_popup')  
     else:
+        #Creating an empty form for GET requests
         form = EventPopupForm()
 
     return render(request, 'cafeteria_admin/event_popup.html', {'form': form})
 
-
+#Displayinh tthe curremt popup event to the users (homepage)
 def show_popup(request):
+    #Getting the current data and time
     current_time = datetime.now()
+    #Getting  the latest event within the current time range
     event = EventPopup.objects.filter(start_date__lte=current_time, end_date__gte=current_time).order_by('-start_date').first()  
+    #Passing the even to the homepage
     return render(request, 'cafeteria/index.html', {'event': event})
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def view_event_history(request):
-    #Fetching all events
+    #Fetching all events from the database
     events = EventPopup.objects.all() 
     return render(request, 'cafeteria_admin/view_event_history.html', {'events': events})
 
@@ -91,13 +99,14 @@ def delete_event(request, event_id):
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def manage_users(request):
+    #Getting search query from GET parameters
     query = request.GET.get('q', '')  
     if query:
-     
+        #Searching users by username or email
         users = Profile.objects.filter(username__icontains=query) | \
                 Profile.objects.filter(email__icontains=query)
     else:
-   
+        # If no search query, fetching all the users
         users = Profile.objects.all()
 
     return render(request, 'cafeteria_admin/manage_users.html', {'users': users, 'query': query})
@@ -105,6 +114,7 @@ def manage_users(request):
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def edit_user(request, user_id):
+    #Fetching the user by ID or 404 if not found
     user = get_object_or_404(Profile, id=user_id)
     if request.method == 'POST':
         user.username = request.POST['username']
@@ -112,6 +122,7 @@ def edit_user(request, user_id):
         user.email = request.POST['email']
         user.save()
         messages.success(request, 'User updated successfully!')
+        #Redirecting after successfully updating the user
         return redirect('manage_users')
     return render(request, 'cafeteria_admin/edit_user.html', {'user': user})
 
@@ -132,11 +143,14 @@ def update_user_password(request, user_id):
 
         if new_password != confirm_password:
             messages.error(request, "Passwords do not match.")
+             # Return if passwords do not match
             return redirect('manage_users')
 
+        #Updating the user's password
         user.password = make_password(new_password)
         user.save()
         messages.success(request, f"Password for {user.username} updated successfully.")
+        #Redurecting after a updating password
         return redirect('manage_users')
 
     return render(request, 'cafeteria_admin/update_password.html', {'user': user})   
@@ -145,10 +159,12 @@ def update_user_password(request, user_id):
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def manage_menu(request):
+    #Getting search query from GET parameters
     query = request.GET.get('q', '')  
     if query:
         food_items = FoodItem.objects.filter(name__icontains=query) | FoodItem.objects.filter(category__icontains=query)
     else:
+         # If no search query, fetch all food items
         food_items = FoodItem.objects.all()
 
     return render(request, 'cafeteria_admin/manage_menu.html', {'food_items': food_items, 'query': query})
@@ -158,11 +174,14 @@ def manage_menu(request):
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def add_food_item(request):
     if request.method == 'POST':
+        #Processing the for mdata
         form = FoodItemForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            #Redirecting after adding the food item
             return redirect('manage_menu') 
     else:
+        #Creating  an empty form for GET requests
         form = FoodItemForm()
     return render(request, 'cafeteria_admin/add_food.html', {'form': form})
 
@@ -170,12 +189,14 @@ def add_food_item(request):
 def edit_food_item(request, food_id):
     food_item = get_object_or_404(FoodItem, id=food_id)
     if request.method == 'POST':
+        #Binding form with food item instance
         form = FoodItemForm(request.POST, request.FILES, instance=food_item)
         if form.is_valid():
             form.save()
             messages.success(request, 'Food item updated successfully!')
             return redirect('manage_menu')
     else:
+        #Pre-poluting rhe form with existing food item data
         form = FoodItemForm(instance=food_item)
     return render(request, 'cafeteria_admin/edit_food.html', {'form': form, 'food_item': food_item})
 

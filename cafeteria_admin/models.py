@@ -1,10 +1,11 @@
 from django.db import models
 from cafeteria.models import FoodItem
 
+# Creating an EventPopup model to store event-related information for the popup
 class EventPopup(models.Model):
     event_id = models.AutoField(primary_key=True) 
     event_title = models.CharField(max_length=255) 
-     # To store Image in /media/popups/ 
+    # Field to store the event image in the /media/popups/ directory
     image = models.ImageField(upload_to='popups/') 
     start_date = models.DateTimeField()  
     end_date = models.DateTimeField()  

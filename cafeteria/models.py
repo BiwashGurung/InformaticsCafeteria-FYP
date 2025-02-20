@@ -11,13 +11,14 @@ class Profile(models.Model):
 
     #String representation of the model 
     def __str__(self):
+         # Returns the username as a string representation
         return self.user.username
-    #Custom table name
+    #Custom table name for profile model
     class Meta:
         db_table = 'cafeteria_users'    
 
 
-
+# Defining the FoodItem model to store food-related details
 class FoodItem(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -27,6 +28,7 @@ class FoodItem(models.Model):
     is_in_stock = models.BooleanField(default=True)
 
     def __str__(self):
+        # Returns the name of the food item as a string representation
         return self.name    
     class Meta:
         db_table = 'food_items'  
