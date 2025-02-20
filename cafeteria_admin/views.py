@@ -52,7 +52,6 @@ def logout_admin(request):
 
 
 
-
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def admin_upload_popup(request):
     if request.method == 'POST':
@@ -65,7 +64,7 @@ def admin_upload_popup(request):
 
     return render(request, 'cafeteria_admin/event_popup.html', {'form': form})
 
-@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+
 def show_popup(request):
     current_time = datetime.now()
     event = EventPopup.objects.filter(start_date__lte=current_time, end_date__gte=current_time).order_by('-start_date').first()  

@@ -217,6 +217,8 @@
   -webkit-background-clip: text;
   color: transparent;
   margin-bottom: 10px;
+  background-attachment: fixed;
+
 }
 
 /* Description */
@@ -254,6 +256,8 @@
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+  background-attachment: fixed;
+
 }
 
 

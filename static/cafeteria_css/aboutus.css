@@ -119,37 +119,36 @@
         transition: 0.2s ease;
       }
 
-      @media screen and (max-width: 768px) {
-        .flex-2 {
-          width: 100%;
-          flex-direction: column;
-          padding: 45px 0px;
-        }
-        .about-content {
-          width: 80%;
-          display: block;
-          margin: auto;
-        }
-        .about-content h1 {
-          font-size: 35px;
-        }
-        .about-content h2 {
-          font-size: 30px;
-        }
-        .about-content p {
-          font-size: 19px;
-          text-align: justify;
-        }
-        .about-content a {
-          font-size: 17px;
-          padding: 8px 8px;
-        }
-        .about-image {
-          width: 80%;
-          margin: 40px auto;
-          display: block;
-        }
+
+      /* Her osection */
+      .hero-section {
+        height: calc(70vh - 64px);
+        width: 100%;
+        background-image: linear-gradient(
+            rgba(4, 9, 30, 0.7),
+            rgba(4, 9, 30, 0.7)
+          ),
+          url(../Images/Abstract1.webp);
+        background-position: center;  
+        background-size: cover;
+        position: relative;
+        background-attachment: fixed;
       }
+      .text-box {
+        width: 90%;
+        color: #fff;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+      }
+
+      .text-box h1 {
+        font-size: 60px;
+      }
+
+  
       /*************Our Team Section  *************/
 
       #ourTeam-Container {
@@ -201,6 +200,42 @@
         color: #222;
         line-height: 1.5;
       }
+
+
+
+      /* About Section  */
+      @media screen and (max-width: 768px) {
+        .flex-2 {
+          width: 100%;
+          flex-direction: column;
+          padding: 45px 0px;
+        }
+        .about-content {
+          width: 80%;
+          display: block;
+          margin: auto;
+        }
+        .about-content h1 {
+          font-size: 35px;
+        }
+        .about-content h2 {
+          font-size: 30px;
+        }
+        .about-content p {
+          font-size: 19px;
+          text-align: justify;
+        }
+        .about-content a {
+          font-size: 17px;
+          padding: 8px 8px;
+        }
+        .about-image {
+          width: 80%;
+          margin: 40px auto;
+          display: block;
+        }
+      }
+
 
       /* Responsive for our team container */
       @media screen and (max-width: 800px) {
