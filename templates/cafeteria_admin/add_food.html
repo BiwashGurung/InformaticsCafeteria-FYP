@@ -22,13 +22,19 @@
 
         <label for="id_image">Upload Image:</label>
         {{ form.image }}
-        <label for = "id_is_in_stock">Is in stock </label>
-        {{ form.is_in_stock }}
+
+        <div class="checkbox-container">
+            <label for="id_is_in_stock">Is in Stock:</label>
+            <label class="switch">
+                <input type="checkbox" name="is_in_stock" id="id_is_in_stock" {% if form.is_in_stock.value %}checked{% endif %}>
+                <span class="slider round"></span>
+            </label>
+        </div>
 
         <button type="submit">Add Food Item</button>
     </form>
     <a href="{% url 'manage_menu' %}" class="back-link">
         <i class="fa-solid fa-arrow-left"></i> Back to Manage Menu
-      </a>
+    </a>
 </div>
 {% endblock %}
