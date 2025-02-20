@@ -19,7 +19,6 @@
                 <th>Username</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Last Login</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -29,11 +28,6 @@
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.phone }}</td>
-                {% comment %} <td>{{ user_last_logins[user.id] }}</td> {% endcomment %}
-                
-
-
-
                 <td class="actions">
                     <a href="{% url 'edit_user' user.id %}" class="edit-btn">Edit</a>
                     <a href="{% url 'delete_user' user.id %}" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</a>

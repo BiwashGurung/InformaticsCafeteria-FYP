@@ -112,6 +112,18 @@
     align-items: center;
     gap: 15px;
 }
+.out-of-stock {
+    color: red; 
+    font-weight: bold; 
+    font-size: 1.2em;
+    margin-top: 10px;
+  }
+  
+  .food-actions .add-to-cart:disabled {
+    background-color: gray; 
+    cursor: not-allowed;
+  }
+  
 
 
 .back-link {

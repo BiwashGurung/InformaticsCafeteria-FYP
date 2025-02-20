@@ -17,21 +17,6 @@ from cafeteria.models import FoodItem
 def is_admin(user):
     return user.is_staff
 
-@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
-def cafeteria_admin_dashboard(request):
-    # Counting the total number of users
-    total_users = Profile.objects.count()  
-
-    context = {
-        'total_users': total_users,
-        'total_orders': 0,  
-        'total_revenue': 0,  
-        'recent_activities': []  
-    }
-
-    return render(request, 'cafeteria_admin/dashboard.html', context)
-
-
 def cafeteria_admin_login(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -47,11 +32,28 @@ def cafeteria_admin_login(request):
             messages.error(request, 'Invalid admin username or password.')
     return render(request, 'cafeteria_admin/admin_login.html')
 
-def logout_admin(request):
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def cafeteria_admin_dashboard(request):
+    # Counting the total number of users
+    total_users = Profile.objects.count()  
 
+    context = {
+        'total_users': total_users,
+        'total_orders': 0,  
+        'total_revenue': 0,  
+        'recent_activities': []  
+    }
+
+    return render(request, 'cafeteria_admin/dashboard.html', context)
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def logout_admin(request):
     return redirect('/cafeteria_admin/admin_login/')
 
 
+
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def admin_upload_popup(request):
     if request.method == 'POST':
         form = EventPopupForm(request.POST, request.FILES)
@@ -63,11 +65,13 @@ def admin_upload_popup(request):
 
     return render(request, 'cafeteria_admin/event_popup.html', {'form': form})
 
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def show_popup(request):
     current_time = datetime.now()
     event = EventPopup.objects.filter(start_date__lte=current_time, end_date__gte=current_time).order_by('-start_date').first()  
     return render(request, 'cafeteria/index.html', {'event': event})
 
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def view_event_history(request):
     #Fetching all events
     events = EventPopup.objects.all() 
@@ -111,6 +115,7 @@ def delete_user(request, user_id):
     messages.success(request, 'User deleted successfully!')
     return redirect('manage_users')
 
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def update_user_password(request, user_id):
     user = get_object_or_404(User, id=user_id)
     
@@ -131,11 +136,12 @@ def update_user_password(request, user_id):
 
 
 
-
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def manage_menu(request):
     food_items = FoodItem.objects.all()  
     return render(request, 'cafeteria_admin/manage_menu.html', {'food_items': food_items})
 
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def add_food_item(request):
     if request.method == 'POST':
         form = FoodItemForm(request.POST, request.FILES)
@@ -146,17 +152,20 @@ def add_food_item(request):
         form = FoodItemForm()
     return render(request, 'cafeteria_admin/add_food.html', {'form': form})
 
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def edit_food_item(request, food_id):
     food_item = get_object_or_404(FoodItem, id=food_id)
     if request.method == 'POST':
         form = FoodItemForm(request.POST, request.FILES, instance=food_item)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Food item updated successfully!')
             return redirect('manage_menu')
     else:
         form = FoodItemForm(instance=food_item)
-    return render(request, 'cafeteria_admin/edit_food.html', {'form': form})
+    return render(request, 'cafeteria_admin/edit_food.html', {'form': form, 'food_item': food_item})
 
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def delete_food_item(request, food_id):
     food_item = get_object_or_404(FoodItem, id=food_id)
     food_item.delete()

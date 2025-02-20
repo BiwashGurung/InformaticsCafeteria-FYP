@@ -3,7 +3,7 @@
 {% block content %}
 
 <head>
-  <title> Informatics Cafeteria - {{ category }} </title>
+  <title>Informatics Cafeteria - {{ category }}</title>
   <link rel="stylesheet" href="{% static 'cafeteria_css/food_list.css' %}" />
 </head>
 
@@ -19,22 +19,28 @@
     </div>
     <div class="food-actions">
       <p class="price">NPR: {{ food.price }} /-</p>
+
+      {% if not food.is_in_stock %}
+      <p class="out-of-stock">Out of Stock</p>  
+      {% endif %}
+
       <div class="quantity">
         <button onclick="decreaseQuantity(this)">-</button>
         <input type="text" value="1" readonly>
         <button onclick="increaseQuantity(this)">+</button>
       </div>
-      <button class="add-to-cart">Add To Cart</button>
+      <button class="add-to-cart" {% if not food.is_in_stock %} disabled {% endif %}>Add To Cart</button> 
     </div>
   </div>
   {% empty %}
   <p>No items available in this category.</p>
   {% endfor %}
 </div>
+
 <a href="{% url 'orderonline' %}" class="back-link">
   <i class="fa-solid fa-arrow-left"></i> Back to Menus
 </a>
 
-<script src="{% static 'javascript/quantity.js'%} "></script>
+<script src="{% static 'javascript/quantity.js'%}"></script>
 
 {% endblock %}

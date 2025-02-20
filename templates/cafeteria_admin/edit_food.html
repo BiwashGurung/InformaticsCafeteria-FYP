@@ -3,10 +3,10 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'admin_css/edit_food.css' %}" />
 <div class="edit-food-form">
-    <h2>Edit Food Item  {{ form.name }}</h2>
+    <h2>Edit Food Item: {{ form.name }}</h2>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-
+        
         <label for="id_name">Food Name:</label>
         {{ form.name }}
 
@@ -22,10 +22,13 @@
         <label for="id_image">Upload New Image (optional):</label>
         {{ form.image }}
 
+        <label for="id_is_in_stock">Out of Stock:</label>
+        {{ form.is_in_stock }}
+
         <button type="submit">Update Food Item</button>
     </form>
     <a href="{% url 'manage_menu' %}" class="back-link">
         <i class="fa-solid fa-arrow-left"></i> Back to Manage Menu
-      </a>
+    </a>
 </div>
 {% endblock %}

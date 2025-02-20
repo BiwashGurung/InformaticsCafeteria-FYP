@@ -11,4 +11,4 @@ class EventPopupForm(forms.ModelForm):
 class FoodItemForm(forms.ModelForm):
     class Meta:
         model = FoodItem
-        fields = ['name', 'category', 'description', 'price', 'image']        
+        fields = ['name', 'category', 'description', 'price', 'image', 'is_in_stock']        
