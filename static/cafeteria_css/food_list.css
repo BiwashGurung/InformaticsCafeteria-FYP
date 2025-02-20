@@ -221,12 +221,13 @@
     }
 
     .quantity button {
-        font-size: 12px;
-        padding: 4px 6px;
+        font-size: 20px;
+        padding: 4px 30px;
     }
 
     .quantity input {
-        font-size: 12px;
+        font-size: 20px;
+        font-weight: 500;
         width: 25px;
     }
 
