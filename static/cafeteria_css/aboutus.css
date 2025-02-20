@@ -203,6 +203,21 @@
 
 
 
+
+      
+  /* Responsive for Hero section */
+  @media (max-width: 768px) {
+
+    .hero-section {
+        background-attachment: scroll;
+        background-size: cover; 
+    }
+     
+    .text-box h1 {
+        font-size: 20px;
+      }
+    }
+  
       /* About Section  */
       @media screen and (max-width: 768px) {
         .flex-2 {
