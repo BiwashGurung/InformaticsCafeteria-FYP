@@ -35,20 +35,6 @@
   <i class="fa-solid fa-arrow-left"></i> Back to Menus
 </a>
 
-<script>
-function decreaseQuantity(button) {
-    let input = button.nextElementSibling;
-    let value = parseInt(input.value);
-    if (value > 1) {
-        input.value = value - 1;
-    }
-}
-
-function increaseQuantity(button) {
-    let input = button.previousElementSibling;
-    let value = parseInt(input.value);
-    input.value = value + 1;
-}
-</script>
+<script src="{% static 'javascript/quantity.js'%} "></script>
 
 {% endblock %}

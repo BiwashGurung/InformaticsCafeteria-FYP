@@ -2,34 +2,37 @@
 {% load static %}
 {% block content %}
 
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="{% static 'admin_css/dashboard.css' %}" />
-    
-    <div class="dashboard-container">
-      <main>
-        <section class="stats">
-          <h2>Statistics</h2>
-          <div class="stat-item">
-            <h3>Total Users</h3>
-            <p>{{ total_users }}</p>
-          </div>
-          <div class="stat-item">
-            <h3>Total Orders</h3>
-            <p>{{ total_orders }}</p>
-          </div>
-          <div class="stat-item">
-            <h3>Total Revenue</h3>
-            <p>{{ total_revenue }}</p>
-          </div>
-        </section>
-        <section class="recent-activity">
-          <h2>Recent Activity</h2>
-          <ul>
-            {% for activity in recent_activities %}
-            <li>{{ activity }}</li>
-            {% endfor %}
-          </ul>
-        </section>
-      </main>
-    </div>
-{% endblock content %}    
+<link rel="stylesheet" href="{% static 'admin_css/dashboard.css' %}" />
+
+
+
+<div class="dashboard-container">
+  <main>
+    <section class="stats">
+      <h2>Statistics</h2>
+      <div class="stat-item">
+        <h3>Total Users</h3>
+        <p>{{ total_users }}</p>
+      </div>
+      <div class="stat-item">
+        <h3>Total Orders</h3>
+        <p>{{ total_orders }}</p>
+      </div>
+      <div class="stat-item">
+        <h3>Total Revenue</h3>
+        <p>{{ total_revenue }}</p>
+      </div>
+    </section>
+
+    <section class="recent-activity">
+      <h2>Recent Activity</h2>
+      <ul>
+        {% for activity in recent_activities %}
+        <li>{{ activity }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  </main>
+</div>
+
+{% endblock content %}

@@ -16,6 +16,7 @@ def SignupPage(request):
         phone = request.POST['phone']
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
+        
 
         if password != confirm_password:
             messages.error(request, 'Passwords do not match')
