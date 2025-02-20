@@ -1,12 +1,3 @@
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
-}
-
-
 .menu-title {
     text-align: center;
     font-size: 28px;
@@ -20,7 +11,8 @@ body {
     margin: 0 auto;
     padding: 20px;
     background: white;
-    border-radius: 8px;
+    border: 1px solid black;
+    border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -38,13 +30,13 @@ body {
     border-bottom: none;
 }
 
+
 .food-item img {
     width: 80px;
     height: 80px;
     object-fit: cover;
     border-radius: 8px;
 }
-
 
 .food-details {
     flex: 1;
@@ -119,4 +111,102 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
+}
+
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 16px;
+    text-decoration: none;
+    color: #007bff;
+    text-align: center; 
+    width: 100%; 
+    text-align: center; 
+  }
+  
+  .back-link:hover {
+    text-decoration: underline;
+  }
+
+/* Responsive Design for tablets */
+@media screen and (max-width: 768px) {
+    .food-container {
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    .food-item {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .food-item img {
+        width: 100%;
+        height: auto;
+        max-width: 250px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .food-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .price {
+        text-align: left;
+        font-size: 16px;
+    }
+
+    .add-to-cart {
+        width: 100%;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .quantity {
+        justify-content: space-between;
+        width: 100%;
+    }
+}
+/* For mobile devices */
+@media screen and (max-width: 480px) {
+    .menu-title {
+        font-size: 24px;
+    }
+
+    .food-item {
+        padding: 8px;
+    }
+
+    .food-details h3 {
+        font-size: 16px;
+    }
+
+    .food-details p {
+        font-size: 13px;
+    }
+
+    .price {
+        font-size: 15px;
+    }
+
+    .quantity button {
+        font-size: 12px;
+        padding: 4px 6px;
+    }
+
+    .quantity input {
+        font-size: 12px;
+        width: 25px;
+    }
+
+    .add-to-cart {
+        font-size: 14px;
+    }
 }

@@ -31,6 +31,9 @@
   <p>No items available in this category.</p>
   {% endfor %}
 </div>
+<a href="{% url 'orderonline' %}" class="back-link">
+  <i class="fa-solid fa-arrow-left"></i> Back to Menus
+</a>
 
 <script>
 function decreaseQuantity(button) {
