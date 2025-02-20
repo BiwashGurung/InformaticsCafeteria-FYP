@@ -22,8 +22,14 @@
         <label for="id_image">Upload New Image (optional):</label>
         {{ form.image }}
 
-        <label for="id_is_in_stock">Out of Stock:</label>
-        {{ form.is_in_stock }}
+        <div class="out-of-stock-section">
+            <label for="id_is_in_stock" class="out-of-stock-label">Out of Stock:</label>
+            <!-- Checkbox for Out of Stock -->
+            <input type="checkbox" id="id_is_in_stock" name="is_in_stock" value="true" 
+                {% if food_item.is_in_stock %}checked{% endif %}>
+            <span>Mark this item as out of stock</span>
+        </div>
+        
 
         <button type="submit">Update Food Item</button>
     </form>
