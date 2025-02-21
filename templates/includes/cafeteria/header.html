@@ -57,6 +57,10 @@
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
           <a class="nav-link {% if request.path == '/contactus/' %}active{% endif %}" href="{% url 'contactus' %}">Contact</a>
         </li>
+        <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+          <a class="nav-link {% if request.path == '/order_online/' %}active{% endif %}" href="{% url 'orderonline' %}"> Menu</a>
+        </li>
+
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4 dropdown">
           <a
             class="nav-link dropdown-toggle {% if request.user.is_authenticated %}logged-in-user{% endif %}  "
@@ -64,9 +68,9 @@
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
-          >
+          > <i class="fa-solid fa-user"></i>
             {% if request.user.is_authenticated %} {{ request.user.username }}
-            {% else %} Account {% endif %}
+            {% else %}  Account {% endif %}
           </a>
           <ul class="dropdown-menu">
             {% if request.user.is_authenticated %}
@@ -82,11 +86,16 @@
             {% endif %}
           </ul>
         </li>
-
-        <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+        
+        {% comment %} <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
           <a href="{% url 'orderonline' %}" class="btn order-btn">
             <i class="lni lni-cart"></i> Order Online
           </a>
+        </li> {% endcomment %}
+        <li class="nav-item px-3 px-lg-0 py-1 py-lg-4" >
+          <a class="nav-link ">
+            <i class="lni lni-cart"></i>
+           Cart</a>
         </li>
       </ul>
     </div>

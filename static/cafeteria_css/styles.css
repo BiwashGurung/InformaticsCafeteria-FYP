@@ -82,9 +82,9 @@ nav.navbar {
 }
 
   
+/*   
   
-  
-/* Order Online Button Styles */
+Order Online Button Styles
 .order-btn {
     border: 1px solid #111;
     border-radius: 16px;
@@ -96,17 +96,18 @@ nav.navbar {
     color: #000;
 }
   
-/* Styling Icon in order button */
+Styling Icon in order button
 .order-btn .lni-cart {
     margin-right: 8px;
     font-size: 1.2rem;
 }
   
-/* Hover effect for order button */
+Hover effect for order button
 .order-btn:hover {
     background-color: rgb(160, 231, 18);
     color: #090909;
-}
+} */
+
 
 /* Highlighting active navigation link */
 .nav-link.active {
