@@ -56,8 +56,9 @@ nav.navbar {
 .nav-link {
     font-weight: 700;
     color: #fff;
+
 }
-  
+
 /* Hover effect for nav links */
 .nav-link:hover {
     color: #1729ea;
@@ -89,32 +90,6 @@ nav.navbar {
     font-size: 0.8em;
 }
 
-  
-/*   
-  
-Order Online Button Styles
-.order-btn {
-    border: 1px solid #111;
-    border-radius: 16px;
-    font-weight: 400;
-    padding: 3px 5px;
-    display: flex;
-    align-items: center;
-    background-color: #ffff00;
-    color: #000;
-}
-  
-Styling Icon in order button
-.order-btn .lni-cart {
-    margin-right: 8px;
-    font-size: 1.2rem;
-}
-  
-Hover effect for order button
-.order-btn:hover {
-    background-color: rgb(160, 231, 18);
-    color: #090909;
-} */
 
 
 /* Highlighting active navigation link */
