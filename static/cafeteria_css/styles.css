@@ -80,6 +80,14 @@ nav.navbar {
      /* For Safari and older WebKit browsers */
     -webkit-background-clip: text;
 }
+.logged-in-user::after {
+    display: none !important;
+}
+
+.custom-arrow {
+    margin-left: 5px;
+    font-size: 0.8em;
+}
 
   
 /*   
@@ -589,7 +597,7 @@ align-content: center;
 justify-content: center;
 text-decoration: none;
 }
-/* Adding background color and hover effects for icons in footer */
+
 
 /* For Instagram */
 footer .footer-aboutus .section-links li a .lni-instagram-original {
