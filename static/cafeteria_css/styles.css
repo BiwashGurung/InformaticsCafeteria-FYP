@@ -339,6 +339,16 @@ border: 1px solid #99180d;
 
 
 /************* Featured Menu *************/
+.out-of-stock {
+    color: red; 
+    font-weight: bold; 
+    font-size: 1.2em;
+    position: absolute;
+    margin-top: 0; 
+    border: 1px solid red; 
+    padding: 5px; 
+    /* z-index: 1; */
+}
 
 /* Styling Featured menu container  */
 #featuredMenu-Container {
@@ -374,8 +384,9 @@ max-width: 100%;
 padding: 1.3rem;
 height: auto;
 border-radius: 5px 5px 0 0;
+
 }
-.featuredMenu:hover {
+.featuredMenu img:hover {
 cursor: pointer;
 opacity: 0.5;
 transition: 0.5s;
@@ -404,6 +415,65 @@ font-weight: 500;
     line-height: 1.5;
     font-weight: 500;
 }
+
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #f1f1f1;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.quantity button {
+    border: none;
+    background: #ddd;
+    padding: 5px 8px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 3px;
+}
+
+.quantity input {
+    width: 30px;
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    background: transparent;
+}
+
+
+.add-to-cart {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.add-to-cart:hover {
+    background-color: darkred;
+}
+
+
+.food-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+  
+.food-actions .add-to-cart:disabled {
+    background-color: gray; 
+    cursor: not-allowed;
+  }
+  
+
+
     
 /******** Call to Action ***********/
 .callToAction {
