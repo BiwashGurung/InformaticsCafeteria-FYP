@@ -78,26 +78,42 @@
 
       <section id="featuredMenu-Container">
         <h1>Featured Menu</h1>
-        {% for food in food_items %}
         <div class="featuredMenu">
-            {% if not food.is_in_stock %}
-            <p class="out-of-stock">Out of Stock</p>  
-            {% endif %}
-            <img src="{{ food.image.url }}" alt="{{ food.name }}">
+          <img src="{{ food_items.0.image.url }}" alt="{{ food_items.0.name }}">
+          <div class="menu-content">
+              <h3>{{ food_items.0.name }}</h3>
+              <p>{{ food_items.0.description }}</p>
+              <span>${{ food_items.0.price }}</span>
+          </div>
+      </div>
+      
+  
+        <div class="featuredMenu">
+            <img src="{{ food_items.1.image.url }}" alt="{{ food_items.1.name }}">
             <div class="menu-content">
-                <h3>{{ food.name }}</h3>
-                <p>{{ food.description }}</p>
-                <span>${{ food.price }}</span>
+                <h3>{{ food_items.1.name }}</h3>
+                <p>{{ food_items.1.description }}</p>
+                <span>${{ food_items.1.price }}</span>
             </div>
-            <div class="quantity">
-                <button onclick="decreaseQuantity(this)" {% if not food.is_in_stock %} disabled {% endif %}>-</button>
-                <input type="text" value="1" readonly>
-                <button onclick="increaseQuantity(this)" {% if not food.is_in_stock %} disabled {% endif %}>+</button>
-            </div>
-            <button class="add-to-cart" {% if food.is_in_stock is False %} disabled {% endif %}>Add To Cart</button>
-
         </div>
-        {% endfor %}
+        
+        <div class="featuredMenu">
+            <img src="{{ food_items.2.image.url }}" alt="{{ food_items.2.name }}">
+            <div class="menu-content">
+                <h3>{{ food_items.2.name }}</h3>
+                <p>{{ food_items.2.description }}</p>
+                <span>${{ food_items.2.price }}</span>
+            </div>
+        </div>
+        
+        <div class="featuredMenu">
+          <img src="{{ food_items.3.image.url }}" alt="{{ food_items.3.name }}">
+          <div class="menu-content">
+              <h3>{{ food_items.3.name }}</h3>
+              <p>{{ food_items.3.description }}</p>
+              <span>${{ food_items.3.price }}</span>
+          </div>
+      </div>
     </section>
     
 
@@ -207,7 +223,6 @@
         </div>
       </section>
       <!--End of Order Description Section-->
-      <script src="{% static 'javascript/quantity.js'%}"></script>
       <script>
         function closePopup() {
             document.querySelector(".popup-main").style.display = "none";
