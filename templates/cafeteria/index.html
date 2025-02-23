@@ -79,36 +79,43 @@
       <section id="featuredMenu-Container">
         <h1>Featured Menu</h1>
         <div class="featuredMenu">
-          <span class="top-sales">Top Sales</span>
-          <img src="../static/Images/about.png" alt="" />
+          <img src="{{ food_items.0.image.url }}" alt="{{ food_items.0.name }}">
           <div class="menu-content">
-            <h3>Chicken Roll</h3>
-            <price>rs 120</price>
-            <p>Lorem ipsum dolor sit amet.</p>
+              <h3>{{ food_items.0.name }}</h3>
+              <p>{{ food_items.0.description }}</p>
+              <span>${{ food_items.0.price }}</span>
           </div>
-        </div>
+      </div>
+      
+  
         <div class="featuredMenu">
-          <img src="{% static 'Images/about.png' %}" alt="" />
-          <div class="menu-content">
-            <h3>Featured Menu 2</h3>
-            <p>Lorem ipsum dolor sit amet.</p>
-          </div>
+            <img src="{{ food_items.1.image.url }}" alt="{{ food_items.1.name }}">
+            <div class="menu-content">
+                <h3>{{ food_items.1.name }}</h3>
+                <p>{{ food_items.1.description }}</p>
+                <span>${{ food_items.1.price }}</span>
+            </div>
         </div>
+        
         <div class="featuredMenu">
-          <img src="Images/bannerImg1.png" alt="" />
-          <div class="menu-content">
-            <h3>Featured Menu 3</h3>
-            <p>Lorem ipsum dolor sit amet.</p>
-          </div>
+            <img src="{{ food_items.2.image.url }}" alt="{{ food_items.2.name }}">
+            <div class="menu-content">
+                <h3>{{ food_items.2.name }}</h3>
+                <p>{{ food_items.2.description }}</p>
+                <span>${{ food_items.2.price }}</span>
+            </div>
         </div>
+        
         <div class="featuredMenu">
-          <img src="Images/bannerImg1.png" alt="" />
+          <img src="{{ food_items.3.image.url }}" alt="{{ food_items.3.name }}">
           <div class="menu-content">
-            <h3>Featured Menu 4</h3>
-            <p>Lorem ipsum dolor sit amet.</p>
+              <h3>{{ food_items.3.name }}</h3>
+              <p>{{ food_items.3.description }}</p>
+              <span>${{ food_items.3.price }}</span>
           </div>
-        </div>
-      </section>
+      </div>
+    </section>
+    
 
       <!-- Call to Action -->
       <div class="callToAction">

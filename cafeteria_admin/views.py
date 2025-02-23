@@ -75,8 +75,10 @@ def show_popup(request):
     current_time = datetime.now()
     #Getting  the latest event within the current time range
     event = EventPopup.objects.filter(start_date__lte=current_time, end_date__gte=current_time).order_by('-start_date').first()  
+    #Limiting the number of food items to be displayed on the homepage
+    food_items = FoodItem.objects.all()[:4] 
     #Passing the even to the homepage
-    return render(request, 'cafeteria/index.html', {'event': event})
+    return render(request, 'cafeteria/index.html', {'event': event, 'food_items': food_items})
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def view_event_history(request):
