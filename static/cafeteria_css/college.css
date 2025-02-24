@@ -295,7 +295,7 @@
   .facilities .facilities-column img {
     width: 100%;
     border-radius: 4px;
-    margin-top: 5%;
+    /* margin-top: 5%; */
   }
 
   .facilities .facilities-column p {

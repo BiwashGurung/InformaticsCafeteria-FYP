@@ -438,8 +438,9 @@ border-right: 1px solid #5e5d5d9f;
 /* Food Gallery */
 #gallery,
 .food-gallery {
+background-color: #FBFBFB;    
 display: flex;
-margin-top: 1rem;
+/* margin-top: 1rem; */
 max-width: 100%;
 width: 100%;
 padding: 0.5rem;
@@ -494,16 +495,16 @@ transform: scale(1.05);
 .order-steps {
 position: relative;
 display: flex;
-margin-top: 1rem;
+/* margin-top: 1rem; */
 max-width: 100%;
 width: 100%;
 padding: 0.5rem;
 justify-content: center;
 align-items: center;
 flex-wrap: wrap;
-/* background-color: #fff; */
 gap: 20px;
 border-radius: 4px;
+background-color: #FBFBFB;    
 }
 
 #order-process h1 {
