@@ -43,6 +43,9 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
+.hour-container:hover {
+    transform: scale(1.05);
+}
 
 h1 {
     font-size: 2rem;
