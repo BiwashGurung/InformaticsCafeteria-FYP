@@ -13,8 +13,9 @@ font-family: "Poppins", sans-serif;
 html {
   scroll-behavior: smooth;
 }
-
-
+body{
+overflow-x: hidden;
+}
 /**************************** Nav BAr Css Start From Here *******************/
 nav.navbar {
     background-color: #1b1b1bf9 !important; 
