@@ -14,9 +14,6 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
-background-color: #fff;
-}
 
 /**************************** Nav BAr Css Start From Here *******************/
 nav.navbar {
@@ -553,9 +550,8 @@ padding: 0.5rem;
 justify-content: center;
 align-items: center;
 flex-wrap: wrap;
-background-color: #fff;
+/* background-color: #fff; */
 gap: 20px;
-border: 1px solid #fff;
 border-radius: 4px;
 }
 
@@ -567,11 +563,19 @@ margin-top: 1rem;
 .steps {
 display: flex;
 width: 90%;
-border: 1px solid #af9d9d;
-background-color: #f6f4f4;
+border: 1px solid #f6f4f4;
 border-radius: 4px;
 margin: 5px;
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.111);
 }
+
+.steps:hover {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.5s;
+
+}
+    
 
 .steps img {
 max-width: 150px;
