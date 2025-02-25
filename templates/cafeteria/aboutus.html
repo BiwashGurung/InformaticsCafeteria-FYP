@@ -8,136 +8,131 @@
   <title>Informatics Cafeteria - About</title>
 </head>
 
-  <!-- IMG FOR ABOUT US-->
-  <section class="background-image">
-    <div class="jumbotron glass-container">
-      <p
-        style="
-          text-align: center;
+<!-- IMG FOR ABOUT US-->
+<section class="background-image">
+  <div class="jumbotron glass-container">
+    <p
+      style="
+        text-align: center;
 
-          font-size: 13px;
-        "
-      >
-        Who We Are?<br />
-        Scroll Down To know about us
+        font-size: 13px;
+      "
+    >
+      Who We Are?<br />
+      Scroll Down To know about us
+    </p>
+  </div>
+</section>
+
+<section class="about-container">
+  <div class="flex-2">
+    <div class="about-content">
+      <h1>About Us</h1>
+      <h2>Your Favorite Dining Spot at Informatics College Pokhara</h2>
+      <p>
+        At Informatics Cafeteria, we are dedicated to providing a variety of
+        delicious meals, from local Nepali dishes to international favorites.
+        Our chefs use the freshest ingredients to craft meals that satisfy all
+        tastes and dietary preferences. With our easy-to-use online platform,
+        you can view our menu, place orders, and make payments securely, whether
+        online or in-person.
       </p>
     </div>
-  </section>
-
-  <section class="about-container">
-    <div class="flex-2">
-      <div class="about-content">
-        <h1>About Us</h1>
-        <h2>Your Favorite Dining Spot at Informatics College Pokhara</h2>
-        <p>
-          At Informatics Cafeteria, we are dedicated to providing a variety of
-          delicious meals, from local Nepali dishes to international
-          favorites. Our chefs use the freshest ingredients to craft meals
-          that satisfy all tastes and dietary preferences. With our
-          easy-to-use online platform, you can view our menu, place orders,
-          and make payments securely, whether online or in-person.
-        </p>
-        
-      </div>
-      <div class="about-image">
-        <img src="{% static 'Images/about_chef.jpg' %}" alt="About Chefs" />
-      </div>
+    <div class="about-image">
+      <img src="{% static 'Images/about_chef.jpg' %}" alt="About Chefs" />
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Call to Action -->
-  <div class="callToAction">
-    <div class="text-center">
-      <div class="row justify-content-center">
-        <div class="col-md-3 px-3 border-line">
-          <p class="text-black fw-bold">Comfortable Ambiance</p>
-          <p class="small mt-2 text-black">
-            Enjoy a cozy and welcoming environment perfect for relaxation and
-            socializing.
-          </p>
-        </div>
-        <div class="col-md-3 px-3 border-line">
-          <p class="text-black fw-bold">Affordable Choices</p>
-          <p class="small mt-2 text-black">
-            Savor delicious meals at prices that fit a student-friendly
-            budget.
-          </p>
-        </div>
-        <div class="col-md-3 px-3 border-line">
-          <p class="text-black fw-bold">Fresh Ingredients</p>
-          <p class="small mt-2 text-black">
-            We prioritize freshness, quality, and nutrition in every dish we
-            serve.
-          </p>
-        </div>
-        <div class="col-md-3 px-3">
-          <p class="text-black fw-bold">Convenient Ordering</p>
-          <p class="small mt-2 text-black">
-            Place orders and make payments online with our user-friendly
-            platform.
-          </p>
-        </div>
+<!-- Call to Action -->
+<div class="callToAction">
+  <div class="text-center">
+    <div class="row justify-content-center">
+      <div class="col-md-3 px-3 border-line">
+        <p class="text-black fw-bold">Comfortable Ambiance</p>
+        <p class="small mt-2 text-black">
+          Enjoy a cozy and welcoming environment perfect for relaxation and
+          socializing.
+        </p>
+      </div>
+      <div class="col-md-3 px-3 border-line">
+        <p class="text-black fw-bold">Affordable Choices</p>
+        <p class="small mt-2 text-black">
+          Savor delicious meals at prices that fit a student-friendly budget.
+        </p>
+      </div>
+      <div class="col-md-3 px-3 border-line">
+        <p class="text-black fw-bold">Fresh Ingredients</p>
+        <p class="small mt-2 text-black">
+          We prioritize freshness, quality, and nutrition in every dish we
+          serve.
+        </p>
+      </div>
+      <div class="col-md-3 px-3">
+        <p class="text-black fw-bold">Convenient Ordering</p>
+        <p class="small mt-2 text-black">
+          Place orders and make payments online with our user-friendly platform.
+        </p>
       </div>
     </div>
   </div>
-  <!-- Call to Action Ends here -->
+</div>
+<!-- Call to Action Ends here -->
 
+<section class="hero-section">
+  <div class="text-box">
+    <h1>Meet The Team</h1>
+  </div>
+</section>
 
-  <section class="hero-section">
-    <div class="text-box">
-      <h1>Meet The Team</h1>
+<section id="ourTeam-Container">
+  <div class="ourTeamDetails">
+    <img src="{% static 'Images/ChefBiwashGurung.jpg' %}" alt="Executive Chef Biwash Gurung" />
+    <div class="ourTeam-description">
+      <h3>Biwash Gurung</h3>
+      <p>Executive Chef</p>
     </div>
-  </section>
+  </div>
+  <div class="ourTeamDetails">
+    <img src="{% static 'Images/Laxman.jpg' %}" alt="Sous Chef Laxman" />
 
-  <section id="ourTeam-Container">
-    <div class="ourTeamDetails">
-      <img src="{% static 'Images/about.png' %}" alt="" />
-      <div class="ourTeam-description">
-        <h3>Chicken Roll</h3>
-        <p class="price">Rs 120</p>
-        <p>Lorem ipsum dolor sit amet.</p>
-      </div>
+    <div class="ourTeam-description">
+      <h3>Laxman Magar</h3>
+      <p>Sous Chef</p>
     </div>
-    <div class="ourTeamDetails">
-      <img src="{% static 'Images/about.png' %}" alt="" />
+  </div>
 
-      <div class="ourTeam-description">
-        <h3>Featured Menu 2</h3>
-        <p>Lorem ipsum dolor sit amet.</p>
-      </div>
-    </div>
-    
-    <div class="ourTeamDetails">
-      <img src="{% static 'Images/about.png' %}" alt="" />
+  <div class="ourTeamDetails">
+    <img src="{% static 'Images/Anand.jpg' %}" alt="Commis Anand" />
 
-      <div class="ourTeam-description">
-        <h3>Featured Menu 3</h3>
-        <p>Lorem ipsum dolor sit amet.</p>
-      </div>
+    <div class="ourTeam-description">
+      <h3>Anand Purja</h3>
+      <p>Commis I</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="hero-section-1">
-    <div class="text-box">
-      <h1>Bringing You Quality with Every Bite </h1>
-    </div>
-  </section>
+<section class="hero-section-1">
+  <div class="text-box">
+    <h1>Bringing You Quality with Every Bite</h1>
+  </div>
+</section>
 
-  <section id="ourTeam-Container-second">
-    <div class="ourTeamDetails">
-      <img src="{% static 'Images/about.png' %}" alt="" />
-      <div class="ourTeam-description">
-        <h3>Featured Menu 3</h3>
-        <p>Lorem ipsum dolor sit amet.</p>
-      </div>
+<section id="ourTeam-Container-second">
+  <div class="ourTeamDetails">
+    <img src="{% static 'Images/Amar.jpg' %}" alt="Commis Amar" />
+    <div class="ourTeam-description">
+      <h3>Amar Thapa Magar</h3>
+      <p> Commis II</p>
     </div>
-    <div class="ourTeamDetails">
-      <img src="{% static 'Images/about.png' %}" alt="" />
+  </div>
+  <div class="ourTeamDetails">
+    <img src="{% static 'Images/Krishna.jpg' %}" alt="Commis Krishna" />
 
-      <div class="ourTeam-description">
-        <h3>Featured Menu 4</h3>
-        <p>Lorem ipsum dolor sit amet.</p>
-      </div>
+    <div class="ourTeam-description">
+      <h3>Krishna Sen</h3>
+      <p> Commis III</p>
     </div>
-  </section>
+  </div>
+</section>
 {% endblock content%}
