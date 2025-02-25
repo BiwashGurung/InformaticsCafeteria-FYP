@@ -44,6 +44,7 @@
     text-align: center;
 }
 .hour-container:hover {
+    background-color: #ffffff;
     transform: scale(1.05);
 }
 

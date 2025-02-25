@@ -103,7 +103,16 @@
 .hero-section {
   height: calc(70vh - 64px);
   width: 100%;
-  background-image: linear-gradient(rgba(4, 9, 30, 0.7), rgba(4, 9, 30, 0.7)), url(../Images/Abstract1.webp);
+  background-image: linear-gradient(rgba(4, 9, 30, 0.7), rgba(4, 9, 30, 0.7)), url(../Images/chef_group.jpg);
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  background-attachment: fixed;
+}
+.hero-section-1 {
+  height: calc(70vh - 64px);
+  width: 100%;
+  background-image: linear-gradient(rgba(4, 9, 30, 0.7), rgba(4, 9, 30, 0.7)), url(../Images/chef_cooking_food.jpg);
   background-position: center;
   background-size: cover;
   position: relative;
