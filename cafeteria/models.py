@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 
 #Creating a profile model to store additional information about the user in MySQL database
 class Profile(models.Model):
@@ -22,7 +23,11 @@ class Profile(models.Model):
 class FoodItem(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField(
+        max_digits=6, 
+        decimal_places=2, 
+        validators=[MinValueValidator(1)]
+    )
     category = models.CharField(max_length=50)
     image = models.ImageField(upload_to='food_images/')
     is_in_stock = models.BooleanField(default=True)
@@ -38,9 +43,20 @@ class FoodItem(models.Model):
 
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    username = models.CharField(max_length=50, blank=True, null=True) 
+
+    def save(self, *args, **kwargs):
+         #Setting  automatically username if not provided
+        if not self.username: 
+            self.username = self.user.username
+        super().save(*args, **kwargs)
 
     def total_price(self):
         return sum(item.total_price() for item in self.cart_items.all())
+
+    class Meta:
+        db_table = 'cafeteria_cart'
+
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name="cart_items", on_delete=models.CASCADE)
@@ -48,4 +64,8 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
 
     def total_price(self):
-        return self.food_item.price * self.quantity
+        return self.food_item.price * self.quantity  
+
+    class Meta:
+        db_table = 'cafeteria_cart_items'
+
