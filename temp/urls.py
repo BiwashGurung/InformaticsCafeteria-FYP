@@ -5,7 +5,7 @@ from cafeteria import views
 from cafeteria_admin.views import show_popup
 from django.conf import settings
 from django.conf.urls.static import static
-from cafeteria.views import food_list
+from cafeteria.views import food_list, view_cart, add_to_cart, update_cart, remove_from_cart, clear_cart
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -19,8 +19,12 @@ urlpatterns = [
     path('contactus/', views.ContactUsPage, name='contactus'),
     path('logout/', views.LogoutPage, name='logout'),
     path('order_online/', views.OrderOnline, name='orderonline'),
-   
     path('menu/<str:category>/', food_list, name='food_list'),
+    path('cart/', view_cart, name='view_cart'),
+    path('cart/add/<int:food_id>/', add_to_cart, name='add_to_cart'),
+    path('cart/update/<int:cart_item_id>/', update_cart, name='update_cart'),
+    path('cart/remove/<int:cart_item_id>/', remove_from_cart, name='remove_from_cart'),
+    path('cart/clear/', clear_cart, name='clear_cart'),
     
     # Password reset views
     path('reset_password/', auth_views.PasswordResetView.as_view(), name='password_reset'),

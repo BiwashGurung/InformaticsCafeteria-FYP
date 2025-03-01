@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect, get_object_or_404
 
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Profile, FoodItem 
+from .models import Profile, FoodItem ,Cart ,CartItem
 
 
 #Rendering the homepage 
@@ -90,3 +91,55 @@ def food_list(request, category):
     food_items = FoodItem.objects.filter(category=category)
     #Rendering the food list page with food items
     return render(request, 'cafeteria/food_list.html', {'food_items': food_items, 'category': category})    
+
+
+
+#Displaying Cart
+@login_required
+def view_cart(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_items = cart.cart_items.all()
+    total_price = cart.total_price()
+    return render(request, 'cafeteria/cart.html', {'cart_items': cart_items, 'total_price': total_price})
+
+#Adding Item to Cart
+@login_required
+def add_to_cart(request, food_id):
+    food_item = get_object_or_404(FoodItem, id=food_id)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+
+    #Checking if item is already in cart
+    cart_item, item_created = CartItem.objects.get_or_create(cart=cart, food_item=food_item)
+    if not item_created:
+        cart_item.quantity += 1
+        cart_item.save()
+
+    return redirect('view_cart')
+
+#Updating Cart Item Quantity
+@login_required
+def update_cart(request, cart_item_id):
+    cart_item = get_object_or_404(CartItem, id=cart_item_id, cart__user=request.user)
+    if request.method == "POST":
+        new_quantity = int(request.POST.get("quantity", 1))
+        if new_quantity > 0:
+            cart_item.quantity = new_quantity
+            cart_item.save()
+        else:
+            # Removing item if quantity is 0
+            cart_item.delete()  
+    return redirect('view_cart')
+
+#Removing Item from Cart
+@login_required
+def remove_from_cart(request, cart_item_id):
+    cart_item = get_object_or_404(CartItem, id=cart_item_id, cart__user=request.user)
+    cart_item.delete()
+    return redirect('view_cart')
+
+# Clearing Cart
+@login_required
+def clear_cart(request):
+    cart = get_object_or_404(Cart, user=request.user)
+    cart.cart_items.all().delete()
+    return redirect('view_cart')

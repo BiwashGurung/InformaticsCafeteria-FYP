@@ -89,11 +89,12 @@
             <i class="lni lni-cart"></i> Order Online
           </a>
         </li> {% endcomment %}
-        <li class="nav-item px-3 px-lg-0 py-1 py-lg-4" >
-          <a class="nav-link" href="#">
-            <i class="lni lni-cart"></i>
-           Cart</a>
+        <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+          <a class="nav-link {% if request.path == '/cart/' %}active{% endif %}" href="{% url 'view_cart' %}">
+            <i class="lni lni-cart"></i> Cart
+          </a>
         </li>
+        
       </ul>
     </div>
   </div>

@@ -30,7 +30,14 @@
         <input type="text" value="1" readonly>
         <button onclick="increaseQuantity(this)"  {% if not food.is_in_stock %} disabled {% endif %}>+</button>
       </div>
-      <button class="add-to-cart" {% if not food.is_in_stock %} disabled {% endif %}>Add To Cart</button> 
+      <form method="POST" action="{% url 'add_to_cart' food.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="quantity" value="1">
+        <button type="submit" class="add-to-cart" {% if not food.is_in_stock %} disabled {% endif %}>
+          Add To Cart
+        </button>
+      </form>
+      
     </div>
   </div>
   {% empty %}

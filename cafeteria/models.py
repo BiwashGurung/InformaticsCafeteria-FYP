@@ -32,3 +32,20 @@ class FoodItem(models.Model):
         return self.name    
     class Meta:
         db_table = 'food_items'  
+
+
+
+
+class Cart(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def total_price(self):
+        return sum(item.total_price() for item in self.cart_items.all())
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, related_name="cart_items", on_delete=models.CASCADE)
+    food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)  
+    quantity = models.PositiveIntegerField(default=1)
+
+    def total_price(self):
+        return self.food_item.price * self.quantity

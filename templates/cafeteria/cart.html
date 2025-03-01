@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">🛒 Your Cart</h2>
+
+    {% if cart_items %}
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.food_item.name }}</td>
+                    <td>Rs. {{ item.food_item.price }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'update_cart' item.id %}">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control" style="width: 60px; display: inline;">
+                            <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                        </form>
+                    </td>
+                    <td>Rs. {{ item.total_price }}</td>
+                    <td>
+                        <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm">Remove</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h4 class="text-right">Total: Rs. {{ total_price }}</h4>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'clear_cart' %}" class="btn btn-warning">Clear Cart</a>
+            <a href="" class="btn btn-success">Proceed to Checkout</a>
+        </div>
+
+    {% else %}
+        <p class="text-center">Your cart is empty! 🛒 <a href="{% url 'orderonline' %}">Browse Menu</a></p>
+    {% endif %}
+</div>
+{% endblock %}
