@@ -18,17 +18,17 @@ def SignupPage(request):
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
 
-        # Check if passwords match
+        # Checking if passwords match or not 
         if password != confirm_password:
             messages.error(request, 'Passwords do not match.')
             return redirect('signup')
 
-        # Check if username already exists
+        # Checking if username already exists or not 
         if User.objects.filter(username=uname).exists():
             messages.error(request, 'Username already exists.')
             return redirect('signup')
 
-        # Create user and profile
+        #Creating user and profile
         user = User.objects.create_user(username=uname, email=email, password=password)
         Profile.objects.create(user=user, username=uname, email=email, phone=phone)
         messages.success(request, 'Account created successfully! You can now log in.')
@@ -42,22 +42,31 @@ def LoginPage(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         remember_me = request.POST.get('remember_me')
+        # Getting the next URL if it exists
+        next_url = request.GET.get('next')
 
         user = authenticate(request, username=username, password=password)
-
         if user is not None:
             login(request, user)
             messages.success(request, 'Login successful!')
 
-            # Handling session expiration based on 'remember me'
-            request.session.set_expiry(604800 if remember_me else 0)
+            # Handling "remember me"
+            if remember_me:
+                # 1 week(7days) session expiry
+                request.session.set_expiry(604800)  
+            else:
+                # It will expires when browser closes
+                request.session.set_expiry(0)  
 
-            return redirect('home')
+            # Redirecting to the previous page or home if no next URL is provided
+            return redirect(next_url) if next_url else redirect('home')
+
         else:
-            messages.error(request, 'Invalid username or password.')
+            messages.error(request, 'Invalid username or password')
             return redirect('login')
 
     return render(request, 'cafeteria/login.html')
+
 
 # User Logout
 def LogoutPage(request):
@@ -78,7 +87,7 @@ def ContactUsPage(request):
 def OrderOnline(request):
     return render(request, 'cafeteria/orderonline.html')
 
-# Display Food Items by Category
+# Displaying Food Items by its Category
 def food_list(request, category):
     food_items = FoodItem.objects.filter(category=category)
     return render(request, 'cafeteria/food_list.html', {'food_items': food_items, 'category': category})
@@ -87,7 +96,8 @@ def food_list(request, category):
 @login_required
 def view_cart(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_items = cart.cart_items.select_related('food_item')  # Optimized Query
+     # Optimizing Query to fetch related food items
+    cart_items = cart.cart_items.select_related('food_item') 
     total_price = cart.total_price()
     return render(request, 'cafeteria/cart.html', {'cart_items': cart_items, 'total_price': total_price})
 
