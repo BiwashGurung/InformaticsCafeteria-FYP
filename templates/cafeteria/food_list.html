@@ -25,18 +25,13 @@
     <div class="food-actions">
       <p class="price">NPR: {{ food.price }} /-</p> 
     
-      <div class="quantity">
-        <button onclick="decreaseQuantity(this)"  {% if not food.is_in_stock %} disabled {% endif %}>-</button>
-        <input type="text" value="1" readonly>
-        <button onclick="increaseQuantity(this)"  {% if not food.is_in_stock %} disabled {% endif %}>+</button>
-      </div>
-      <form method="POST" action="{% url 'add_to_cart' food.id %}">
+      <form method="POST" action="{% url 'add_to_cart' food.id %}" class="add-to-cart-form">
         {% csrf_token %}
-        <input type="hidden" name="quantity" value="1">
-        <button type="submit" class="add-to-cart" {% if not food.is_in_stock %} disabled {% endif %}>
-          Add To Cart
-        </button>
-      </form>
+        <input type="hidden" name="food_id" value="{{ food.id }}">
+        <input type="number" name="quantity" value="1" min="1" class="quantity-input" {% if not food.is_in_stock %} disabled {% endif %}>
+        <button type="submit" class="btn btn-primary" {% if not food.is_in_stock %} disabled {% endif %}>Add to Cart</button>
+    </form>
+    
       
     </div>
   </div>

@@ -5,7 +5,6 @@
     margin-top: 20px;
 }
 
-
 .food-container {
     max-width: 900px;
     margin: 0 auto;
@@ -15,7 +14,6 @@
     border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 
 .food-item {
     display: flex;
@@ -40,12 +38,10 @@
     padding: 5px; 
 }
 
-
 .food-item:last-child {
     border-bottom: none;
     margin-bottom: 0;
 }
-
 
 .food-item img {
     width: 80px;
@@ -70,7 +66,6 @@
     margin: 5px 0;
 }
 
-
 .price {
     font-size: 18px;
     font-weight: bold;
@@ -78,7 +73,6 @@
     min-width: 120px;
     text-align: right;
 }
-
 
 .quantity {
     display: flex;
@@ -106,9 +100,8 @@
     background: transparent;
 }
 
-
 .add-to-cart {
-    background-color: red;
+    background-color: #99180d;
     color: white;
     border: none;
     padding: 8px 12px;
@@ -122,20 +115,48 @@
     background-color: darkred;
 }
 
-
 .food-actions {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-  
 .food-actions .add-to-cart:disabled {
     background-color: gray; 
     cursor: not-allowed;
-  }
-  
+}
 
+.add-to-cart-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-input {
+    width: 50px;
+    text-align: center;
+    padding: 5px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn.btn-primary {
+    background-color: #99180d;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.btn.btn-primary:hover {
+    background-color: #99190dbe;
+}
+
+.btn[disabled] {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
 
 .back-link {
     display: inline-block;
@@ -146,13 +167,12 @@
     text-align: center; 
     width: 100%; 
     text-align: center; 
-  }
-  
-  .back-link:hover {
-    text-decoration: underline;
-  }
+}
 
-/* Responsive Design for tablets */
+.back-link:hover {
+    text-decoration: underline;
+}
+
 @media screen and (max-width: 768px) {
     .food-container {
         max-width: 100%;
@@ -197,7 +217,7 @@
         width: 100%;
     }
 }
-/* For mobile devices */
+
 @media screen and (max-width: 480px) {
     .menu-title {
         font-size: 24px;

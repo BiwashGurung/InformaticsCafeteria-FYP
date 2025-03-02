@@ -104,21 +104,28 @@ def view_cart(request):
 # Add Item to Cart
 @login_required
 def add_to_cart(request, food_id):
-    food_item = get_object_or_404(FoodItem, id=food_id)
-    
-    if not food_item.is_in_stock:
-        messages.error(request, 'This item is out of stock.')
-        return redirect('food_list', category=food_item.category)
+    if request.method == "POST":
+        food_item = get_object_or_404(FoodItem, id=food_id)
+         # Getting the quantity from the form
+        quantity = int(request.POST.get("quantity", 1)) 
+        
+        # Getting the user's cart (Creating one if it doesn't exist)
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        
+        # Checking if item already exists in the cart or not
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, food_item=food_item)
 
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_item, item_created = CartItem.objects.get_or_create(cart=cart, food_item=food_item)
-
-    if not item_created:
-        cart_item.quantity += 1
+        if created:
+            # Setting the quantity if it's a new item
+            cart_item.quantity = quantity  
+        else:
+            # Increasing the quantity if item exists already
+            cart_item.quantity += quantity  
+        
         cart_item.save()
-
-    messages.success(request, f"{food_item.name} added to cart.")
-    return redirect('view_cart')
+        messages.success(request, f"{food_item.name} added to cart successfully!")
+        
+    return redirect("view_cart")
 
 # Update Cart Item Quantity
 @login_required
