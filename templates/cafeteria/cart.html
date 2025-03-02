@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center mb-4">🛒 Your Cart</h2>
+    <h2 class="text-center mb-4">Hello {{ user.username }}, 🛒 Your Cart</h2>
 
     {% if cart_items %}
         <table class="table table-bordered">
@@ -39,7 +39,7 @@
             </tbody>
         </table>
 
-        <h4 class="text-right">Total: Rs. {{ total_price }}</h4>
+        <h4 class="text-right"><strong>Total: Rs. {{ total_price }}</strong></h4>
         
         <div class="text-center mt-4">
             <a href="{% url 'clear_cart' %}" class="btn btn-warning">Clear Cart</a>
