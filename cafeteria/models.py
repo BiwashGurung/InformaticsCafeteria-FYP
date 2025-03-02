@@ -62,10 +62,18 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name="cart_items", on_delete=models.CASCADE)
     food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)  
     quantity = models.PositiveIntegerField(default=1)
+    username = models.CharField(max_length=50, blank=True, null=True)  
+
+    def save(self, *args, **kwargs):
+        # Automatically setting the username based on the associated cart's user
+        if not self.username and self.cart.user:
+            self.username = self.cart.user.username
+        super().save(*args, **kwargs)
 
     def total_price(self):
         return self.food_item.price * self.quantity  
 
     class Meta:
         db_table = 'cafeteria_cart_items'
+
 
