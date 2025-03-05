@@ -8,6 +8,7 @@ class Profile(models.Model):
     username = models.CharField(max_length=50, blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(max_length=50,default='informatics.cafetera@icp.edu.np')
+    session_key = models.CharField(max_length=40, blank=True, null=True)
     
 
     #String representation of the model 

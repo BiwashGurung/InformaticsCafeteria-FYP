@@ -36,13 +36,12 @@ def SignupPage(request):
 
     return render(request, 'cafeteria/registration.html')
 
-# User Login
+#User Login
 def LoginPage(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         remember_me = request.POST.get('remember_me')
-        # Getting the next URL if it exists
         next_url = request.GET.get('next')
 
         user = authenticate(request, username=username, password=password)
@@ -50,22 +49,28 @@ def LoginPage(request):
             login(request, user)
             messages.success(request, 'Login successful!')
 
-            # Handling "remember me"
+            # Updating the Profile with the session key after login
+            profile, created = Profile.objects.get_or_create(user=user)
+            # Storing the session key in Profile models
+            profile.session_key = request.session.session_key  
+            profile.save()
+
+            # Handling "remember me" option
             if remember_me:
-                # 1 week(7days) session expiry
-                request.session.set_expiry(604800)  
+                 # adding 1week expiry time for session
+                request.session.set_expiry(604800) 
             else:
-                # It will expires when browser closes
+                # setting the session to expire when the browser is closed if "remember me" is not checked
                 request.session.set_expiry(0)  
 
             # Redirecting to the previous page or home if no next URL is provided
             return redirect(next_url) if next_url else redirect('home')
-
         else:
             messages.error(request, 'Invalid username or password')
             return redirect('login')
 
     return render(request, 'cafeteria/login.html')
+
 
 
 # User Logout
