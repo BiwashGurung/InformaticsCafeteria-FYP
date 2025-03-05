@@ -20,6 +20,8 @@
                 <th>Username</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th>Session Key</th>
+                <th>Expired Date</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -29,6 +31,8 @@
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.phone }}</td>
+                <td>{{ user.session_key }}</td>
+                <td>{{ user.expired_date }}</td>
                 <td class="actions">
                     <a href="{% url 'edit_user' user.id %}" class="edit-btn">Edit</a>
                     <a href="{% url 'delete_user' user.id %}" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</a>

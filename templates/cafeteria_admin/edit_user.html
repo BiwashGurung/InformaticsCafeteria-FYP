@@ -23,6 +23,12 @@
 
         <label>Phone:</label>
         <input type="text" name="phone" value="{{ user.phone }}">
+        
+        <label>Session Key:</label>
+        <input type="text" name="session_key" value="{{ user.session_key }}" required readonly>
+
+        <label>Expired Date:</label>
+        <input type="" name="expired_date" value="{{ user.expired_date }}" required readonly>
 
         <button type="submit" class="update-btn">Update</button>
     </form>
