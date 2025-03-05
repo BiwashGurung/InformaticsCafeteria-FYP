@@ -53,6 +53,7 @@ def LoginPage(request):
             profile, created = Profile.objects.get_or_create(user=user)
             # Storing the session key in Profile models
             profile.session_key = request.session.session_key  
+            profile.expired_date = request.session.get_expiry_date()
             profile.save()
 
             # Handling "remember me" option

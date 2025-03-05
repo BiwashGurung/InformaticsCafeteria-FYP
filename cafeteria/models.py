@@ -9,6 +9,7 @@ class Profile(models.Model):
     phone = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(max_length=50,default='informatics.cafetera@icp.edu.np')
     session_key = models.CharField(max_length=40, blank=True, null=True)
+    expired_date = models.DateTimeField(blank=True, null=True)
     
 
     #String representation of the model 
