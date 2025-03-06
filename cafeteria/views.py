@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Profile, FoodItem, Cart, CartItem
+from .models import Profile, FoodItem, Cart, CartItem, OrderItem, Order
 
 # Home Page
 def HomePage(request):
@@ -166,3 +166,62 @@ def clear_cart(request):
     cart.cart_items.all().delete()
     messages.success(request, "Cart cleared successfully.")
     return redirect('view_cart')
+
+
+
+
+@login_required
+def cart_summary(request):
+    cart = Cart.objects.filter(user=request.user).first()
+    if not cart or not cart.cart_items.exists():
+        return redirect('view_cart')
+
+    total_price = cart.total_price()
+    
+    return render(request, 'cafeteria/cartsummary.html', {
+        'cart': cart,
+        'cart_items': cart.cart_items.all(),
+        'total_price': total_price
+    })
+
+
+@login_required
+def place_order(request):
+    if request.method == "POST":
+        cart = Cart.objects.filter(user=request.user).first()
+        if not cart or not cart.cart_items.exists():
+            return redirect('cart') 
+
+        payment_method = request.POST.get("payment_method")
+        pickup_time = request.POST.get("pickup_time")
+        dine_in_time = request.POST.get("dine_in_time")
+
+      
+        order = Order.objects.create(
+            user=request.user,
+            total_price=cart.total_price(),
+            payment_method=payment_method,
+            pickup_time=pickup_time if pickup_time else None,
+            dine_in_time=dine_in_time if dine_in_time else None
+        )
+
+      
+        for item in cart.cart_items.all():
+            OrderItem.objects.create(
+                order=order,
+                food_item=item.food_item,
+                quantity=item.quantity,
+                price=item.food_item.price * item.quantity
+            )
+            item.delete()  
+
+        return redirect('order_history') 
+
+    return redirect('cafeteria/cartsummary.html')
+
+
+
+@login_required
+def order_history(request):
+    orders = Order.objects.filter(user=request.user).order_by('-order_date')
+    return render(request, 'cafeteria/order.html', {'orders': orders})

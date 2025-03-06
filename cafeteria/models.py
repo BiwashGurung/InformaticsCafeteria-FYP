@@ -78,4 +78,55 @@ class CartItem(models.Model):
     class Meta:
         db_table = 'cafeteria_cart_items'
 
+class OrderItem(models.Model):
+    order = models.ForeignKey('Order', related_name="order_items", on_delete=models.CASCADE)
+    food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    username = models.CharField(max_length=50, blank=True, null=True) 
 
+    def save(self, *args, **kwargs):
+        # Automatically setting the username based on the associated order's user
+        if not self.username and self.order.user:
+            self.username = self.order.user.username
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.quantity}x {self.food_item.name}"
+
+    class Meta:
+        db_table = "cafeteria_order_items"
+
+
+class Order(models.Model):
+    PAYMENT_CHOICES = [
+        ("Cash", "Payment on Delivery"),
+        ("Online", "Online Payment"),
+    ]
+
+    STATUS_CHOICES = [
+        ("Pending", "Pending"),
+        ("Completed", "Completed"),
+        ("Cancelled", "Cancelled"),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    order_date = models.DateTimeField(auto_now_add=True)
+    payment_method = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default="Cash")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Pending")
+    pickup_time = models.TimeField(null=True, blank=True)
+    dine_in_time = models.TimeField(null=True, blank=True)
+    username = models.CharField(max_length=50, blank=True, null=True)  
+
+    def save(self, *args, **kwargs):
+        # Automatically setting the username based on the order's user
+        if not self.username and self.user:
+            self.username = self.user.username
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Order {self.id} - {self.user.username}"
+
+    class Meta:
+        db_table = "cafeteria_orders"

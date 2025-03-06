@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+<head>
+    <title>Your Orders</title>
+</head>
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Your Order Process</h2>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>
+                    {% for item in order.order_items.all %}
+                    <span>{{ item.food_item.name }}</span><br>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for item in order.order_items.all %}
+                    <span>{{ item.quantity }}</span><br>
+                    {% endfor %}
+                </td>
+                <td>Rs. {{ order.total_price }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.order_date|date:"Y-m-d H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

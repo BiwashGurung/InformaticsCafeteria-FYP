@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+<head>
+    <title>Cart Summary</title>
+</head>
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Cart Summary</h1>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Food Item</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.food_item.name }}</td>
+                <td>Rs. {{ item.food_item.price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        <h4><strong>Grand Total:</strong> Rs. {{ total_price }}</h4>
+    </div>
+
+    <form method="POST" action="{% url 'place_order' %}">
+        {% csrf_token %}
+        <div class="mt-3">
+            <label><strong>Pickup or Dine-in Time:</strong></label>
+            <input type="time" name="pickup_time" class="form-control">
+            <input type="time" name="dine_in_time" class="form-control mt-2">
+        </div>
+
+        <div class="mt-3">
+            <label><strong>Payment Method:</strong></label>
+            <div>
+                <input type="radio" name="payment_method" value="Cash" checked> Payment on Delivery
+            </div>
+            <div>
+                <input type="radio" name="payment_method" value="Online"> Online Payment
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success">Order Now</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

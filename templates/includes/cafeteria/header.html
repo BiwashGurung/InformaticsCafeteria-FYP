@@ -71,7 +71,7 @@
         
           <ul class="dropdown-menu">
             {% if request.user.is_authenticated %}
-            <li><a class="dropdown-item" href="#">Your Order</a></li>
+            <li><a class="dropdown-item" href="{% url 'order_history' %}">Your Order</a></li>
             <li><hr class="dropdown-divider" /></li>
             <li>
               <a class="dropdown-item" href="{% url 'logout' %}">LogOut</a>
