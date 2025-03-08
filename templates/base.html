@@ -10,4 +10,30 @@
     {% include "includes/cafeteria/footer.html" %}
      {% include "includes/cafeteria/scripts.html" %}
   </body>
+<!-- -----------------------------------------------------  goToTopButton start from Here -------------------------------->
+<button id="goToTopButton" class="go-to-top" aria-label="Go to top" onclick="scrollToTop()">
+  <i class="fas fa-arrow-up"></i>
+</button>
+<!-- -----------------------------------------------------  goToTopButton ends Here -------------------------------->
+
+
+
+<script>
+  function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+window.onscroll = function () {
+    let button = document.getElementById("goToTopButton");
+    if (document.documentElement.scrollTop > 200) {
+        button.style.display = "block";
+    } else {
+        button.style.display = "none";
+    }
+};
+
+</script>
 </html>
