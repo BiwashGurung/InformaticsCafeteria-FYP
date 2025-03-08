@@ -1,3 +1,12 @@
+/* For image slider */
+:root {
+    --items-count: 6;
+    --width: 370px;
+    --height: 220px;
+    --duration: 8s;
+    --gap: 300px; 
+}
+
 /* Order Steps */
 .order-steps {
     display: flex;
@@ -15,19 +24,50 @@
     gap: 5px;
 }
 
+:root {
+    --items-count: 6;
+    --width: 370px;
+    --height: 220px;
+    --duration: 8s;
+    --gap: 300px; 
+}
 
-.image-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
+.slider {
+    /* border: 1px solid black; */
+    width: 100%;
+    height: var(--height);
+    position: relative;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, #fff 10% 90%, transparent);
+    margin-bottom: 3%;
+}
 
-.image-row img {
-    flex: 1 1 calc(25% - 10px); 
-    max-width: calc(25% - 10px);
-    margin: 5px 5px 30px 5px;
-    height: 120px; 
-  }
+.slider img {
+    position: absolute;
+    width: var(--width);
+    height: var(--height);
+    object-fit: contain;
+    left: 100%;
+    animation: autoRunSlider var(--duration) infinite linear;
+    animation-delay: calc((var(--pos) - 1) * (var(--duration) / var(--items-count)));
+    gap: 100px;
+}
+
+.slider:hover img {
+    animation-play-state: paused !important;
+    filter: grayscale(1);
+}
+
+.slider img:hover {
+    filter: grayscale(0);
+}
+
+.slider img {
+    filter: grayscale(0);
+}
+
+
+    
 
 
 
@@ -92,20 +132,6 @@
 /* Responsive design for mobile view */
 
 @media (max-width: 768px) {
-    .image-row img {
-      flex: 1 1 calc(50% - 10px); 
-      max-width: calc(50% - 10px);
-    
-    }
-  }
-
-  @media (max-width: 480px) {
-    .image-row img {
-      display: none;
-    
-  }
-
-@media (max-width: 768px) {
     .menu-title {
         text-align: center;
         margin-top: 10%;
@@ -120,4 +146,13 @@
     }
 }
 
+
+/* For image slider */
+@keyframes autoRunSlider {
+    from {
+        left: 100%;
+    }
+    to {
+        left: calc((var(--width) + var(--gap)) * -1);
+    }
 }
