@@ -890,6 +890,11 @@ bottom: 20px;
 right: 10px;
 font-size: 22px;
 }
+
+.go-to-top{
+    bottom: 65px;
+    right: 10px;
+}
 }
 
 /*For responsive Footer  */
