@@ -4,7 +4,7 @@
     --width: 370px;
     --height: 220px;
     --duration: 8s;
-    --gap: 300px; 
+    --gap: 250px; 
 }
 
 /* Order Steps */
@@ -28,12 +28,12 @@
     --items-count: 6;
     --width: 370px;
     --height: 220px;
-    --duration: 8s;
+    --duration: 18s;
     --gap: 300px; 
 }
 
 .slider {
-    /* border: 1px solid black; */
+    border: 1px solid #ddddddc9;
     width: 100%;
     height: var(--height);
     position: relative;
@@ -82,12 +82,12 @@
     grid-template-columns: repeat(2, 1fr); 
     grid-template-rows: repeat(3, auto);
     width: 100%;
-    max-width: 800px; 
+    max-width: 810px; 
     margin: 20px auto; 
     border: 1px solid #111111; 
     border-radius: 4px;
     padding: 10px;
-    background-color: #fefefe;
+    background-color:rgba(128, 128, 128, 0.036);
     gap: 20px; 
 }
 
@@ -99,7 +99,15 @@
     border: 1px solid black; 
     border-radius: 2px;
     padding: 15px;
+    /* background-color: #ffffff81; */
 }
+.menu-box:hover{
+    cursor: pointer;
+    /* opacity: 0.6; */
+    transform: scale(1.05);
+    background-color: #ffffff;
+}
+
 
 /* Menu Box Image */
 .menu-box img {
@@ -122,11 +130,11 @@
     border-radius: 4px;
     cursor: pointer;
     text-align: center;
-    margin-top: 6%;
+    margin-top: 12%;
 }
 
 .menu-box .view-menu:hover {
-    background: #99190dea;
+    background: #99190dd1;
 }
 
 /* Responsive design for mobile view */
