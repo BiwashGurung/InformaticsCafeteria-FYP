@@ -10,7 +10,7 @@ from datetime import datetime
 from cafeteria.models import Profile  
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from cafeteria.models import FoodItem
+from cafeteria.models import FoodItem 
 
 
 #Helper function to check whether the user is an admin or not
@@ -37,10 +37,12 @@ def cafeteria_admin_login(request):
 def cafeteria_admin_dashboard(request):
     # Counting the total number of users
     total_users = Profile.objects.count()  
+    total_orders = FoodItem.objects.count()
+  
 
     context = {
         'total_users': total_users,
-        'total_orders': 0,  
+        'total_orders': total_orders,  
         'total_revenue': 0,  
         'recent_activities': []  
     }
