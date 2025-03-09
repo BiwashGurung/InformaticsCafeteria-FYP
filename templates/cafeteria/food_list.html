@@ -23,7 +23,7 @@
       <p>{{ food.description }}</p>
     </div>
     <div class="food-actions">
-      <p class="price">NPR: {{ food.price }} /-</p> 
+      <p class="price">Rs. {{ food.price }} /-</p> 
     
       <form method="POST" action="{% url 'add_to_cart' food.id %}" class="add-to-cart-form">
         {% csrf_token %}

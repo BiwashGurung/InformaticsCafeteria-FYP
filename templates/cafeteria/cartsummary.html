@@ -1,16 +1,18 @@
 {% extends 'base.html' %}
+{% load static %}
 <head>
     <title>Cart Summary</title>
 </head>
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-center">Cart Summary</h1>
+    <h1 class="text-center"> {{ user.username}}, Cart Summary</h1>
 
     <table class="table table-bordered mt-3">
         <thead>
             <tr>
                 <th>Food Item</th>
+                <th>Food Quantity</th>
                 <th>Price</th>
             </tr>
         </thead>
@@ -18,16 +20,14 @@
             {% for item in cart_items %}
             <tr>
                 <td>{{ item.food_item.name }}</td>
+                <td>{{ item.quantity }}</td>
                 <td>Rs. {{ item.food_item.price }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <div class="mt-4">
-        <h4><strong>Grand Total:</strong> Rs. {{ total_price }}</h4>
-    </div>
-
+   
     <form method="POST" action="{% url 'place_order' %}">
         {% csrf_token %}
         <div class="mt-3">
@@ -43,8 +43,14 @@
             </div>
             <div>
                 <input type="radio" name="payment_method" value="Online"> Online Payment
+                <img src="{% static 'Images/Esewa_logo.webp' %}" alt="Online Payment" width="50" height="50">
+
             </div>
         </div>
+        <div class="mt-4">
+            <h4><strong>Grand Total:</strong> Rs. {{ total_price }}</h4>
+        </div>
+    
 
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-success">Order Now</button>
