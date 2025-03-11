@@ -1,6 +1,6 @@
 
 /* Import Google Font */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap');
 
 /* Global Styles */
 * {
@@ -205,10 +205,13 @@ margin-top: -1%;
 .hero-text h1{
     font-weight: 600;
     font-size: 60px;
+    font-family: 'Poppins', sans-serif;
+
 }
 .hero-text h1,
 .text p {
 margin-bottom: 20px;
+font-family: 'Poppins', sans-serif;
 }
 
 /* Transparent button styles */
@@ -256,12 +259,14 @@ border: 1px solid #99180d;
     max-width: 70%;
     padding-right: 20px;
     box-sizing: border-box;
+    
 }
 
 .banner-content h2 {
     margin-top: -10%;
     font-weight: 600;
     font-size: 3rem;
+    font-family: 'Poppins', sans-serif;
 }
 
 .banner-content p {
@@ -269,6 +274,7 @@ border: 1px solid #99180d;
     font-weight: 400;
     font-size: 1.9rem;
     margin-bottom: 20px;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Discover more button */
@@ -336,6 +342,7 @@ border: 1px solid #99180d;
     margin: 5px auto;
     white-space: normal;
     max-width: 100%;
+    font-family: 'Poppins', sans-serif;
 }
 
 
@@ -350,6 +357,7 @@ border: 1px solid #99180d;
     border: 1px solid red; 
     padding: 5px; 
     /* z-index: 1; */
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Styling Featured menu container  */
@@ -370,7 +378,8 @@ grid-gap: 35px;
 grid-column: 1 / -1;
 text-align: center;
 margin: 2rem 0;
-font-weight: 200;
+font-weight: 100;
+font-family: 'Pacifico', cursive;
 }
 
 .featuredMenu {
@@ -404,6 +413,7 @@ padding: 20px;
 font-size: 28px;
 margin-bottom: 6px;
 font-weight: 500;
+font-family: 'Poppins', sans-serif;
 
 }
 
@@ -411,11 +421,13 @@ font-weight: 500;
 color: #222;
 line-height: 1.5;
 font-weight: 500;
+font-family: 'Poppins', sans-serif;
 }
 .menu-content span {
     color: #222;
     line-height: 1.5;
     font-weight: 500;
+    font-family: 'Poppins', sans-serif;
 }
 
 
@@ -430,6 +442,7 @@ margin-top: 1rem;
 border-radius: 4px;
 background-color: #fff;
 padding: 10px;
+font-family: 'Poppins', sans-serif;
 }
 
 .callToAction .border-line {
@@ -452,7 +465,9 @@ flex-wrap: wrap;
 gap: 20px;
 }
 #gallery h1 {
-font-weight: 200;
+font-weight:lighter;
+font-family: 'Pacifico', cursive;
+
 }
 #gallery  img {
 border: 2px solid #000;
@@ -511,6 +526,8 @@ background-color: #FBFBFB;
 #order-process h1 {
 font-weight: 200;
 margin-top: 1rem;
+font-family: 'Pacifico', cursive;
+
 }
 
 .steps {
@@ -545,9 +562,11 @@ font-size: 1.5rem;
 color: #99180d;
 font-weight: 500;
 margin-top: 20px;
+font-family: 'Poppins', sans-serif;
 }
 .steps p {
 margin-top: 0.2rem;
+font-family: 'Poppins', sans-serif;
 }
 
 /* Footer */
@@ -572,11 +591,13 @@ position: relative;
 color: #ffffff;
 font-weight: 600;
 margin-bottom: 15px;
+font-family: 'Poppins', sans-serif;
 }
 
 .footer-aboutus p {
 text-align: justify;
 color: #b0b0b0;
+font-family: 'Poppins', sans-serif;
 }
 
 .footer-aboutus .section-links {
@@ -675,6 +696,7 @@ margin-bottom: 16px;
 footer .footer-holder .footer-contact .info li span {
 color: #b0b0b0;
 font-size: 20px;
+font-family: 'Poppins', sans-serif;
 }
 
 footer .footer-holder .footer-contact .info li a {
@@ -690,6 +712,7 @@ padding-top: 15px;
 text-align: center;
 color: #b0b0b0;
 border-top: 1px solid #b0b0b0;
+font-family: 'Poppins', sans-serif;
 }
 
 .copyrightText p img{
@@ -831,10 +854,12 @@ margin-top: 16px;
 
     .banner-content h2 {
         font-size: 2.5rem;
+        font-family: 'Poppins', sans-serif;
     }
 
     .banner-content p {
         font-size: 1.5rem;
+        font-family: 'Poppins', sans-serif;
     }
 
     .border-banner {
@@ -852,10 +877,12 @@ margin-top: 16px;
     .banner-content h2 {
         font-size: 2rem;
         margin-top: 0;
+        font-family: 'Poppins', sans-serif;
     }
 
     .banner-content p {
         font-size: 1.3rem;
+        font-family: 'Poppins', sans-serif;
     }
 
     .btn-danger {
@@ -911,6 +938,7 @@ grid-gap: 20px;
 
 .copyrightText {
 padding: 20px 40px 30px;
+font-family: 'Poppins', sans-serif;
 }
 }
 
