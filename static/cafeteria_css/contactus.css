@@ -23,13 +23,16 @@
   }
 
   .text-box h1 {
-    font-size: 42px;
+    font-size: 62px;
+    font-family: 'Poppins', sans-serif;
   }
 
   .text-box p {
     margin: 10px 0 40px;
     font-size: 14px;
     color: #fff;
+    font-family: 'Poppins', sans-serif;
+
   }
 
   
@@ -49,12 +52,14 @@
 }
 
 h1 {
-    font-size: 2rem;
-    font-weight: bold;
+    /* font-size: 2rem; */
+    /* font-weight: bold; */
+    font-family: 'Pacifico', cursive;
 }
 
 p {
     font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
 
 }
 
@@ -71,11 +76,7 @@ p {
     max-width: 90%;
 }
 
-h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
+
 
 .map iframe {
     width: 100%;
@@ -98,6 +99,7 @@ h1 {
 .faq-container h1 {
     font-size: 2rem;
     margin-bottom: 20px;
+    
 }
 
 .faq {
@@ -121,6 +123,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: 'Poppins', sans-serif;
 }
 
 .faq-question:hover {
@@ -133,6 +136,7 @@ h1 {
     display: none;
     text-align: left;
     border-top: 1px solid #ddd;
+    font-family: 'Poppins', sans-serif;
 }
 
 .arrow {

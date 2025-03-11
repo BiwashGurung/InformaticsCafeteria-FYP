@@ -3,6 +3,7 @@
     font-size: 28px;
     color: #333;
     margin-top: 20px;
+    font-family: 'Pacifico', cursive;
 }
 
 .food-container {
@@ -28,7 +29,7 @@
 
 .out-of-stock {
     color: red; 
-    font-weight: bold; 
+    font-weight:bolder; 
     font-size: 1.2em;
     position: absolute;
     top: -15px;
@@ -36,6 +37,7 @@
     margin-top: 0; 
     border: 1px solid red; 
     padding: 5px; 
+    font-family: 'Poppins', sans-serif;
 }
 
 .food-item:last-child {
@@ -58,12 +60,15 @@
     font-size: 18px;
     color: #333;
     margin: 0;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
 }
 
 .food-details p {
     font-size: 14px;
     color: #666;
     margin: 5px 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 .price {
@@ -72,6 +77,7 @@
     color: #333;
     min-width: 120px;
     text-align: right;
+    font-family: 'Poppins', sans-serif;
 }
 
 .quantity {
@@ -90,6 +96,7 @@
     cursor: pointer;
     font-size: 14px;
     border-radius: 3px;
+    font-family: 'Poppins', sans-serif;
 }
 
 .quantity input {
@@ -98,6 +105,7 @@
     font-size: 14px;
     border: none;
     background: transparent;
+    font-family: 'Poppins', sans-serif;
 }
 
 .add-to-cart {
@@ -109,6 +117,7 @@
     cursor: pointer;
     font-size: 14px;
     transition: background 0.3s ease;
+    font-family: 'Poppins', sans-serif;
 }
 
 .add-to-cart:hover {
@@ -166,7 +175,8 @@
     color: #007bff;
     text-align: center; 
     width: 100%; 
-    text-align: center; 
+    text-align: center;
+    font-family: 'Poppins', sans-serif; 
 }
 
 .back-link:hover {
