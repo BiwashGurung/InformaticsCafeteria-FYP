@@ -1,3 +1,4 @@
+
 .background-image {
   background-image: url(../Images/about.png);
   position: relative;
@@ -70,11 +71,13 @@
   color: red;
   font-size: 40px;
   font-weight: 600;
+  font-family: 'Poppins', sans-serif;
 }
 .about-content h2 {
   color: #2a2a2a;
   margin-top: 30px;
   font-size: 40px;
+  font-family: 'Poppins', sans-serif;
 }
 .about-content p {
   font-size: 22px;
@@ -82,24 +85,9 @@
   color: #7e7e7e;
   margin-top: 30px;
   text-align: justify;
+  font-family: 'Poppins', sans-serif;
 }
-.about-content a {
-  text-decoration: none;
-  font-size: 22px;
-  display: inline-block;
-  background-color: transparent;
-  padding: 4px;
-  letter-spacing: 1.5px;
-  color: #111;
-  border: 1px solid;
-  border-radius: 5px;
-  margin-top: 30px;
-}
-.about-content a:hover {
-  background-color: #111;
-  color: #fff;
-  transition: 0.2s ease;
-}
+
 .hero-section {
   height: calc(70vh - 64px);
   width: 100%;
@@ -129,6 +117,7 @@
 }
 .text-box h1 {
   font-size: 60px;
+  font-family: 'Pacifico', cursive;
 }
 #ourTeam-Container {
   margin-top: 1rem;
@@ -159,6 +148,7 @@
   text-align: center;
   margin: 2rem 0;
   font-weight: 200;
+  font-family: 'Pacifico', cursive;
 }
 .ourTeamDetails {
   position: relative;
@@ -183,6 +173,7 @@
   font-size: 28px;
   margin-bottom: 6px;
   text-align: center;
+  font-family: 'Pacifico', cursive;
 
 }
 .ourTeam-description p {

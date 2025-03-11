@@ -24,13 +24,6 @@
     gap: 5px;
 }
 
-:root {
-    --items-count: 6;
-    --width: 370px;
-    --height: 220px;
-    --duration: 18s;
-    --gap: 300px; 
-}
 
 .slider {
     border: 1px solid #ddddddc9;
@@ -74,6 +67,7 @@
 /* Menu Title */
 .menu-title {
     text-align: center;
+    font-family: 'Pacifico', cursive;
 }
 
 /* Menu Table (Grid Layout) */
@@ -131,6 +125,7 @@
     cursor: pointer;
     text-align: center;
     margin-top: 12%;
+    font-family: 'Poppins', sans-serif;
 }
 
 .menu-box .view-menu:hover {

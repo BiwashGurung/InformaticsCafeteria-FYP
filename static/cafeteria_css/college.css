@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap');
 .hero-section {
     height: calc(100vh - 88px);
     width: 100%;
@@ -23,12 +24,16 @@
 
   .text-box h1 {
     font-size: 62px;
+    font-family: 'Poppins', sans-serif;
+
   }
 
   .text-box p {
     margin: 10px 0 40px;
     font-size: 14px;
     color: #fff;
+    font-family: 'Poppins', sans-serif;
+
   }
   .hero-btn {
     display: inline-block;
@@ -56,7 +61,8 @@
   }
   .course h1 {
     font-size: 36px;
-    font-weight: 200;
+    font-weight: 900;
+    font-family: 'Pacifico', cursive;
   }
   .course p {
     color: #777;
@@ -64,6 +70,8 @@
     font-weight: 300;
     line-height: 22px;
     padding: 10px;
+    font-family: 'Poppins', sans-serif;
+
   }
 
   .course .course-row {
@@ -102,6 +110,8 @@
     text-align: left;
     font-weight: 600;
     margin-bottom: 6rem;
+    font-family: 'Poppins', sans-serif;
+
   }
 
   .course .course-row .course-column .bit-description p {
@@ -109,6 +119,8 @@
     color: #fff;
     text-align: left;
     font-weight: 300;
+    font-family: 'Poppins', sans-serif;
+
   }
 
   .course .course-row .course-column .bit-description .btn {
@@ -141,6 +153,8 @@
   .course .course-row .course-column .bba-description h3 {
     text-align: left;
     font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+
   }
 
   .course .course-row .course-column .bba-description ul {
@@ -159,6 +173,8 @@
     color: #fff;
     text-align: left;
     font-weight: 300;
+    font-family: 'Poppins', sans-serif;
+
   }
 
   .course .course-row .course-column .bba-description .btn {
@@ -218,6 +234,7 @@
   color: transparent;
   margin-bottom: 10px;
   background-attachment: fixed;
+  font-family: 'Poppins', sans-serif;
 
 }
 
@@ -231,6 +248,7 @@
   text-transform: uppercase;
   padding: 10px;
   color: #fff;
+  font-family: 'Poppins', sans-serif;
 
   
 }
@@ -257,6 +275,7 @@
   -webkit-background-clip: text;
   color: transparent;
   background-attachment: fixed;
+  font-family: 'Poppins', sans-serif;
 
 }
 
@@ -272,6 +291,7 @@
 
   .facilities h1 {
     font-weight: 200;
+    font-family: 'Pacifico', cursive;
   }
 
   .facilities .facilities-row {
@@ -305,11 +325,13 @@
     font-weight: 300;
     line-height: 22px;
     padding: 10px;
+    font-family: 'Poppins', sans-serif;
   }
 
   .facilities .facilities-column h3 {
     margin: 1rem 0;
     text-align: center;
+    font-family: 'Pacifico', cursive;
   }
 
 
