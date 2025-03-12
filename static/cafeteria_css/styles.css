@@ -100,6 +100,23 @@ nav.navbar {
  /**************************** Nav BAr Css ENDS From Here *******************/ 
   
 
+/* For Toast Messages */
+  .toast-progress {
+    height: 3px;
+    background: #ff4500;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    animation: progressBar 5s linear forwards;
+  }
+
+  @keyframes progressBar {
+    from { width: 100%; }
+    to { width: 0%; }
+  }
+
+
 /**************************** Crousel(Hero Section) Start From Here *******************/
 
 /* For event popup */

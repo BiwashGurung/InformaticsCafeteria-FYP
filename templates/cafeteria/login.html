@@ -2,7 +2,6 @@
 
 <head>
   <link rel="stylesheet" type="text/css" href="{% static 'cafeteria_css/login.css' %}" />
-
   <title>Informatics Cafeteria - Login</title>
 </head>
 
@@ -10,17 +9,26 @@
 <div  id="login" class="login-container">
   <div class="login-box">
     <h2>Login</h2>
-    {% if messages %}
-    <div>
-      {% for message in messages %}
-      <div
-        class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
-      >
-        {{ message }}
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %}
+    <!-- Toast Notification (Hidden by Default) -->
+<div id="toast-container" class="toast mt-3" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false" style="position: fixed; top: 20px; right: 20px; min-width: 250px; z-index: 1050; display: none;">
+  <div class="toast-header">
+    <strong class="mr-auto text-primary">Informatics Cafeteria</strong>
+    <small class="text-muted">Just now</small>
+    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="toast-body">
+    {% for message in messages %}
+      {{ message }}
+    {% endfor %}
+    <!-- Progress Bar Animation -->
+    <div class="toast-progress"></div>
+  </div>
+</div>
+
+
+
 
     <form method="POST">
       {% csrf_token %}
@@ -62,6 +70,8 @@
     </p>
   </div>
 </div>
+
+{% comment %} <script src="{% static 'javascript/toast_message.js' %}"></script> {% endcomment %}
 
 
 {% endblock content %}
