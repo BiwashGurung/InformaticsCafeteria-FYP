@@ -27,6 +27,14 @@ def SignupPage(request):
         if User.objects.filter(username=uname).exists():
             messages.error(request, 'Username already exists.')
             return redirect('signup')
+        
+        # Checking if email already exists or not
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email already exists.')
+            return redirect('signup')
+        
+        
+
 
         #Creating user and profile
         user = User.objects.create_user(username=uname, email=email, password=password)
