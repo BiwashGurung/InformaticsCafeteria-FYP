@@ -121,7 +121,7 @@
 }
 
 .add-to-cart:hover {
-    background-color: darkred;
+    background-color: darkred !important;
 }
 
 .food-actions {
@@ -131,7 +131,7 @@
 }
 
 .food-actions .add-to-cart:disabled {
-    background-color: gray; 
+    background-color: gray !important; 
     cursor: not-allowed;
 }
 
@@ -150,7 +150,7 @@
 }
 
 .btn.btn-primary {
-    background-color: #99180d;
+    background-color: #99180d !important;
     border: none;
     padding: 8px 12px;
     cursor: pointer;
@@ -163,7 +163,7 @@
 }
 
 .btn[disabled] {
-    background-color: #aaa;
+    background-color: #aaa !important;
     cursor: not-allowed;
 }
 

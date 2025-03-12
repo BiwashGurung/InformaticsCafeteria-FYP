@@ -236,8 +236,8 @@ font-family: 'Poppins', sans-serif;
 .btn-transparent {
 background-color: transparent;
 border-radius: 0;
-border: 1px solid #ffffff;
-color: #fff;
+border: 1px solid #ffffff !important;
+color: #fff !important;
 padding: 10px 20px;
 text-decoration: none;
 transition: background-color 0.2s ease-in;
