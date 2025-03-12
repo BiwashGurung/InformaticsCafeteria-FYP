@@ -19,17 +19,6 @@
     <div class="form-container">
       <h2 class="title">SignUp</h2>
 
-      {% if messages %}
-      <div>
-        {% for message in messages %}
-        <div
-          class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}"
-        >
-          {{ message }}
-        </div>
-        {% endfor %}
-      </div>
-      {% endif %}
 
       <form action="" method="POST" onsubmit="return validateForm()">
         {% csrf_token %}
