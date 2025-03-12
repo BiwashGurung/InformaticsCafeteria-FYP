@@ -110,6 +110,7 @@ nav.navbar {
     left: 0;
     animation: progressBar 5s linear forwards;
   }
+  
 
   @keyframes progressBar {
     from { width: 100%; }
