@@ -118,6 +118,7 @@ class Order(models.Model):
     pickup_time = models.TimeField(null=True, blank=True)
     dine_in_time = models.TimeField(null=True, blank=True)
     username = models.CharField(max_length=50, blank=True, null=True)  
+    remarks = models.TextField(blank=True, null=True) 
 
     def save(self, *args, **kwargs):
         # Automatically setting the username based on the order's user

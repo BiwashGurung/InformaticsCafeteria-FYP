@@ -177,7 +177,6 @@ def clear_cart(request):
 
 
 
-
 @login_required
 def cart_summary(request):
     cart = Cart.objects.filter(user=request.user).first()
@@ -203,17 +202,19 @@ def place_order(request):
         payment_method = request.POST.get("payment_method")
         pickup_time = request.POST.get("pickup_time")
         dine_in_time = request.POST.get("dine_in_time")
+        remarks = request.POST.get("remarks", "")  # Get remarks, default to empty string
 
-      
+        # Create the order with remarks
         order = Order.objects.create(
             user=request.user,
             total_price=cart.total_price(),
             payment_method=payment_method,
             pickup_time=pickup_time if pickup_time else None,
-            dine_in_time=dine_in_time if dine_in_time else None
+            dine_in_time=dine_in_time if dine_in_time else None,
+            remarks=remarks  # Store remarks in the database
         )
 
-      
+        # Move cart items to order items
         for item in cart.cart_items.all():
             OrderItem.objects.create(
                 order=order,
@@ -226,7 +227,6 @@ def place_order(request):
         return redirect('order_history') 
 
     return redirect('cafeteria/cartsummary.html')
-
 
 
 @login_required
