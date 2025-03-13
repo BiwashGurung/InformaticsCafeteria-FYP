@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 # Importing Profile from cafeteria app
 from cafeteria.models import Profile  , FoodItem , OrderItem
+from django.db.models import Sum
 
 
 
@@ -32,6 +33,7 @@ def cafeteria_admin_login(request):
             messages.error(request, 'Invalid admin username or password.')
     return render(request, 'cafeteria_admin/admin_login.html')
 
+from cafeteria.models import Order
 # Admin dashboard view
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def cafeteria_admin_dashboard(request):
@@ -39,11 +41,15 @@ def cafeteria_admin_dashboard(request):
     total_users = Profile.objects.count()  
     total_orders = FoodItem.objects.count()
     order_items = OrderItem.objects.count()
+    pending_orders = Order.objects.filter(status='Pending').select_related('user').order_by('-order_date')[:5]
+    total_revenue = OrderItem.objects.aggregate(total=Sum('price'))['total'] or 0
 
     context = {
         'total_users': total_users,
         'total_orders': total_orders,  
-        'total_revenue':order_items ,  
+        'order_items': order_items,
+        'pending_orders': pending_orders,
+        'total_revenue': total_revenue,
         'recent_activities': []  
     }
 
@@ -51,6 +57,7 @@ def cafeteria_admin_dashboard(request):
 #Logout View
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def logout_admin(request):
+    logout(request)  
     return redirect('/cafeteria_admin/admin_login/')
 
 
