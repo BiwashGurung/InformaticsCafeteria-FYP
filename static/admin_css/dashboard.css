@@ -238,49 +238,8 @@ section h2 i {
 }
 
 
-.recent-activity ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
 
-.recent-activity ul li {
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    background-color: #f9fbfd;
-    display: flex;
-    align-items: center;
-    transition: background-color 0.2s ease;
-}
 
-.recent-activity ul li i {
-    margin-right: 10px;
-    color: #3498db;
-}
-
-.recent-activity ul li:hover {
-    background-color: #eef2f7;
-}
-
-/* User Activity */
-.user-activity ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.user-activity ul li {
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    background-color: #f9fbfd;
-    transition: background-color 0.2s ease;
-}
-
-.user-activity ul li:hover {
-    background-color: #eef2f7;
-}
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {

@@ -17,7 +17,7 @@
     <div class="stats-grid">
       <div class="stat-item"><h3>Total Users</h3><p>{{ total_users }}</p></div>
       <div class="stat-item"><h3>Total Orders</h3><p>{{ total_orders }}</p></div>
-      <div class="stat-item"><h3>Total Revenue</h3><p>Rs.{{ total_revenue }}</p></div>
+      <div class="stat-item"><h3>Total Revenue</h3><p>Rs. {{ total_revenue }}</p></div>
     </div>
   </section>
 
@@ -32,27 +32,9 @@
     </div>
   </section>
 
-  <section class="recent-activity">
-    <h2><i class="fas fa-clock"></i> Recent Activity</h2>
-    <ul>
-      {% for activity in recent_activities %}
-      <li><i class="fas fa-circle-notch"></i> {{ activity }}</li>
-      {% empty %}
-      <li>No recent activity available.</li>
-      {% endfor %}
-    </ul>
-  </section>
+ 
 
-  <section class="user-activity">
-    <h2><i class="fas fa-users"></i> User Activity</h2>
-    <ul>
-      {% for action in user_actions %}
-      <li>{{ action.user }} - {{ action.action }} at {{ action.timestamp }}</li>
-      {% empty %}
-      <li>No recent user activity.</li>
-      {% endfor %}
-    </ul>
-  </section>
+
 </div>
 
 {% endblock content %}

@@ -1,5 +1,7 @@
 from django.db import models
 from cafeteria.models import FoodItem
+from django.contrib.auth.models import User
+
 
 # Creating an EventPopup model to store event-related information for the popup
 class EventPopup(models.Model):
@@ -16,3 +18,5 @@ class EventPopup(models.Model):
     #Creating a Custom table name in MYSQL
     class Meta:
         db_table = 'event_popups'  
+
+
