@@ -218,15 +218,19 @@ def delete_food_item(request, food_id):
   
 
 
-# Admin View: Manage Orders
-@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+#  Manage Orders
 def manage_orders(request):
-    if not request.user.is_staff:  # Ensure only admins can access this
-        messages.error(request, "Access denied.")
-        return redirect('home')
+    #Getting search query from GET parameters
+    query = request.GET.get('q')  
 
-    orders = Order.objects.all().order_by('-order_date')  # Fetch all orders
-    return render(request, 'cafeteria_admin/manage_orders.html', {'orders': orders})
+    if query:
+        #Searching with the help of order id 
+        orders = Order.objects.filter(id=query)  
+    else:
+        # Showing all the orders if no query is provided
+        orders = Order.objects.all().order_by('-order_date')  
+
+    return render(request, 'cafeteria_admin/manage_orders.html', {'orders': orders, 'query': query})
 
 # Admin View: Update Order Status
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')

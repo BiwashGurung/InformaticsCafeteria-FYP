@@ -1,0 +1,151 @@
+/* Reset for Manage Orders Content Only */
+.manage-orders-wrapper * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+
+
+.manage-orders-wrapper {
+    font-family: 'Roboto', Arial, sans-serif;
+    color: #2d3748;
+    line-height: 1.6;
+    padding: 25px;
+    background-color: #f4f6f9;
+    /* width: calc(100% - 250px); */
+    overflow-y: auto;
+}
+
+
+.manage-orders-wrapper h2 {
+    font-size: 2rem;
+    color: #1a202c;
+    margin-bottom: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    border-left: 4px solid #4a90e2;
+}
+
+
+.manage-orders-wrapper table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+
+.manage-orders-wrapper thead {
+    background: linear-gradient(135deg, #4a90e2, #3182ce);
+    color: #fff;
+}
+
+.manage-orders-wrapper thead th {
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+
+.manage-orders-wrapper tbody tr {
+    border-bottom: 1px solid #edf2f7;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.manage-orders-wrapper tbody tr:hover {
+    background-color: #f7fafc;
+    transform: translateY(-2px);
+}
+
+.manage-orders-wrapper tbody td {
+    padding: 14px 20px;
+    font-size: 1rem;
+    color: #4a5568;
+    vertical-align: middle;
+}
+
+.manage-orders-wrapper tbody td:nth-child(3) { 
+    max-width: 250px;
+    word-break: break-word;
+    line-height: 1.4;
+}
+
+
+.manage-orders-wrapper select {
+    appearance: none;
+    padding: 8px 30px 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #4a5568;
+    font-size: 0.95rem;
+    cursor: pointer;
+    width: 100%;
+    max-width: 150px;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.manage-orders-wrapper select:hover,
+.manage-orders-wrapper select:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 8px rgba(74, 144, 226, 0.2);
+    outline: none;
+}
+
+.manage-orders-wrapper select option {
+    color: #4a5568;
+}
+
+.manage-orders-wrapper select option[value="Pending"] {
+    color: #e53e3e;
+}
+
+.manage-orders-wrapper select option[value="Preparing"] {
+    color: #dd6b20; 
+}
+
+.manage-orders-wrapper select option[value="Completed"] {
+    color: #38a169;
+}
+
+.manage-orders-wrapper select option[value="Canceled"] {
+    color: #718096; 
+}
+
+
+.manage-orders-wrapper td form {
+    margin: 0;
+    display: inline-block;
+}
+
+
+.manage-orders-wrapper a {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #fff;
+    color: #e53e3e;
+    text-decoration: none;
+    font-weight: 500;
+    border: 1px solid #e53e3e;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.manage-orders-wrapper a:hover {
+    background-color: #e53e3e;
+    color: #fff;
+}
+
