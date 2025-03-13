@@ -1,33 +1,105 @@
-/* Reset for Manage Orders Content Only */
+
 .manage-orders-wrapper * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-
 }
 
 
-
 .manage-orders-wrapper {
-    font-family: 'Roboto', Arial, sans-serif;
     color: #2d3748;
     line-height: 1.6;
     padding: 25px;
     background-color: #f4f6f9;
-    /* width: calc(100% - 250px); */
     overflow-y: auto;
+}
+
+
+.manage-orders-wrapper .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
 }
 
 
 .manage-orders-wrapper h2 {
     font-size: 2rem;
     color: #1a202c;
-    margin-bottom: 20px;
     font-weight: 700;
     display: flex;
     align-items: center;
     padding-left: 10px;
     border-left: 4px solid #4a90e2;
+}
+
+.manage-orders-wrapper h2 i {
+    margin-right: 10px;
+    color: #4a90e2;
+    font-size: 1.8rem;
+}
+
+
+.manage-orders-wrapper .search-form {
+    display: flex;
+    gap: 10px;
+    max-width: 400px;
+}
+
+.manage-orders-wrapper .search-form input[type="text"] {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #4a5568;
+    background-color: #fff;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.manage-orders-wrapper .search-form input[type="text"]:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 8px rgba(74, 144, 226, 0.2);
+    outline: none;
+}
+
+.manage-orders-wrapper .search-form input[type="text"]::placeholder {
+    color: #a0aec0;
+    font-style: italic;
+}
+
+.manage-orders-wrapper .search-form button {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #4a90e2, #3182ce);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.manage-orders-wrapper .search-form button i {
+    font-size: 1.1rem;
+}
+
+.manage-orders-wrapper .search-form button:hover {
+    background: linear-gradient(135deg, #3182ce, #4a90e2);
+    transform: translateY(-2px);
+}
+
+.manage-orders-wrapper .search-form button:active {
+    transform: translateY(0);
+}
+
+
+.manage-orders-wrapper .table-container {
+    width: 100%;
 }
 
 
@@ -74,7 +146,7 @@
     vertical-align: middle;
 }
 
-.manage-orders-wrapper tbody td:nth-child(3) { 
+.manage-orders-wrapper tbody td:nth-child(3) {
     max-width: 250px;
     word-break: break-word;
     line-height: 1.4;
@@ -95,13 +167,14 @@
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 12px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .manage-orders-wrapper select:hover,
 .manage-orders-wrapper select:focus {
     border-color: #4a90e2;
     box-shadow: 0 0 8px rgba(74, 144, 226, 0.2);
+    transform: scale(1.02);
     outline: none;
 }
 
@@ -110,21 +183,20 @@
 }
 
 .manage-orders-wrapper select option[value="Pending"] {
-    color: #e53e3e;
+    color: #e53e3e; 
 }
 
 .manage-orders-wrapper select option[value="Preparing"] {
-    color: #dd6b20; 
+    color: #dd6b20;
 }
 
 .manage-orders-wrapper select option[value="Completed"] {
-    color: #38a169;
+    color: #38a169; 
 }
 
 .manage-orders-wrapper select option[value="Canceled"] {
     color: #718096; 
 }
-
 
 .manage-orders-wrapper td form {
     margin: 0;
@@ -132,20 +204,26 @@
 }
 
 
-.manage-orders-wrapper a {
+.manage-orders-wrapper .actions a {
     display: inline-block;
     padding: 8px 16px;
-    background-color: #fff;
-    color: #e53e3e;
     text-decoration: none;
     font-weight: 500;
-    border: 1px solid #e53e3e;
     border-radius: 6px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0 5px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
 }
 
-.manage-orders-wrapper a:hover {
+.manage-orders-wrapper .delete-btn {
+    background-color: #fff;
+    color: #e53e3e; 
+    border: 1px solid #e53e3e;
+}
+
+.manage-orders-wrapper .delete-btn:hover {
     background-color: #e53e3e;
     color: #fff;
+    transform: translateY(-2px);
 }
+
 

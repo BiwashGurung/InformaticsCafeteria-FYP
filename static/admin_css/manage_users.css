@@ -15,10 +15,17 @@
 }
 
 
+.manage-users-wrapper .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+
 .manage-users-wrapper h2 {
     font-size: 2rem;
     color: #1a202c;
-    margin-bottom: 20px;
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -30,7 +37,6 @@
 .manage-users-wrapper .search-form {
     display: flex;
     gap: 10px;
-    margin-bottom: 25px;
     max-width: 400px;
 }
 
@@ -128,7 +134,7 @@
     text-align: center; 
 }
 
-
+/* Action Buttons */
 .manage-users-wrapper .actions a {
     display: inline-block;
     padding: 8px 16px;
@@ -141,7 +147,7 @@
 
 .manage-users-wrapper .edit-btn {
     background-color: #fff;
-    color: #38a169; 
+    color: #38a169;
     border: 1px solid #38a169;
 }
 
@@ -174,4 +180,5 @@
     color: #fff;
     transform: translateY(-2px);
 }
+
 
