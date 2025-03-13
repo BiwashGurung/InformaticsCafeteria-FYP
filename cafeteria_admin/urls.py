@@ -26,3 +26,5 @@ urlpatterns = [
     path('orders/delete/<int:order_id>/', delete_order, name='delete_order'),
 
 ]
+  
+  
