@@ -216,3 +216,44 @@ def delete_food_item(request, food_id):
     food_item.delete()
     return redirect('manage_menu')
   
+
+
+# Admin View: Manage Orders
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def manage_orders(request):
+    if not request.user.is_staff:  # Ensure only admins can access this
+        messages.error(request, "Access denied.")
+        return redirect('home')
+
+    orders = Order.objects.all().order_by('-order_date')  # Fetch all orders
+    return render(request, 'cafeteria_admin/manage_orders.html', {'orders': orders})
+
+# Admin View: Update Order Status
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def update_order_status(request, order_id):
+    if not request.user.is_staff:
+        messages.error(request, "Access denied.")
+        return redirect('manage_orders')
+
+    order = get_object_or_404(Order, id=order_id)
+
+    if request.method == "POST":
+        new_status = request.POST.get("status")
+        order.status = new_status
+        order.save()
+        messages.success(request, f"Order #{order_id} updated successfully!")
+    
+    return redirect('manage_orders')
+
+# Admin View: Delete Order
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def delete_order(request, order_id):
+    if not request.user.is_staff:
+        messages.error(request, "Access denied.")
+        return redirect('manage_orders')
+
+    order = get_object_or_404(Order, id=order_id)
+    order.delete()
+    messages.success(request, f"Order #{order_id} deleted successfully!")
+    
+    return redirect('manage_orders')

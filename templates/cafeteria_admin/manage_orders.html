@@ -1,0 +1,38 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+<h2>Manage Orders</h2>
+
+<table>
+    <tr>
+        <th>Order ID</th>
+        <th>User</th>
+        <th>Total Price</th>
+        <th>Payment Method</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.user.username }}</td>
+        <td>{{ order.total_price }}</td>
+        <td>{{ order.payment_method }}</td>
+        <td>
+            <form method="POST" action="{% url 'update_order_status' order.id %}">
+                {% csrf_token %}
+                <select name="status" onchange="this.form.submit()">
+                    <option value="Pending" {% if order.status == "Pending" %}selected{% endif %}>Pending</option>
+                    <option value="Preparing" {% if order.status == "Preparing" %}selected{% endif %}>Preparing</option>
+                    <option value="Completed" {% if order.status == "Completed" %}selected{% endif %}>Completed</option>
+                    <option value="Canceled" {% if order.status == "Canceled" %}selected{% endif %}>Canceled</option>
+                </select>
+            </form>
+        </td>
+        <td>
+            <a href="{% url 'delete_order' order.id %}" onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

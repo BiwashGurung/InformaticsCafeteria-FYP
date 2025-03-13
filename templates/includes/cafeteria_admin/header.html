@@ -2,11 +2,11 @@
 <link rel="stylesheet" href="{% static 'admin_css/dashboard.css' %}" />
 <header>
   <div class="header-container">
+    <h1>Admin Dashboard</h1>
     <div class="user-greeting">
       <i class="fas fa-user-circle"></i>
       <span>Welcome, {{ user.username }}</span>
     </div>
-    <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
   </div>
 </header>
 
@@ -16,7 +16,7 @@
     <li><a href="{% url 'admin_upload_popup' %}"><i class="fas fa-calendar-alt"></i> Event Management</a></li>
     <li><a href="{% url 'manage_users' %}"><i class="fas fa-users"></i> Manage Users</a></li>
     <li><a href="{% url 'manage_menu' %}"><i class="fas fa-utensils"></i> Manage Menu</a></li>
-    <li><a href=""><i class="fas fa-shopping-cart"></i> Manage Orders</a></li>
+    <li><a href="{% url 'manage_orders' %}"><i class="fas fa-shopping-cart"></i> Manage Orders</a></li>
     <li><a href=""><i class="fas fa-credit-card"></i> Payment Management</a></li>
     <li><a href="{% url 'logout_admin' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
   </ul>
