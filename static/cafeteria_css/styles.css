@@ -194,9 +194,30 @@ display: flex;
 align-items: center;
 justify-content: center;
 overflow: hidden;
+background-image: url(../Images/FriedRice.png);
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+animation: animate 22s linear infinite;
 }
 
-/* Background image blur effect */
+@keyframes animate {
+    0% {
+      background-image: url(../Images/Momo.png);
+      background-position: -100% center;
+      background-size: cover;
+    }
+    35% {
+      background-image: url(../Images/Chicken_Roll.jpg);
+      background-position: 0% center;
+    }
+    75% {
+      background-image: url(../Images/Sandwich.png);
+      background-position: 100% center;
+    }
+  }
+  
+/* Background image blur effect
 .bg::before {
 content: "";
 position: absolute;
@@ -210,7 +231,7 @@ background-repeat: no-repeat;
 background-size: cover;
 background-attachment: fixed;
 filter: blur(7px);
-}
+} */
 
 /* Hero text container */
 .hero-container {
