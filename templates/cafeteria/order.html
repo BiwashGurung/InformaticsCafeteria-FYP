@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center">Your Order Process</h2>
+    <h2 class="text-center">{{ user.username}}, Your Order Details</h2>
 
     <table class="table table-bordered mt-3">
         <thead>
@@ -16,6 +16,7 @@
                 <th>Price</th>
                 <th>Status</th>
                 <th>Date</th>
+                <th>Remarks</th>
             </tr>
         </thead>
         <tbody>
@@ -33,7 +34,8 @@
                 </td>
                 <td>Rs. {{ order.total_price }}</td>
                 <td>{{ order.status }}</td>
-                <td>{{ order.order_date|date:"Y-m-d H:i" }}</td>
+                <td>{{ order.order_date|date:"Y-m-d " }}</td>
+                <td>{{ order.remarks }}</td>
             </tr>
             {% endfor %}
         </tbody>

@@ -25,6 +25,7 @@
                     <th>Total Price</th>
                     <th>Payment Method</th>
                     <th>Status</th>
+                    <th>Remarks</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -53,6 +54,7 @@
                             </select>
                         </form>
                     </td>
+                    <td>{{ order.remarks }}</td>
                     <td class="actions">
                         <a href="{% url 'delete_order' order.id %}" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</a>
                     </td>
