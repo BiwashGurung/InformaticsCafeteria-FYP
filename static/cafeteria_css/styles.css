@@ -48,6 +48,7 @@ nav.navbar {
 .container img {
     max-width: 200px;
     width: 100%;
+    margin-left: -80%;
 }
   
 /* Styling Navigation link */
@@ -59,7 +60,7 @@ nav.navbar {
 
 /* Hover effect for nav links */
 .nav-link:hover {
-    color: #1729ea;
+    color: #99180d;
 }
   
 /* Styling for logged-in user text */
