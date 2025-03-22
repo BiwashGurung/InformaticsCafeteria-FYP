@@ -11,6 +11,7 @@
     background-size: cover;
     position: relative;
     background-attachment: fixed;
+    
   }
   .text-box {
     width: 90%;
@@ -58,6 +59,9 @@
     margin: auto;
     text-align: center;
     padding-top: 100px;
+    animation: appear 5s linear;
+    animation-timeline:view() ;
+    animation-range: entry 0%  cover 40%;
   }
   .course h1 {
     font-size: 36px;
@@ -211,6 +215,7 @@
   background-repeat: no-repeat;
   background-position: center;
   padding: 20px; 
+  
 }
 
 /* Main Experience Container */
@@ -287,6 +292,9 @@
     margin: auto;
     text-align: center;
     padding-top: 100px;
+    animation: appear 5s linear;
+    animation-timeline:view() ;
+    animation-range: entry 0%  cover 40%;
   }
 
   .facilities h1 {
