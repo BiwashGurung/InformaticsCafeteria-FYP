@@ -45,6 +45,9 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
+    animation: appear 5s linear;
+    animation-timeline:view() ;
+    animation-range: entry 0%  cover 40%;
 }
 .hour-container:hover {
     background-color: #ffffff;
@@ -74,6 +77,9 @@ p {
     text-align: center;
     margin: 50px auto;
     max-width: 90%;
+    animation: appear 5s linear;
+    animation-timeline:view() ;
+    animation-range: entry 0%  cover 40%;
 }
 
 
@@ -94,6 +100,9 @@ p {
     margin: 50px auto;
     padding: 20px;
     text-align: center;
+    animation: appear 5s linear;
+    animation-timeline:view() ;
+    animation-range: entry 0%  cover 40%;
 }
 
 .faq-container h1 {
