@@ -5,6 +5,9 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profile, FoodItem, Cart, CartItem, OrderItem, Order
 
+import requests
+import json
+
 # Home Page
 def HomePage(request):
     return render(request, 'cafeteria/index.html')
@@ -233,3 +236,109 @@ def place_order(request):
 def order_history(request):
     orders = Order.objects.filter(user=request.user).order_by('-order_date')
     return render(request, 'cafeteria/order.html', {'orders': orders})
+
+
+
+@login_required
+def initkhalti(request):
+    if request.method != "POST":
+        return redirect('cartsummary')
+
+    url = "https://dev.khalti.com/api/v2/epayment/initiate/"  # Sandbox URL
+    return_url = request.POST.get('return_url')
+    purchase_order_id = request.POST.get('purchase_order_id')
+    amount = request.POST.get('amount')  # Amount in NPR
+
+    cart = Cart.objects.filter(user=request.user).first()
+    if not cart or not cart.cart_items.exists():
+        messages.error(request, "Cart is empty.")
+        return redirect('view_cart')
+
+    # Convert amount from NPR to paisa
+    try:
+        amount_in_paisa = int(float(amount) * 100)
+    except (ValueError, TypeError):
+        messages.error(request, "Invalid amount.")
+        return redirect('cartsummary')
+
+    payload = {
+        "return_url": return_url,
+        "website_url": "http://127.0.0.1:8000",
+        "amount": amount_in_paisa, 
+        "purchase_order_id": purchase_order_id,
+        "purchase_order_name": f"Order-{purchase_order_id}",
+        "customer_info": {
+            "name": request.user.username,
+            "email": request.user.email,
+            "phone": request.user.profile.phone or "9800000000" 
+        }
+    }
+
+    headers = {
+        'Authorization': 'key 53a4f74df232487ba9b0b35ef76d3e39',  # Test key
+        'Content-Type': 'application/json',
+    }
+
+    try:
+        response = requests.post(url, headers=headers, data=json.dumps(payload))
+        response.raise_for_status()  # Raises exception for 4xx/5xx errors
+        new_response = response.json()
+
+        if 'payment_url' in new_response:
+            return redirect(new_response['payment_url'])
+        else:
+            messages.error(request, "Failed to initiate payment: " + str(new_response))
+            return redirect('cartsummary')
+
+    except requests.RequestException as e:
+        messages.error(request, f"Payment initiation failed: {str(e)}")
+        return redirect('cartsummary')
+
+@login_required
+def khalti_callback(request):
+    pidx = request.GET.get('pidx')
+    txn_id = request.GET.get('txnId')
+    amount = request.GET.get('amount')  
+    status = request.GET.get('status')
+
+    if status == "Completed":
+        # Verify payment with Khalti lookup API
+        url = "https://dev.khalti.com/api/v2/epayment/lookup/"
+        headers = {
+            'Authorization': 'key 53a4f74df232487ba9b0b35ef76d3e39',
+            'Content-Type': 'application/json',
+        }
+        payload = {"pidx": pidx}
+
+        try:
+            response = requests.post(url, headers=headers, data=json.dumps(payload))
+            response.raise_for_status()
+            payment_data = response.json()
+
+            if payment_data.get('status') == "Completed":
+                cart = Cart.objects.filter(user=request.user).first()
+                order = Order.objects.create(
+                    user=request.user,
+                    total_price=int(amount) / 100,  # Convert paisa back to NPR
+                    payment_method="Online",
+                    remarks=f"Khalti Payment: {txn_id}"
+                )
+
+                # Move cart items to order
+                for item in cart.cart_items.all():
+                    OrderItem.objects.create(
+                        order=order,
+                        food_item=item.food_item,
+                        quantity=item.quantity,
+                        price=item.food_item.price * item.quantity
+                    )
+                    item.delete()
+
+                messages.success(request, "Payment successful! Order placed.")
+                return redirect('order_history')
+
+        except requests.RequestException as e:
+            messages.error(request, f"Payment verification failed: {str(e)}")
+
+    messages.error(request, "Payment was not completed.")
+    return redirect('cartsummary')

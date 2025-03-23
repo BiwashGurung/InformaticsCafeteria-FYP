@@ -5,7 +5,7 @@ from cafeteria import views
 from cafeteria_admin.views import show_popup
 from django.conf import settings
 from django.conf.urls.static import static
-from cafeteria.views import food_list, view_cart, add_to_cart, update_cart, remove_from_cart, clear_cart,cart_summary, place_order, order_history
+from cafeteria.views import food_list, view_cart, add_to_cart, update_cart, remove_from_cart, clear_cart,cart_summary, place_order, order_history , initkhalti , khalti_callback
 
 
 urlpatterns = [
@@ -30,6 +30,11 @@ urlpatterns = [
     path('cartsummary/', cart_summary, name='cartsummary'),
     path('checkout/', place_order, name='place_order'),
     path('orders/', order_history, name='order_history'),
+
+
+    # Khalti
+    path('initiate/', views.initkhalti, name='initiate'),
+    path('khalti-callback/', views.khalti_callback, name='khalti_callback'),
     
     # Password reset views
     path('reset_password/', auth_views.PasswordResetView.as_view(), name='password_reset'),

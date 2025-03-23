@@ -28,6 +28,7 @@
         </tbody>
     </table>
 
+    <!-- Main Order Form -->
     <form method="POST" action="{% url 'place_order' %}">
         {% csrf_token %}
 
@@ -41,7 +42,7 @@
         <!-- Remarks (Optional) -->
         <div class="mt-3">
             <label for="remarks" class="form-label"><strong>Remarks (Optional):</strong></label>
-            <textarea name="remarks" class="form-control" rows="4" placeholder="Let us know if you have any special requests for your order, such as food preferences, spice levels, or urgent delivery needs..."></textarea>
+            <textarea name="remarks" class="form-control" rows="4" placeholder="Let us know if you have any special requests..."></textarea>
         </div>
 
         <!-- Payment Method -->
@@ -67,6 +68,15 @@
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-success">Order Now</button>
         </div>
+    </form>
+
+    <!-- Khalti Payment Form -->
+    <form action="{% url 'initiate' %}" method="POST" class="mt-3">
+        {% csrf_token %}
+        <input type="hidden" name="purchase_order_id" value="{{ cart.id }}">
+        <input type="hidden" name="amount" value="{{ total_price }}"> 
+        <input type="hidden" name="return_url" value="http://127.0.0.1:8000/orders/">
+        <button type="submit" class="btn btn-success">Pay with Khalti</button>
     </form>
 </div>
 {% endblock %}
