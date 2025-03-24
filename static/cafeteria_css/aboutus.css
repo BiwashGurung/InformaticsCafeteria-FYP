@@ -103,6 +103,7 @@
   background-size: cover;
   position: relative;
   background-attachment: fixed;
+  
 }
 .hero-section-1 {
   height: calc(70vh - 64px);
@@ -125,6 +126,9 @@
 .text-box h1 {
   font-size: 60px;
   font-family: 'Pacifico', cursive;
+  animation: appear 5s linear;
+  animation-timeline:view() ;
+  animation-range: entry 0%  cover 40%;
 }
 #ourTeam-Container {
   margin-top: 1rem;

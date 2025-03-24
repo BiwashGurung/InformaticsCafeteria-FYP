@@ -245,17 +245,17 @@ def initkhalti(request):
     if request.method != "POST":
         return redirect('cartsummary')
 
-    url = "https://dev.khalti.com/api/v2/epayment/initiate/" 
+    url = "https://dev.khalti.com/api/v2/epayment/initiate/"
     return_url = request.POST.get('return_url')
     purchase_order_id = request.POST.get('purchase_order_id')
-    amount = request.POST.get('amount') 
+    amount = request.POST.get('amount')
 
     cart = Cart.objects.filter(user=request.user).first()
     if not cart or not cart.cart_items.exists():
         messages.error(request, "Cart is empty.")
         return redirect('view_cart')
 
-    # Converting amount from NPR to paisa
+    # Convert amount from NPR to paisa
     try:
         amount_in_paisa = int(float(amount) * 100)
     except (ValueError, TypeError):
@@ -265,13 +265,13 @@ def initkhalti(request):
     payload = {
         "return_url": return_url,
         "website_url": "http://127.0.0.1:8000",
-        "amount": amount_in_paisa, 
+        "amount": amount_in_paisa,
         "purchase_order_id": purchase_order_id,
         "purchase_order_name": f"Order-{purchase_order_id}",
         "customer_info": {
             "name": request.user.username,
             "email": request.user.email,
-            # "contact_number": request.user.profile.phone
+            "phone": request.user.profile.phone or "9800000000"  # Use user's phone or fallback
         }
     }
 
@@ -282,7 +282,8 @@ def initkhalti(request):
 
     try:
         response = requests.post(url, headers=headers, data=json.dumps(payload))
-        response.raise_for_status() 
+        print(f"Khalti API Response: {response.text}")  # Debug output
+        response.raise_for_status()
         new_response = response.json()
 
         if 'payment_url' in new_response:
@@ -294,16 +295,19 @@ def initkhalti(request):
     except requests.RequestException as e:
         messages.error(request, f"Payment initiation failed: {str(e)}")
         return redirect('cartsummary')
+    print(f"Payload sent to Khalti: {json.dumps(payload, indent=2)}")
+
 
 @login_required
 def khalti_callback(request):
     pidx = request.GET.get('pidx')
     txn_id = request.GET.get('txnId')
-    amount = request.GET.get('amount')  
+    amount = request.GET.get('amount')
     status = request.GET.get('status')
+    print(f"Callback: pidx={pidx}, txn_id={txn_id}, amount={amount}, status={status}")  # Debug
 
     if status == "Completed":
-        # Verifying the payment with Khalti lookup API
+        # Verify payment
         url = "https://dev.khalti.com/api/v2/epayment/lookup/"
         headers = {
             'Authorization': 'key 53a4f74df232487ba9b0b35ef76d3e39',
@@ -313,6 +317,7 @@ def khalti_callback(request):
 
         try:
             response = requests.post(url, headers=headers, data=json.dumps(payload))
+            print(f"Lookup Response: {response.text}")  # Debug
             response.raise_for_status()
             payment_data = response.json()
 
@@ -320,12 +325,10 @@ def khalti_callback(request):
                 cart = Cart.objects.filter(user=request.user).first()
                 order = Order.objects.create(
                     user=request.user,
-                    total_price=int(amount) / 100, 
+                    total_price=int(amount) / 100,
                     payment_method="Online",
                     remarks=f"Khalti Payment: {txn_id}"
                 )
-
-                # Move cart items to order
                 for item in cart.cart_items.all():
                     OrderItem.objects.create(
                         order=order,
@@ -334,7 +337,6 @@ def khalti_callback(request):
                         price=item.food_item.price * item.quantity
                     )
                     item.delete()
-
                 messages.success(request, "Payment successful! Order placed.")
                 return redirect('order_history')
 
