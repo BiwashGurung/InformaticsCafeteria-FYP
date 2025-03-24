@@ -205,19 +205,20 @@ def place_order(request):
         payment_method = request.POST.get("payment_method")
         pickup_time = request.POST.get("pickup_time")
         dine_in_time = request.POST.get("dine_in_time")
-        remarks = request.POST.get("remarks", "")  # Get remarks, default to empty string
+        # Getting remarks, default to empty string
+        remarks = request.POST.get("remarks", "")  
 
-        # Create the order with remarks
+        # Creating the order with remarks
         order = Order.objects.create(
             user=request.user,
             total_price=cart.total_price(),
             payment_method=payment_method,
             pickup_time=pickup_time if pickup_time else None,
             dine_in_time=dine_in_time if dine_in_time else None,
-            remarks=remarks  # Store remarks in the database
+            remarks=remarks 
         )
 
-        # Move cart items to order items
+        # Moving the cart items to order items
         for item in cart.cart_items.all():
             OrderItem.objects.create(
                 order=order,
@@ -238,23 +239,23 @@ def order_history(request):
     return render(request, 'cafeteria/order.html', {'orders': orders})
 
 
-
+# Khalti Payment Gateway Integration
 @login_required
 def initkhalti(request):
     if request.method != "POST":
         return redirect('cartsummary')
 
-    url = "https://dev.khalti.com/api/v2/epayment/initiate/"  # Sandbox URL
+    url = "https://dev.khalti.com/api/v2/epayment/initiate/" 
     return_url = request.POST.get('return_url')
     purchase_order_id = request.POST.get('purchase_order_id')
-    amount = request.POST.get('amount')  # Amount in NPR
+    amount = request.POST.get('amount') 
 
     cart = Cart.objects.filter(user=request.user).first()
     if not cart or not cart.cart_items.exists():
         messages.error(request, "Cart is empty.")
         return redirect('view_cart')
 
-    # Convert amount from NPR to paisa
+    # Converting amount from NPR to paisa
     try:
         amount_in_paisa = int(float(amount) * 100)
     except (ValueError, TypeError):
@@ -270,7 +271,7 @@ def initkhalti(request):
         "customer_info": {
             "name": request.user.username,
             "email": request.user.email,
-            "phone": request.user.profile.phone or "9800000000" 
+            # "contact_number": request.user.profile.phone
         }
     }
 
@@ -281,7 +282,7 @@ def initkhalti(request):
 
     try:
         response = requests.post(url, headers=headers, data=json.dumps(payload))
-        response.raise_for_status()  # Raises exception for 4xx/5xx errors
+        response.raise_for_status() 
         new_response = response.json()
 
         if 'payment_url' in new_response:
@@ -302,7 +303,7 @@ def khalti_callback(request):
     status = request.GET.get('status')
 
     if status == "Completed":
-        # Verify payment with Khalti lookup API
+        # Verifying the payment with Khalti lookup API
         url = "https://dev.khalti.com/api/v2/epayment/lookup/"
         headers = {
             'Authorization': 'key 53a4f74df232487ba9b0b35ef76d3e39',
@@ -319,7 +320,7 @@ def khalti_callback(request):
                 cart = Cart.objects.filter(user=request.user).first()
                 order = Order.objects.create(
                     user=request.user,
-                    total_price=int(amount) / 100,  # Convert paisa back to NPR
+                    total_price=int(amount) / 100, 
                     payment_method="Online",
                     remarks=f"Khalti Payment: {txn_id}"
                 )
