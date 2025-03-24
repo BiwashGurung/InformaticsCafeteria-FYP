@@ -6,6 +6,13 @@
 </head>
 
 {% block content %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 <div class="container mt-5">
     <h1 class="text-center">{{ user.username }}, Cart Summary</h1>
 
@@ -29,23 +36,17 @@
     </table>
 
     <!-- Main Order Form -->
-    <form method="POST" action="{% url 'place_order' %}">
+    <form method="POST" action="{% url 'place_order' %}" id="orderForm">
         {% csrf_token %}
-
-        <!-- Pickup or Dine-in Time -->
         <div class="mt-3">
             <label class="form-label"><strong>Pickup or Dine-in Time:</strong></label>
             <input type="time" name="pickup_time" class="form-control">
             <input type="time" name="dine_in_time" class="form-control mt-2">
         </div>
-
-        <!-- Remarks (Optional) -->
         <div class="mt-3">
             <label for="remarks" class="form-label"><strong>Remarks (Optional):</strong></label>
-            <textarea name="remarks" class="form-control" rows="4" placeholder="Let us know if you have any special requests..."></textarea>
+            <textarea name="remarks" id="remarks" class="form-control" rows="4" placeholder="Let us know if you have any special requests..."></textarea>
         </div>
-
-        <!-- Payment Method -->
         <div class="mt-3">
             <label class="form-label"><strong>Payment Method:</strong></label>
             <div class="form-check">
@@ -58,25 +59,28 @@
                 <img src="{% static 'Images/Esewa_logo.webp' %}" alt="Online Payment" width="50" height="50">
             </div>
         </div>
-
-        <!-- Grand Total -->
         <div class="mt-4">
             <h4><strong>Grand Total:</strong> Rs. {{ total_price }}</h4>
         </div>
-
-        <!-- Submit Button -->
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-success">Order Now</button>
         </div>
     </form>
 
     <!-- Khalti Payment Form -->
-    <form action="{% url 'initiate' %}" method="POST" class="mt-3">
+    <form action="{% url 'initiate' %}" method="POST" class="mt-3" id="khaltiForm">
         {% csrf_token %}
-        <input type="hidden" name="purchase_order_id" value="{{ cart.id }}">
-        <input type="hidden" name="amount" value="{{ total_price }}"> 
-        <input type="hidden" name="return_url" value="http://127.0.0.1:8000/orders/">
+        <input type="hidden" name="amount" value="{{ total_price }}">
+        <input type="hidden" name="return_url" value="http://127.0.0.1:8000/khalti-callback/">
+        <input type="hidden" name="remarks" id="khaltiRemarks">
         <button type="submit" class="btn btn-success">Pay with Khalti</button>
     </form>
 </div>
+
+<script>
+    document.getElementById('khaltiForm').addEventListener('submit', function() {
+        var remarks = document.getElementById('remarks').value;
+        document.getElementById('khaltiRemarks').value = remarks;
+    });
+</script>
 {% endblock %}

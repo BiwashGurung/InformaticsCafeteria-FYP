@@ -205,10 +205,8 @@ def place_order(request):
         payment_method = request.POST.get("payment_method")
         pickup_time = request.POST.get("pickup_time")
         dine_in_time = request.POST.get("dine_in_time")
-        # Getting remarks, default to empty string
         remarks = request.POST.get("remarks", "")  
 
-        # Creating the order with remarks
         order = Order.objects.create(
             user=request.user,
             total_price=cart.total_price(),
@@ -218,7 +216,6 @@ def place_order(request):
             remarks=remarks 
         )
 
-        # Moving the cart items to order items
         for item in cart.cart_items.all():
             OrderItem.objects.create(
                 order=order,
@@ -239,75 +236,96 @@ def order_history(request):
     return render(request, 'cafeteria/order.html', {'orders': orders})
 
 
+import uuid
 # Khalti Payment Gateway Integration
+import logging
+
+logger = logging.getLogger(__name__)
 @login_required
 def initkhalti(request):
+    logger.info("Entering initkhalti view")
     if request.method != "POST":
+        logger.warning("Non-POST request received, redirecting to cartsummary")
         return redirect('cartsummary')
 
     url = "https://dev.khalti.com/api/v2/epayment/initiate/"
     return_url = request.POST.get('return_url')
-    purchase_order_id = request.POST.get('purchase_order_id')
     amount = request.POST.get('amount')
+    remarks = request.POST.get('remarks', '')
+    logger.info(f"Received POST data: return_url={return_url}, amount={amount}, remarks={remarks}")
 
     cart = Cart.objects.filter(user=request.user).first()
     if not cart or not cart.cart_items.exists():
+        logger.error("Cart is empty or not found")
         messages.error(request, "Cart is empty.")
         return redirect('view_cart')
 
-    # Convert amount from NPR to paisa
     try:
         amount_in_paisa = int(float(amount) * 100)
-    except (ValueError, TypeError):
+        logger.info(f"Converted amount: NPR {amount} to Paisa {amount_in_paisa}")
+    except (ValueError, TypeError) as e:
+        logger.error(f"Invalid amount: {amount}, Error: {str(e)}")
         messages.error(request, "Invalid amount.")
         return redirect('cartsummary')
+
+    purchase_order_id = str(uuid.uuid4())
+    purchase_order_name = f"Order-{purchase_order_id[:8]}"
+    logger.info(f"Generated: purchase_order_id={purchase_order_id}, purchase_order_name={purchase_order_name}")
+
+    request.session['order_remarks'] = remarks
 
     payload = {
         "return_url": return_url,
         "website_url": "http://127.0.0.1:8000",
         "amount": amount_in_paisa,
         "purchase_order_id": purchase_order_id,
-        "purchase_order_name": f"Order-{purchase_order_id}",
+        "purchase_order_name": purchase_order_name,
         "customer_info": {
             "name": request.user.username,
-            "email": request.user.email,
-            "phone": request.user.profile.phone or "9800000000"  # Use user's phone or fallback
+            "email": request.user.email or "test@example.com",
+            "phone": request.user.profile.phone or "9800000000"
         }
     }
+    logger.info(f"Payload sent to Khalti: {json.dumps(payload, indent=2)}")
 
     headers = {
-        'Authorization': 'key 53a4f74df232487ba9b0b35ef76d3e39',  # Test key
+        'Authorization': 'key 53a4f74df232487ba9b0b35ef76d3e39',
         'Content-Type': 'application/json',
     }
 
     try:
         response = requests.post(url, headers=headers, data=json.dumps(payload))
-        print(f"Khalti API Response: {response.text}")  # Debug output
+        logger.info(f"Khalti API Response: Status={response.status_code}, Body={response.text}")
         response.raise_for_status()
         new_response = response.json()
 
         if 'payment_url' in new_response:
+            logger.info(f"Redirecting to payment_url: {new_response['payment_url']}")
             return redirect(new_response['payment_url'])
         else:
-            messages.error(request, "Failed to initiate payment: " + str(new_response))
+            logger.error(f"No payment_url in response: {new_response}")
+            messages.error(request, f"Failed to initiate payment: {new_response}")
             return redirect('cartsummary')
 
     except requests.RequestException as e:
+        logger.error(f"Payment initiation failed: {str(e)}")
         messages.error(request, f"Payment initiation failed: {str(e)}")
         return redirect('cartsummary')
-    print(f"Payload sent to Khalti: {json.dumps(payload, indent=2)}")
-
+    
 
 @login_required
 def khalti_callback(request):
+    logger.info("Entering khalti_callback view")
+    
     pidx = request.GET.get('pidx')
-    txn_id = request.GET.get('txnId')
+    txn_id = request.GET.get('transaction_id') or request.GET.get('tidx') or request.GET.get('txnId')
     amount = request.GET.get('amount')
     status = request.GET.get('status')
-    print(f"Callback: pidx={pidx}, txn_id={txn_id}, amount={amount}, status={status}")  # Debug
+    purchase_order_id = request.GET.get('purchase_order_id')
+    
+    logger.info(f"Callback params: pidx={pidx}, txn_id={txn_id}, amount={amount}, status={status}, purchase_order_id={purchase_order_id}")
 
     if status == "Completed":
-        # Verify payment
         url = "https://dev.khalti.com/api/v2/epayment/lookup/"
         headers = {
             'Authorization': 'key 53a4f74df232487ba9b0b35ef76d3e39',
@@ -317,18 +335,26 @@ def khalti_callback(request):
 
         try:
             response = requests.post(url, headers=headers, data=json.dumps(payload))
-            print(f"Lookup Response: {response.text}")  # Debug
+            logger.info(f"Lookup Response: Status={response.status_code}, Body={response.text}")
             response.raise_for_status()
             payment_data = response.json()
 
             if payment_data.get('status') == "Completed":
                 cart = Cart.objects.filter(user=request.user).first()
+                if not cart or not cart.cart_items.exists():
+                    logger.error("Cart is empty or not found")
+                    messages.error(request, "Cart is empty.")
+                    return redirect('cartsummary')
+
+                remarks = request.session.get('order_remarks', '')
                 order = Order.objects.create(
                     user=request.user,
                     total_price=int(amount) / 100,
                     payment_method="Online",
-                    remarks=f"Khalti Payment: {txn_id}"
+                    remarks=remarks
                 )
+                logger.info(f"Order created: ID={order.id}, Remarks={order.remarks}")
+
                 for item in cart.cart_items.all():
                     OrderItem.objects.create(
                         order=order,
@@ -337,11 +363,17 @@ def khalti_callback(request):
                         price=item.food_item.price * item.quantity
                     )
                     item.delete()
+
+                if 'order_remarks' in request.session:
+                    del request.session['order_remarks']
+
                 messages.success(request, "Payment successful! Order placed.")
                 return redirect('order_history')
 
         except requests.RequestException as e:
+            logger.error(f"Payment verification failed: {str(e)}")
             messages.error(request, f"Payment verification failed: {str(e)}")
 
+    logger.warning(f"Payment not completed: status={status}")
     messages.error(request, "Payment was not completed.")
     return redirect('cartsummary')
