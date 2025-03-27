@@ -1,0 +1,54 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Manage Lost & Found</h1>
+    
+    <form method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search by item name or location" value="{{ query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    {% if items %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                    <th>Image</th>
+                    <th>Reported By</th>
+                    <th>Status</th>
+                    <th>Submitted</th>
+                    <th>Approved By</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    <tr>
+                        <td>{{ item.item_name }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.location }}</td>
+                        <td>
+                            {% if item.image %}
+                                <img src="{{ item.image.url }}" alt="{{ item.item_name }}" style="max-width: 100px; height: auto;">
+                            {% else %}
+                                No Image
+                            {% endif %}
+                        </td>
+                        <td>{{ item.user.username }}</td> 
+                        <td>{{ item.status }}</td>
+                        <td>{{ item.submitted_at|date:"M d, Y" }}</td>
+                        <td>{{ item.approved_by.username|default:"Not Approved" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No lost or found items reported yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

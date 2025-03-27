@@ -61,6 +61,12 @@
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
           <a class="nav-link {% if request.path == '/contactus/' %}active{% endif %}" href="{% url 'contactus' %}">Contact</a>
         </li>
+
+        {% if request.user.is_authenticated %}
+        <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+          <a class="nav-link {% if request.path == '/lost-found/' %}active{% endif %}" href="{% url 'lost_found_page' %}">Lost & Found</a>
+        </li>
+        {% endif %}
        
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4 dropdown">
           <a class="nav-link  {% if request.user.is_authenticated %}logged-in-user{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

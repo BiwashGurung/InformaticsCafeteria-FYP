@@ -9,7 +9,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 # Importing Profile from cafeteria app
-from cafeteria.models import Profile  , FoodItem , OrderItem, Order
+from cafeteria.models import Profile  , FoodItem , OrderItem, Order , LostFound
 from django.db.models import Sum
 
 
@@ -261,3 +261,14 @@ def delete_order(request, order_id):
     messages.success(request, f"Order #{order_id} deleted successfully!")
     
     return redirect('manage_orders')
+
+
+# Admin View: View Order Details
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def manage_lost_found(request):
+    query = request.GET.get('q', '')
+    if query:
+        items = LostFound.objects.filter(item_name__icontains=query) | LostFound.objects.filter(location__icontains=query)
+    else:
+        items = LostFound.objects.all()
+    return render(request, 'cafeteria_admin/manage_lost_found.html', {'items': items, 'query': query})

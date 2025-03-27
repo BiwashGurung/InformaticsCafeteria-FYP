@@ -132,3 +132,29 @@ class Order(models.Model):
 
     class Meta:
         db_table = "cafeteria_orders"
+
+
+
+class LostFound(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('resolved', 'Resolved'),
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  
+    item_name = models.CharField(max_length=100)
+    description = models.TextField()
+    location = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='lost_found/', null=True, blank=True)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='approved_lost_found')
+
+    def __str__(self):
+        return f"{self.item_name} ({self.status})"
+
+    class Meta:
+        db_table = 'lost_and_found'
+        verbose_name = 'Lost and Found Item'
+        verbose_name_plural = 'Lost and Found Items'
+        ordering = ['-submitted_at']

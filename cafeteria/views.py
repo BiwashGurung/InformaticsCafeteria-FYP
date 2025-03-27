@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Profile, FoodItem, Cart, CartItem, OrderItem, Order
+from .models import Profile, FoodItem, Cart, CartItem, OrderItem, Order , LostFound
 
 import requests
 import json
@@ -377,3 +377,26 @@ def khalti_callback(request):
     logger.warning(f"Payment not completed: status={status}")
     messages.error(request, "Payment was not completed.")
     return redirect('cartsummary')
+
+
+
+
+
+@login_required
+def lost_found_page(request):
+    approved_items = LostFound.objects.filter(status='approved')
+    if request.method == 'POST':
+        item_name = request.POST.get('item_name')
+        description = request.POST.get('description')
+        location = request.POST.get('location')
+        image = request.FILES.get('image')
+        LostFound.objects.create(
+            user=request.user,
+            item_name=item_name,
+            description=description,
+            location=location,
+            image=image
+        )
+        messages.success(request, "Your report has been submitted for approval!")
+        return redirect('lost_found_page')
+    return render(request, 'cafeteria/lost_found_page', {'approved_items': approved_items})
