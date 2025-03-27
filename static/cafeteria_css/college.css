@@ -248,7 +248,7 @@
   margin-top: 0;
   justify-content: center;
   text-align: center;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 900;
   text-transform: uppercase;
   padding: 10px;
@@ -281,6 +281,7 @@
   color: transparent;
   background-attachment: fixed;
   font-family: 'Poppins', sans-serif;
+  font-weight: 700;
 
 }
 
