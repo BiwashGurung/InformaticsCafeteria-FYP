@@ -1,0 +1,200 @@
+
+
+/* Base Styles Scoped to Wrapper */
+.manage-lost-found-wrapper {
+    font-family: 'Roboto', Arial, sans-serif;
+    color: #2d3748;
+    line-height: 1.6;
+    padding: 25px;
+    background-color: #f4f6f9;
+    /* min-height: calc(100vh - 70px);  */
+
+    width:100%;
+    overflow-y: auto;
+}
+
+/* Header Section */
+.manage-lost-found-wrapper .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+/* Heading */
+.manage-lost-found-wrapper h2 {
+    font-size: 2rem;
+    color: #1a202c;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    border-left: 4px solid #4a90e2;
+}
+
+.manage-lost-found-wrapper h2 i {
+    margin-right: 10px;
+    color: #4a90e2;
+    font-size: 1.8rem;
+}
+
+/* Search Form */
+.manage-lost-found-wrapper .search-form {
+    display: flex;
+    gap: 10px;
+    max-width: 400px;
+}
+
+.manage-lost-found-wrapper .search-form input[type="text"] {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #4a5568;
+    background-color: #fff;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.manage-lost-found-wrapper .search-form input[type="text"]:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 8px rgba(74, 144, 226, 0.2);
+    outline: none;
+}
+
+.manage-lost-found-wrapper .search-form input[type="text"]::placeholder {
+    color: #a0aec0;
+    font-style: italic;
+}
+
+.manage-lost-found-wrapper .search-form button {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #4a90e2, #3182ce);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.manage-lost-found-wrapper .search-form button i {
+    font-size: 1.1rem;
+}
+
+.manage-lost-found-wrapper .search-form button:hover {
+    background: linear-gradient(135deg, #3182ce, #4a90e2);
+    transform: translateY(-2px);
+}
+
+.manage-lost-found-wrapper .search-form button:active {
+    transform: translateY(0);
+}
+
+/* Table Container */
+.manage-lost-found-wrapper .table-container {
+    width: 100%;
+}
+
+/* Table */
+.manage-lost-found-wrapper table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Table Header */
+.manage-lost-found-wrapper thead {
+    background: linear-gradient(135deg, #4a90e2, #3182ce);
+    color: #fff;
+}
+
+.manage-lost-found-wrapper thead th {
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Table Body */
+.manage-lost-found-wrapper tbody tr {
+    border-bottom: 1px solid #edf2f7;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.manage-lost-found-wrapper tbody tr:hover {
+    background-color: #f7fafc;
+    transform: translateY(-2px);
+}
+
+.manage-lost-found-wrapper tbody td {
+    padding: 14px 20px;
+    font-size: 1rem;
+    color: #4a5568;
+    vertical-align: middle;
+}
+
+/* Image Styling */
+.manage-lost-found-wrapper td img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Action Buttons */
+.manage-lost-found-wrapper .actions button {
+    display: inline-block;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 6px;
+    margin: 0 5px;
+    border: none;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.manage-lost-found-wrapper .approve-btn {
+    background-color: #fff;
+    color: #38a169; /* Green */
+    border: 1px solid #38a169;
+}
+
+.manage-lost-found-wrapper .approve-btn:hover {
+    background-color: #38a169;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.manage-lost-found-wrapper .resolve-btn {
+    background-color: #fff;
+    color: #dd6b20; /* Orange */
+    border: 1px solid #dd6b20;
+}
+
+.manage-lost-found-wrapper .resolve-btn:hover {
+    background-color: #dd6b20;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* No Items Message */
+.manage-lost-found-wrapper .no-items {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #718096;
+    padding: 20px;
+}
+
