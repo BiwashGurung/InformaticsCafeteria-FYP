@@ -272,3 +272,22 @@ def manage_lost_found(request):
     else:
         items = LostFound.objects.all()
     return render(request, 'cafeteria_admin/manage_lost_found.html', {'items': items, 'query': query})
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def approve_lost_found(request, item_id):
+    if request.method == 'POST':
+        item = get_object_or_404(LostFound, id=item_id)
+        item.status = 'approved'
+        item.approved_by = request.user
+        item.save()
+        messages.success(request, f"Item '{item.item_name}' has been approved.")
+    return redirect('manage_lost_found')
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def resolve_lost_found(request, item_id):
+    if request.method == 'POST':
+        item = get_object_or_404(LostFound, id=item_id)
+        item.status = 'resolved'
+        item.save()
+        messages.success(request, f"Item '{item.item_name}' has been marked as resolved.")
+    return redirect('manage_lost_found')

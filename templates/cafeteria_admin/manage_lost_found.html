@@ -1,4 +1,6 @@
 {% extends 'admin_base.html' %}
+
+
 {% load static %}
 
 {% block content %}
@@ -24,6 +26,7 @@
                     <th>Status</th>
                     <th>Submitted</th>
                     <th>Approved By</th>
+                    <th>Actions</th> <!-- New column for actions -->
                 </tr>
             </thead>
             <tbody>
@@ -39,10 +42,27 @@
                                 No Image
                             {% endif %}
                         </td>
-                        <td>{{ item.user.username }}</td> 
+                        <td>{{ item.user.username }}</td>
                         <td>{{ item.status }}</td>
                         <td>{{ item.submitted_at|date:"M d, Y" }}</td>
                         <td>{{ item.approved_by.username|default:"Not Approved" }}</td>
+                        <td>
+                            {% if item.status == 'pending' %}
+                                <form method="post" action="{% url 'approve_lost_found' item.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                </form>
+                                <form method="post" action="{% url 'resolve_lost_found' item.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-warning btn-sm">Resolve</button>
+                                </form>
+                            {% elif item.status == 'approved' %}
+                                <form method="post" action="{% url 'resolve_lost_found' item.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-warning btn-sm">Resolve</button>
+                                </form>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
