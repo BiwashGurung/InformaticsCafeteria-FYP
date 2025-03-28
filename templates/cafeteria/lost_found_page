@@ -1,41 +1,57 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block content %}
 <style>
-    .card-img-top {
-        width: 100% !important;
-        max-width: none !important; 
-    }
-    .card {
-        overflow: hidden; 
-    }
     .btn:hover {
-        background-color: #7a130a !important; 
+        background-color: #7a130a !important;
+        transform: translateY(-2px);
+        transition: all 0.3s;
     }
     .card:hover {
         transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+    .card-img-top {
+        width: 100% !important;
+        max-width: none !important;
+    }
+    .card {
+        overflow: hidden;
+    }
+    .modal-content {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    .form-control:focus {
+        border-color: #99180d;
+        box-shadow: 0 0 5px rgba(153, 24, 13, 0.5);
+    }
+    .badge-resolved {
+        background-color: #28a745 !important; 
     }
 </style>
-{% block content %}
-<div class="container mt-5">
-    
-    <div class="position-relative mb-5 text-center py-5" style="background:  linear-gradient(135deg, rgba(0, 123, 255, 0.7), rgba(40, 167, 69, 0.7)); border-radius: 10px; min-height: 250px;">
+
+<div class="container mt-5 px-0">
+    <!-- Header with Gradient and Shadow -->
+    <div class="position-relative mb-5 text-center py-5 shadow-sm" style="background: linear-gradient(135deg, rgba(153, 24, 13, 0.9), rgba(217, 83, 79, 0.7)); border-radius: 15px; min-height: 250px;">
         <div class="position-absolute top-50 start-50 translate-middle text-white">
-            <h1 class="display-4 fw-bold animate__animated animate__fadeInDown">Lost & Found</h1>
-            <p class="lead animate__animated animate__fadeInUp animate__delay-1s">We’ve got your back—find or report items here!</p>
+            <h1 class="display-3 fw-bold animate__animated animate__bounceInDown">Lost & Found</h1>
+            <p class="lead animate__animated animate__fadeInUp animate__delay-1s" style="font-size: 1.5rem;">Your items are safe with us—report or reclaim them here!</p>
         </div>
     </div>
 
     <!-- Introductory Card -->
     <section class="mb-5 text-center">
-        <div class="card shadow-sm border-0 animate__animated animate__zoomIn" style="max-width: 600px; margin: 0 auto;">
-            <div class="card-body p-4">
-                <i class="fas fa-search fa-3x mb-3" style="color: #99180d;"></i>
-                <p class="card-text">
-                    Misplaced something? Found an item that isn’t yours? Our Lost & Found service connects lost items with their owners. 
-                    Report below or browse found items—all handled with care by our team.
+        <div class="card shadow border-0 animate__animated animate__zoomIn" style="max-width: 700px; margin: 0 auto; background: linear-gradient(135deg, #fff, #f8e1e1); border-radius: 20px;">
+            <div class="card-body p-5">
+                <i class="fas fa-search fa-4x mb-4" style="color: #99180d;"></i>
+                <h3 class="fw-bold" style="color: #99180d;">Lost Something?</h3>
+                <p class="card-text text-muted" style="font-size: 1.1rem;">
+                    Whether you’ve lost an item or found someone else’s, our Lost & Found service is here to help. 
+                    Report below or check the found items—all managed with care.
                 </p>
-                <button class="btn btn-lg mt-3" style="background-color: #99180d; color: white; border: none;" data-bs-toggle="modal" data-bs-target="#reportModal">
-                    <i class="fas fa-plus me-2"></i> Report a Lost Item
+                <button class="btn btn-lg mt-4 animate__animated animate__pulse animate__infinite" style="background-color: #99180d; color: white; border: none; border-radius: 25px; padding: 12px 30px;" data-bs-toggle="modal" data-bs-target="#reportModal">
+                    <i class="fas fa-plus me-2"></i> Report Lost Item
                 </button>
             </div>
         </div>
@@ -43,39 +59,42 @@
 
     <!-- Modal for Reporting Form -->
     <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header text-white" style="background-color:rgb(137, 128, 127);">
-                    <h5 class="modal-title" id="reportModalLabel">Report a Lost Item</h5>
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="border-radius: 15px; overflow: hidden;">
+                <div class="modal-header text-white" style="background: linear-gradient(90deg, #99180d, #d9534f);">
+                    <h5 class="modal-title fw-bold" id="reportModalLabel">Report a Lost Item</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body p-5">
                     <form method="post" enctype="multipart/form-data" id="lostForm">
                         {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="item_name" class="form-label fw-bold">Item Name</label>
-                            <input type="text" class="form-control" id="item_name" name="item_name" placeholder="e.g., Jacket" required>
+                        <div class="mb-4">
+                            <label for="item_name" class="form-label fw-bold" style="color: #99180d;">Item Name</label>
+                            <input type="text" class="form-control shadow-sm" id="item_name" name="item_name" placeholder="e.g., Jacket" required style="border-radius: 10px;">
                             <div class="invalid-feedback">Please enter the item name.</div>
                         </div>
-                        <div class="mb-3">
-                            <label for="description" class="form-label fw-bold">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="3" placeholder="e.g., Black leather jacket" required></textarea>
+                        <div class="mb-4">
+                            <label for="description" class="form-label fw-bold" style="color: #99180d;">Description</label>
+                            <textarea class="form-control shadow-sm" id="description" name="description" rows="4" placeholder="e.g., Black leather jacket" required style="border-radius: 10px;"></textarea>
                             <div class="invalid-feedback">Please provide a description.</div>
                         </div>
-                        <div class="mb-3">
-                            <label for="location" class="form-label fw-bold">Location Lost</label>
-                            <input type="text" class="form-control" id="location" name="location" placeholder="e.g., Table 5, Canteen" required>
+                        <div class="mb-4">
+                            <label for="location" class="form-label fw-bold" style="color: #99180d;">Location Lost</label>
+                            <input type="text" class="form-control shadow-sm" id="location" name="location" placeholder="e.g., Table 5, Canteen" required style="border-radius: 10px;">
                             <div class="invalid-feedback">Please specify the location.</div>
                         </div>
-                        <div class="mb-3">
-                            <label for="image" class="form-label fw-bold">Upload Image (Optional)</label>
-                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                        <div class="mb-4">
+                            <label for="image" class="form-label fw-bold" style="color: #99180d;">Upload Image</label>
+                            <input type="file" class="form-control shadow-sm" id="image" name="image" accept="image/*" required style="border-radius: 10px;">
                         </div>
-                        <button type="submit" class="btn w-100" style="background-color: #99180d; color: white; border: none;">Submit Report</button>
+                        <button type="submit" class="btn w-100 position-relative overflow-hidden" style="background-color: #99180d; color: white; border: none; border-radius: 25px; padding: 12px; transition: all 0.3s;">
+                            <span class="position-relative z-index-1">Submit Report</span>
+                            <span class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-0" style="transition: transform 0.5s; transform: scaleX(0); transform-origin: left;"></span>
+                        </button>
                     </form>
                     {% if messages %}
                         {% for message in messages %}
-                            <div class="alert alert-success mt-3 animate__animated animate__fadeIn">{{ message }}</div>
+                            <div class="alert alert-success mt-4 animate__animated animate__fadeIn" style="border-radius: 10px;">{{ message }}</div>
                         {% endfor %}
                     {% endif %}
                 </div>
@@ -83,49 +102,88 @@
         </div>
     </div>
 
-    
-
     <!-- Found Items Card Grid -->
-<section>
-    <h2 class="mb-4 text-center animate__animated animate__fadeIn">Found Items</h2>
-    {% if approved_items %}
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            {% for item in approved_items %}
-                <div class="col">
-                    <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp" style="transition: transform 0.3s; border-radius: 15px;">
-                        {% if item.image %}
-                            <img src="{{ item.image.url }}" class="card-img-top w-100" alt="{{ item.item_name }}" style="height: 200px; object-fit: cover; border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                        {% else %}
-                            <div class="card-img-top bg-light text-center d-flex align-items-center justify-content-center w-100" style="height: 200px; border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                                <span class="text-muted">No Image</span>
+    <section>
+        <h2 class="mb-5 text-center animate__animated animate__fadeIn" style="color: #99180d; font-size: 2.5rem;">Found Items</h2>
+        {% if approved_items %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for item in approved_items %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; background: linear-gradient(135deg, #fff, #f9ecec); transition: transform 0.3s;">
+                            {% if item.image %}
+                                <img src="{{ item.image.url }}" class="card-img-top w-100" alt="{{ item.item_name }}" style="height: 220px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px;">
+                            {% else %}
+                                <div class="card-img-top bg-light text-center d-flex align-items-center justify-content-center w-100" style="height: 220px; border-top-left-radius: 20px; border-top-right-radius: 20px;">
+                                    <span class="text-muted">No Image</span>
+                                </div>
+                            {% endif %}
+                            <div class="card-body p-4">
+                                <h5 class="card-title fw-bold" style="color: #99180d;">{{ item.item_name }}</h5>
+                                <p class="card-text text-muted mb-3">{{ item.description|truncatewords:12 }}</p>
+                                <ul class="list-unstyled text-dark">
+                                    <li><i class="fas fa-map-marker-alt me-2" style="color: #99180d;"></i><strong>Location:</strong> {{ item.location }}</li>
+                                    <li><i class="fas fa-user me-2" style="color: #99180d;"></i><strong>Reported By:</strong> {{ item.user.username }}</li>
+                                    <li><i class="fas fa-calendar-alt me-2" style="color: #99180d;"></i><strong>Date:</strong> {{ item.submitted_at|date:"M d, Y" }}</li>
+                                </ul>
                             </div>
-                        {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{ item.item_name }}</h5>
-                            <p class="card-text text-muted"><strong>Description:</strong>{{ item.description|truncatewords:10 }}</p>
-                            <ul class="list-unstyled">
-                                <li><strong>Location:</strong> {{ item.location }}</li>
-                                <li><strong>Reported By:</strong> {{ item.user.username }}</li>
-                                <li><strong>Date:</strong> {{ item.submitted_at|date:"M d, Y" }}</li>
-                            </ul>
-                        </div>
-                        <div class="card-footer text-white text-center border-0" style="background-color: #99180d; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
-                            <span class="badge">Lost Item: {{ item.item_name }}</span>
+                            <div class="card-footer bg-transparent border-0 p-4 pt-0">
+                                <span class="badge w-100 d-block py-2 mb-3" style="background-color: #99180d; color: white; border-radius: 10px;">Found: {{ item.item_name }}</span>
+                                <a href="{% url 'contactus' %}" class="btn btn-sm w-100" style="background-color: #99180d; color: white; border: none; border-radius: 20px;">Contact to Claim</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-        </div>
-        <p class="mt-4 text-center text-muted animate__animated animate__fadeIn">
-            <strong>Note:</strong> Contact or visit the Student Service Department with proof (e.g., student ID) to reclaim your belongings.
-        </p>
-    {% else %}
-        <div class="alert alert-info text-center animate__animated animate__fadeIn">
-            No found items reported yet.
-        </div>
-    {% endif %}
-</section>
+                {% endfor %}
+            </div>
+            <p class="mt-5 text-center text-muted animate__animated animate__fadeIn" style="font-size: 1.1rem;">
+                <strong>Note:</strong> Visit the Student Service Department with proof (e.g., student ID) to reclaim your belongings.
+            </p>
+        {% else %}
+            <div class="alert alert-info text-center animate__animated animate__fadeIn shadow-sm" style="border-radius: 15px;">
+                No found items reported yet.
+            </div>
+        {% endif %}
+    </section>
 
+    <!--Recently Resolved Items -->
+    <section class="mt-5">
+        <h2 class="mb-5 text-center animate__animated animate__fadeIn" style="color: #28a745; font-size: 2.5rem;">Recently Resolved Items</h2>
+        {% if resolved_items %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for item in resolved_items %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; background: linear-gradient(135deg, #fff, #e6f4ea); transition: transform 0.3s;">
+                            {% if item.image %}
+                                <img src="{{ item.image.url }}" class="card-img-top w-100" alt="{{ item.item_name }}" style="height: 220px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px;">
+                            {% else %}
+                                <div class="card-img-top bg-light text-center d-flex align-items-center justify-content-center w-100" style="height: 220px; border-top-left-radius: 20px; border-top-right-radius: 20px;">
+                                    <span class="text-muted">No Image</span>
+                                </div>
+                            {% endif %}
+                            <div class="card-body p-4">
+                                <h5 class="card-title fw-bold" style="color: #28a745;">{{ item.item_name }}</h5>
+                                <p class="card-text text-muted mb-3">{{ item.description|truncatewords:12 }}</p>
+                                <ul class="list-unstyled text-dark">
+                                    <li><i class="fas fa-map-marker-alt me-2" style="color: #28a745;"></i><strong>Location:</strong> {{ item.location }}</li>
+                                    <li><i class="fas fa-user me-2" style="color: #28a745;"></i><strong>Reported By:</strong> {{ item.user.username }}</li>
+                                    <li><i class="fas fa-calendar-alt me-2" style="color: #28a745;"></i><strong>Resolved On:</strong> {{ item.submitted_at|date:"M d, Y" }}</li>
+                                </ul>
+                            </div>
+                            <div class="card-footer bg-transparent border-0 p-4 pt-0">
+                                <span class="badge badge-resolved w-100 d-block py-2 mb-3" style="color: white; border-radius: 10px;">Resolved: {{ item.item_name }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <p class="mt-5 text-center text-muted animate__animated animate__fadeIn" style="font-size: 1.1rem;">
+                <strong>Note:</strong> These items have been successfully returned to their owners.
+            </p>
+        {% else %}
+            <div class="alert alert-success text-center animate__animated animate__fadeIn shadow-sm" style="border-radius: 15px;">
+                No items have been resolved yet.
+            </div>
+        {% endif %}
+    </section>
 </div>
 
 <!-- External Dependencies -->
@@ -146,8 +204,12 @@
         });
         if (!valid) event.preventDefault();
     });
+
+    document.querySelector('#lostForm button[type="submit"]').addEventListener('click', function(e) {
+        if (this.form.checkValidity()) {
+            this.querySelector('span:nth-child(2)').style.transform = 'scaleX(1)';
+            setTimeout(() => this.querySelector('span:nth-child(2)').style.transform = 'scaleX(0)', 500);
+        }
+    });
 </script>
-
-
-
 {% endblock %}

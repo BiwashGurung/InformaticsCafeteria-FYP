@@ -385,6 +385,7 @@ def khalti_callback(request):
 @login_required
 def lost_found_page(request):
     approved_items = LostFound.objects.filter(status='approved')
+    resolved_items = LostFound.objects.filter(status='resolved').order_by('-submitted_at')[:6]  
     if request.method == 'POST':
         item_name = request.POST.get('item_name')
         description = request.POST.get('description')
@@ -399,4 +400,9 @@ def lost_found_page(request):
         )
         messages.success(request, "Your report has been submitted for approval!")
         return redirect('lost_found_page')
-    return render(request, 'cafeteria/lost_found_page', {'approved_items': approved_items})
+    return render(request, 'cafeteria/lost_found_page', {
+        'approved_items': approved_items,
+        'resolved_items': resolved_items
+    })
+
+    
