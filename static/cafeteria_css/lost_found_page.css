@@ -1,0 +1,67 @@
+
+    .hero-section {
+        height: calc(70vh - 64px);
+        width: 100%;
+        background-image: linear-gradient(
+            rgba(4, 9, 30, 0.7),
+            rgba(4, 9, 30, 0.7)
+          ),
+          url(../Images/lost_found.jpg);
+        background-position: center;  
+        background-size: cover;
+        position: relative;
+        background-attachment: fixed;
+      }
+      .text-box {
+        width: 90%;
+        color: #fff;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+      }
+    
+      .text-box h1 {
+        font-size: 62px;
+        font-family: 'Poppins', sans-serif;
+      }
+    
+      .text-box p {
+        margin: 10px 0 40px;
+        font-size: 14px;
+        color: #fff;
+        font-family: 'Poppins', sans-serif;
+    
+      }
+    
+
+
+
+
+    .btn:hover {
+        background-color: #7a130a !important;
+        transform: translateY(-2px);
+        transition: all 0.3s;
+    }
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+    .card-img-top {
+        width: 100% !important;
+        max-width: none !important;
+    }
+    .card {
+        overflow: hidden;
+    }
+    .modal-content {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    .form-control:focus {
+        border-color: #99180d;
+        box-shadow: 0 0 5px rgba(153, 24, 13, 0.5);
+    }
+    .badge-resolved {
+        background-color: #28a745 !important; 
+    }

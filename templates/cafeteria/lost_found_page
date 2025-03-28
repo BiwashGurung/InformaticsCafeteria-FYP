@@ -2,43 +2,19 @@
 {% load static %}
 
 {% block content %}
-<style>
-    .btn:hover {
-        background-color: #7a130a !important;
-        transform: translateY(-2px);
-        transition: all 0.3s;
-    }
-    .card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
-    }
-    .card-img-top {
-        width: 100% !important;
-        max-width: none !important;
-    }
-    .card {
-        overflow: hidden;
-    }
-    .modal-content {
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    }
-    .form-control:focus {
-        border-color: #99180d;
-        box-shadow: 0 0 5px rgba(153, 24, 13, 0.5);
-    }
-    .badge-resolved {
-        background-color: #28a745 !important; 
-    }
-</style>
 
-<div class="container mt-5 px-0">
-    <!-- Header with Gradient and Shadow -->
-    <div class="position-relative mb-5 text-center py-5 shadow-sm" style="background: linear-gradient(135deg, rgba(153, 24, 13, 0.9), rgba(217, 83, 79, 0.7)); border-radius: 15px; min-height: 250px;">
-        <div class="position-absolute top-50 start-50 translate-middle text-white">
-            <h1 class="display-3 fw-bold animate__animated animate__bounceInDown">Lost & Found</h1>
-            <p class="lead animate__animated animate__fadeInUp animate__delay-1s" style="font-size: 1.5rem;">Your items are safe with us—report or reclaim them here!</p>
-        </div>
+
+<link rel="stylesheet" href="{% static 'cafeteria_css/lost_found_page.css' %}" />
+
+
+<section class="hero-section">
+    <div class="text-box">
+      <h1>Lost & Found</h1>
+      <p>Your items are safe with us—report or reclaim them here!</p>
     </div>
+  </section>
+<div class="container mt-5 px-0">
+    
 
     <!-- Introductory Card -->
     <section class="mb-5 text-center">
