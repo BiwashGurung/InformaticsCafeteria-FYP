@@ -6,7 +6,6 @@ import uuid
 # Define a function to generate the default group code
 def generate_group_code():
     return uuid.uuid4().hex[:6].upper()
-
 #Creating a profile model to store additional information about the user in MySQL database
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

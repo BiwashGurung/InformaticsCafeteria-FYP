@@ -1,68 +1,83 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <head>
   <link rel="stylesheet" href="{% static 'cafeteria_css/orderonline.css' %}" />
 </head>
 
 <div class="container mt-5 px-0">
-    <h2 class="menu-title">Group Ordering</h2>
-    <p class="text-center">Order together, eat together—share the fun!</p>
+  <h2 class="menu-title">Group Ordering</h2>
+  <p class="text-center">Order together, eat together—share the fun!</p>
 
-    <section class="menu-table">
-        <div class="menu-box">
-            <img src="{% static 'Images/GroupOrder.png' %}" alt="Start Group" />
-            <form method="POST">
-                {% csrf_token %}
-                <button type="submit" name="create_group" class="view-menu">Create Group Order</button>
-            </form>
+  <section class="menu-table">
+    <div class="menu-box">
+      <img src="{% static 'Images/GroupOrder.png' %}" alt="Start Group" />
+      <form method="POST">
+        {% csrf_token %}
+        <button type="submit" name="create_group" class="view-menu">
+          Create Group Order
+        </button>
+      </form>
+    </div>
+    <div class="menu-box">
+      <img src="{% static 'Images/GroupOrder.png' %}" alt="Join Group" />
+      <form method="POST">
+        {% csrf_token %}
+        <input
+          type="text"
+          name="code"
+          placeholder="Enter Group Code"
+          class="form-control mb-2"
+          required
+        />
+        <button type="submit" name="join_group" class="view-menu">
+          Join Group
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    <h3>Your Active Groups</h3>
+    {% if active_groups %}
+    <div class="food-container">
+      {% for group in active_groups %}
+      <div class="food-item">
+        <div class="food-details">
+          <h3>Code: {{ group.code }}</h3>
+          <p>Leader: {{ group.leader.username }}</p>
+          <p>Total: NPR {{ group.total_price }}</p>
+          <p>Participants: {{ group.participants_count }}</p>
         </div>
-        <div class="menu-box">
-            <img src="{% static 'Images/GroupOrder.png' %}" alt="Join Group" />
-            <form method="POST">
-                {% csrf_token %}
-                <input type="text" name="code" placeholder="Enter Group Code" class="form-control mb-2" required>
-                <button type="submit" name="join_group" class="view-menu">Join Group</button>
-            </form>
+        <div class="food-actions">
+          <a
+            href="{% url 'group_order_detail' group.code %}"
+            class="btn btn-primary"
+            >View & Add Items</a
+          >
         </div>
-    </section>
-
-    <section>
-        <h3>Your Active Groups</h3>
-        {% if active_groups %}
-            <div class="food-container">
-                {% for group in active_groups %}
-                    <div class="food-item">
-                        <div class="food-details">
-                            <h3>Code: {{ group.code }}</h3>
-                            <p>Leader: {{ group.leader.username }}</p>
-                            <p>Total: NPR {{ group.total_price }}</p>
-                            <p>Participants: {{ group.participants_count }}</p>
-                        </div>
-                        <div class="food-actions">
-                            <a href="{% url 'group_order_detail' group.code %}" class="btn btn-primary">View & Add Items</a>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="alert alert-info text-center">No active group orders yet.</div>
-        {% endif %}
-    </section>
-
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-success mt-4">{{ message }}</div>
-        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">No active group orders yet.</div>
     {% endif %}
+  </section>
 
-    <a href="{% url 'orderonline' %}" class="back-link">
-        <i class="fa-solid fa-arrow-left"></i> Back to Menus
-    </a>
+  {% if messages %} {% for message in messages %}
+  <div class="alert alert-success mt-4">{{ message }}</div>
+  {% endfor %} {% endif %}
+
+  <a href="{% url 'orderonline' %}" class="back-link">
+    <i class="fa-solid fa-arrow-left"></i> Back to Menus
+  </a>
 </div>
 
-<link href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animation.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link
+  href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animation.min.css"
+  rel="stylesheet"
+/>
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+  rel="stylesheet"
+/>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
