@@ -11,17 +11,23 @@
     <table class="table table-bordered mt-3">
         <thead>
             <tr>
+                <th>Order ID</th>
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>Status</th>
                 <th>Date</th>
+                <th>Pickup Time</th>
+                <th>Dine-in Time</th>
+                <th>Group Code</th>
                 <th>Remarks</th>
             </tr>
         </thead>
         <tbody>
+            
             {% for order in orders %}
             <tr>
+                <td>{{ order.id }}</td>
                 <td>
                     {% for item in order.order_items.all %}
                     <span>{{ item.food_item.name }}</span><br>
@@ -35,6 +41,9 @@
                 <td>Rs. {{ order.total_price }}</td>
                 <td>{{ order.status }}</td>
                 <td>{{ order.order_date|date:"Y-m-d " }}</td>
+                <td>{{ order.pickup_time }}</td>
+                <td>{{ order.dine_in_time }}</td>
+                <td>{{ order.group_code }}</td>
                 <td>{{ order.remarks }}</td>
             </tr>
             {% endfor %}
