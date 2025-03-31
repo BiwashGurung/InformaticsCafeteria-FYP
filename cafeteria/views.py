@@ -181,7 +181,6 @@ def clear_cart(request):
     return redirect('view_cart')
 
 
-
 @login_required
 def cart_summary(request):
     cart = Cart.objects.filter(user=request.user).first()
@@ -189,13 +188,17 @@ def cart_summary(request):
         return redirect('view_cart')
 
     total_price = cart.total_price()
-    
+    # Check if this cart contains group items
+    group_code = request.session.get('group_code', None)
+    if not group_code and cart.cart_items.filter(group_code__isnull=False).exists():
+        group_code = cart.cart_items.filter(group_code__isnull=False).first().group_code
+
     return render(request, 'cafeteria/cartsummary.html', {
         'cart': cart,
         'cart_items': cart.cart_items.all(),
-        'total_price': total_price
+        'total_price': total_price,
+        'group_code': group_code  
     })
-
 
 @login_required
 def place_order(request):
@@ -209,23 +212,27 @@ def place_order(request):
         dine_in_time = request.POST.get("dine_in_time")
         remarks = request.POST.get("remarks", "")  
 
+        group_code = request.session.get('group_code', None)
         order = Order.objects.create(
             user=request.user,
             total_price=cart.total_price(),
             payment_method=payment_method,
             pickup_time=pickup_time if pickup_time else None,
             dine_in_time=dine_in_time if dine_in_time else None,
-            remarks=remarks 
+            remarks=remarks,
+            group_code=group_code
         )
+        if 'group_code' in request.session:
+            del request.session['group_code']
 
-        for item in cart.cart_items.all():
-            OrderItem.objects.create(
-                order=order,
-                food_item=item.food_item,
-                quantity=item.quantity,
-                price=item.food_item.price * item.quantity
-            )
-            item.delete()  
+            for item in cart.cart_items.all():
+                    OrderItem.objects.create(
+                        order=order,
+                        food_item=item.food_item,
+                        quantity=item.quantity,
+                        price=item.food_item.price * item.quantity
+                    )
+                    item.delete()  
 
         return redirect('order_history') 
 
@@ -413,14 +420,20 @@ def group_order_page(request):
     if request.method == 'POST' and 'create_group' in request.POST:
         group = GroupOrder.objects.create(leader=request.user)
         messages.success(request, f"Group created! Share this code: {group.code}")
-        return redirect('group_order_page')
+        return redirect('group_order_detail', group_code=group.code)  # Redirect directly to detail page
 
     if request.method == 'POST' and 'join_group' in request.POST:
         code = request.POST.get('code')
-        group = get_object_or_404(GroupOrder, code=code, is_active=True)
-        return redirect('group_order_detail', group_code=group.code)
+        try:
+            group = GroupOrder.objects.get(code=code, is_active=True)
+            return redirect('group_order_detail', group_code=group.code)
+        except GroupOrder.DoesNotExist:
+            messages.error(request, "Invalid or inactive group code.")
+            return redirect('group_order_page')
 
-    active_groups = GroupOrder.objects.filter(is_active=True).filter(Q(leader=request.user) | Q(group_items__user=request.user)).distinct()
+    active_groups = GroupOrder.objects.filter(is_active=True).filter(
+        Q(leader=request.user) | Q(group_items__user=request.user)
+    ).distinct()
     food_items = FoodItem.objects.filter(is_in_stock=True)
     return render(request, 'cafeteria/group_order_page.html', {
         'active_groups': active_groups,
@@ -429,43 +442,62 @@ def group_order_page(request):
 
 @login_required
 def group_order_detail(request, group_code):
-    group = get_object_or_404(GroupOrder, code=group_code, is_active=True)
+    try:
+        # Attempt to fetch the active group order
+        group = GroupOrder.objects.get(code=group_code, is_active=True)
+    except GroupOrder.DoesNotExist:
+        # If no active group exists, redirect with a message
+        messages.error(request, f"Group order {group_code} is either closed or does not exist.")
+        return redirect('group_order_page')
+
     food_items = FoodItem.objects.filter(is_in_stock=True)
 
     if request.method == 'POST' and 'add_item' in request.POST:
-        food_item_id = request.POST.get('food_item')
-        quantity = int(request.POST.get('quantity', 1))
-        food_item = get_object_or_404(FoodItem, id=food_item_id)
-        GroupOrderItem.objects.create(
-            group_order=group,
-            user=request.user,
-            food_item=food_item,
-            quantity=quantity
-        )
-        messages.success(request, f"Added {quantity}x {food_item.name} to the group order!")
-        return redirect('group_order_detail', group_code=group.code)
+        try:
+            food_item_id = request.POST.get('food_item')
+            quantity = int(request.POST.get('quantity', 1))
+            food_item = get_object_or_404(FoodItem, id=food_item_id)
 
-    if request.method == 'POST' and 'close_group' in request.POST and request.user == group.leader:
-        group.is_active = False
-        order = Order.objects.create(
-            user=group.leader,
-            total_price=group.total_price,
-            payment_method="Cash",
-            remarks="Group Order"
-        )
-        for item in group.group_items.all():
-            OrderItem.objects.create(
-                order=order,
-                food_item=item.food_item,
-                quantity=item.quantity,
-                price=item.subtotal
+            GroupOrderItem.objects.create(
+                group_order=group,
+                user=request.user,
+                food_item=food_item,
+                quantity=quantity
             )
-        group.save()
-        messages.success(request, f"Group order {group.code} closed and placed as Order #{order.id}.")
-        return redirect('order_history')
+            messages.success(request, f"Added {quantity}x {food_item.name} to the group order!")
+            return redirect('group_order_detail', group_code=group.code)
+        except Exception as e:
+            messages.error(request, f"Failed to add item: {str(e)}")
+            return redirect('group_order_detail', group_code=group.code)
+
+    if request.method == 'POST' and 'close_group' in request.POST:
+        try:
+            if request.user != group.leader:
+                messages.error(request, "Only the group leader can close this order.")
+                return redirect('group_order_detail', group_code=group.code)
+
+            group.is_active = False
+            group.save()
+
+            leader_cart, created = Cart.objects.get_or_create(user=group.leader)
+            leader_cart.cart_items.all().delete()  # Clear existing cart items
+
+            for group_item in group.group_items.all():
+                CartItem.objects.create(
+                    cart=leader_cart,
+                    food_item=group_item.food_item,
+                    quantity=group_item.quantity,
+                    username=group_item.user.username
+                )
+
+            messages.success(request, f"Group order {group.code} closed. Please review and confirm your order.")
+            return redirect('cartsummary')
+
+        except Exception as e:
+            messages.error(request, f"Error closing group order: {str(e)}")
+            return redirect('group_order_detail', group_code=group.code)
 
     return render(request, 'cafeteria/group_order_detail.html', {
         'group': group,
         'food_items': food_items
     })
-    
