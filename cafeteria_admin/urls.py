@@ -26,7 +26,10 @@ urlpatterns = [
     path('orders/delete/<int:order_id>/', delete_order, name='delete_order'),
     path('manage_lost_found/', manage_lost_found, name='manage_lost_found'),
     path('approve_lost_found/<int:item_id>/', approve_lost_found, name='approve_lost_found'),  
-    path('resolve_lost_found/<int:item_id>/', resolve_lost_found, name='resolve_lost_found'),  
+    path('resolve_lost_found/<int:item_id>/', resolve_lost_found, name='resolve_lost_found'), 
+    path('manage_group_orders/', views.manage_group_orders, name='manage_group_orders'),
+    path('close_group_order/<int:group_id>/', views.close_group_order, name='close_group_order'),
+    path('delete_group_order/<int:group_id>/', views.delete_group_order, name='delete_group_order'), 
 
 ]
   

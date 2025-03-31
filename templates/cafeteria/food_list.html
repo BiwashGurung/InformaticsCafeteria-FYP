@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
-{% block content %}
 
+{% block content %}
 <head>
   <title>Informatics Cafeteria - {{ category }}</title>
   <link rel="stylesheet" href="{% static 'cafeteria_css/food_list.css' %}" />
@@ -15,24 +15,19 @@
      {% if not food.is_in_stock %}
     <p class="out-of-stock">Out of Stock</p>  
     {% endif %}
-
     <img src="{{ food.image.url }}" alt="{{ food.name }}" />
     <div class="food-details">
-
       <h3>{{ food.name }}</h3>
       <p>{{ food.description }}</p>
     </div>
     <div class="food-actions">
       <p class="price">Rs. {{ food.price }} /-</p> 
-    
       <form method="POST" action="{% url 'add_to_cart' food.id %}" class="add-to-cart-form">
         {% csrf_token %}
         <input type="hidden" name="food_id" value="{{ food.id }}">
         <input type="number" name="quantity" value="1" min="1" class="quantity-input" {% if not food.is_in_stock %} disabled {% endif %}>
         <button type="submit" class="btn btn-primary" {% if not food.is_in_stock %} disabled {% endif %}>Add to Cart</button>
-    </form>
-    
-      
+      </form>
     </div>
   </div>
   {% empty %}
@@ -45,5 +40,4 @@
 </a>
 
 <script src="{% static 'javascript/quantity.js'%}"></script>
-
 {% endblock %}

@@ -39,6 +39,10 @@ urlpatterns = [
 
     # Lost and Found
     path('lost-found/', lost_found_page, name='lost_found_page'),
+
+    # Group Order 
+    path('group-order/', views.group_order_page, name='group_order_page'),
+    path('group-order/<str:group_code>/', views.group_order_detail, name='group_order_detail'),
     
     # Password reset views
     path('reset_password/', auth_views.PasswordResetView.as_view(), name='password_reset'),

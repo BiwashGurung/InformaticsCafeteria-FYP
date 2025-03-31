@@ -1,6 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
+import uuid
+
+# Define a function to generate the default group code
+def generate_group_code():
+    return uuid.uuid4().hex[:6].upper()
 
 #Creating a profile model to store additional information about the user in MySQL database
 class Profile(models.Model):
@@ -158,3 +163,53 @@ class LostFound(models.Model):
         verbose_name = 'Lost and Found Item'
         verbose_name_plural = 'Lost and Found Items'
         ordering = ['-submitted_at']
+
+
+class GroupOrder(models.Model):
+    leader = models.ForeignKey(User, on_delete=models.CASCADE, related_name='led_group_orders')
+    code = models.CharField(max_length=6, unique=True, default=generate_group_code)  # Use the function here
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    username = models.CharField(max_length=50, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.username and self.leader:
+            self.username = self.leader.username
+        super().save(*args, **kwargs)
+
+    @property
+    def participants_count(self):
+        # Count unique users who added items, including the leader if they contributed
+        unique_users = set(item.user.id for item in self.group_items.all())
+        if self.leader.id not in unique_users and self.group_items.exists():
+            return len(unique_users) + 1  # Include leader if they haven't added items
+        return len(unique_users) or 1  # Minimum 1 for the leader
+
+    def __str__(self):
+        return f"Group Order {self.code} by {self.leader.username}"
+
+    class Meta:
+        db_table = 'cafeteria_group_orders'
+
+class GroupOrderItem(models.Model):
+    group_order = models.ForeignKey(GroupOrder, on_delete=models.CASCADE, related_name='group_items')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    subtotal = models.DecimalField(max_digits=6, decimal_places=2)
+    username = models.CharField(max_length=50, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.subtotal = self.food_item.price * self.quantity
+        if not self.username and self.user:
+            self.username = self.user.username
+        super().save(*args, **kwargs)
+        self.group_order.total_price = sum(item.subtotal for item in self.group_order.group_items.all())
+        self.group_order.save()
+
+    def __str__(self):
+        return f"{self.quantity}x {self.food_item.name} by {self.user.username}"
+
+    class Meta:
+        db_table = 'cafeteria_group_order_items'        

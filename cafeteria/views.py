@@ -3,8 +3,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Profile, FoodItem, Cart, CartItem, OrderItem, Order , LostFound
-
+from .models import Profile, FoodItem, Cart, CartItem, OrderItem, Order , LostFound , GroupOrder, GroupOrderItem
+from django.db.models import Q
+import uuid
+import logging
 import requests
 import json
 
@@ -236,9 +238,9 @@ def order_history(request):
     return render(request, 'cafeteria/order.html', {'orders': orders})
 
 
-import uuid
+
 # Khalti Payment Gateway Integration
-import logging
+
 
 logger = logging.getLogger(__name__)
 @login_required
@@ -405,4 +407,65 @@ def lost_found_page(request):
         'resolved_items': resolved_items
     })
 
+
+@login_required
+def group_order_page(request):
+    if request.method == 'POST' and 'create_group' in request.POST:
+        group = GroupOrder.objects.create(leader=request.user)
+        messages.success(request, f"Group created! Share this code: {group.code}")
+        return redirect('group_order_page')
+
+    if request.method == 'POST' and 'join_group' in request.POST:
+        code = request.POST.get('code')
+        group = get_object_or_404(GroupOrder, code=code, is_active=True)
+        return redirect('group_order_detail', group_code=group.code)
+
+    active_groups = GroupOrder.objects.filter(is_active=True).filter(Q(leader=request.user) | Q(group_items__user=request.user)).distinct()
+    food_items = FoodItem.objects.filter(is_in_stock=True)
+    return render(request, 'cafeteria/group_order_page.html', {
+        'active_groups': active_groups,
+        'food_items': food_items
+    })
+
+@login_required
+def group_order_detail(request, group_code):
+    group = get_object_or_404(GroupOrder, code=group_code, is_active=True)
+    food_items = FoodItem.objects.filter(is_in_stock=True)
+
+    if request.method == 'POST' and 'add_item' in request.POST:
+        food_item_id = request.POST.get('food_item')
+        quantity = int(request.POST.get('quantity', 1))
+        food_item = get_object_or_404(FoodItem, id=food_item_id)
+        GroupOrderItem.objects.create(
+            group_order=group,
+            user=request.user,
+            food_item=food_item,
+            quantity=quantity
+        )
+        messages.success(request, f"Added {quantity}x {food_item.name} to the group order!")
+        return redirect('group_order_detail', group_code=group.code)
+
+    if request.method == 'POST' and 'close_group' in request.POST and request.user == group.leader:
+        group.is_active = False
+        order = Order.objects.create(
+            user=group.leader,
+            total_price=group.total_price,
+            payment_method="Cash",
+            remarks="Group Order"
+        )
+        for item in group.group_items.all():
+            OrderItem.objects.create(
+                order=order,
+                food_item=item.food_item,
+                quantity=item.quantity,
+                price=item.subtotal
+            )
+        group.save()
+        messages.success(request, f"Group order {group.code} closed and placed as Order #{order.id}.")
+        return redirect('order_history')
+
+    return render(request, 'cafeteria/group_order_detail.html', {
+        'group': group,
+        'food_items': food_items
+    })
     

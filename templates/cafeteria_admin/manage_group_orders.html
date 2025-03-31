@@ -1,0 +1,78 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'admin_css/manage_orders.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="manage-orders-wrapper">
+    <div class="header-section">
+        <h2><i class="fas fa-users"></i> Manage Group Orders</h2>
+        <form method="GET" action="{% url 'manage_group_orders' %}" class="search-form">
+            <input type="text" name="q" placeholder="Search by Code or Leader" value="{{ query|default:'' }}">
+            <button type="submit"><i class="fas fa-search"></i> Search</button>
+        </form>
+    </div>
+
+    <div class="table-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        {% if group_orders %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Leader</th>
+                        <th>Total Price</th>
+                        <th>Participants</th>
+                        <th>Created At</th>
+                        <th>Status</th>
+                        <th>Items</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for group in group_orders %}
+                    <tr>
+                        <td>{{ group.code }}</td>
+                        <td>{{ group.leader.username }}</td>
+                        <td>Rs. {{ group.total_price }}</td>
+                        <td>{{ group.participants_count }}</td>
+                        <td>{{ group.created_at|date:"M d, Y H:i" }}</td>
+                        <td>{{ group.is_active|yesno:"Active,Closed" }}</td>
+                        <td>
+                            <ul>
+                                {% for item in group.group_items.all %}
+                                    <li>{{ item.quantity }}x {{ item.food_item.name }} (Rs. {{ item.subtotal }}) by {{ item.user.username }}</li>
+                                {% empty %}
+                                    <li>No items</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td class="actions">
+                            {% if group.is_active %}
+                                <form method="POST" action="{% url 'close_group_order' group.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="edit-btn">Close</button>
+                                </form>
+                            {% endif %}
+                            <form method="POST" action="{% url 'delete_group_order' group.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No group orders found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

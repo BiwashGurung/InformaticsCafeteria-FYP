@@ -1,11 +1,12 @@
-{% extends "base.html" %} {% load static %} {% block content %}
+{% extends "base.html" %}
+{% load static %}
 
+{% block content %}
 <head>
   <title>Informatics Cafeteria - Menu</title>
   <link rel="stylesheet" href="{% static 'cafeteria_css/orderonline.css' %}" />
 </head>
 
-<!-- Order Steps -->
 <div class="order-steps">
   <div class="step">
     <span class="icon">1.</span> Select items from the menu
@@ -18,7 +19,6 @@
   </div>
 </div>
 
-<!-- Image Row -->
 <div class="slider">
   <img src="{% static 'Images/college.jpg' %}" alt="Image 1" style="--pos: 1" />
   <img src="{% static 'Images/canteen.jpg' %}" alt="Image 2" style="--pos: 2" />
@@ -28,7 +28,6 @@
   <img src="{% static 'Images/canteen.jpg' %}" alt="Image 4" style="--pos: 6" />
 </div>
 
-<!-- Menu Section -->
 <h2 class="menu-title">Our Menu</h2>
 <div class="menu-table">
   <div class="menu-box">
@@ -67,6 +66,11 @@
       <button class="view-menu">View Menu</button>
     </a>
   </div>
+  <div class="menu-box">
+    <img src="{% static 'Images/GroupOrder.png' %}" alt="Group Ordering" />
+    <a href="{% url 'group_order_page' %}">
+      <button class="view-menu">Group Order</button>
+    </a>
+  </div>
 </div>
-
 {% endblock content %}

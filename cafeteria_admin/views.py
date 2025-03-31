@@ -9,7 +9,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 # Importing Profile from cafeteria app
-from cafeteria.models import Profile  , FoodItem , OrderItem, Order , LostFound
+from cafeteria.models import Profile  , FoodItem , OrderItem, Order , LostFound , GroupOrder, GroupOrderItem
 from django.db.models import Sum
 
 
@@ -291,3 +291,46 @@ def resolve_lost_found(request, item_id):
         item.save()
         messages.success(request, f"Item '{item.item_name}' has been marked as resolved.")
     return redirect('manage_lost_found')
+
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def manage_group_orders(request):
+    query = request.GET.get('q', '')
+    if query:
+        group_orders = GroupOrder.objects.filter(code__icontains=query) | GroupOrder.objects.filter(leader__username__icontains=query)
+    else:
+        group_orders = GroupOrder.objects.all().order_by('-created_at')
+    return render(request, 'cafeteria_admin/manage_group_orders.html', {'group_orders': group_orders, 'query': query})
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def close_group_order(request, group_id):
+    if request.method == 'POST':
+        group = get_object_or_404(GroupOrder, id=group_id)
+        if group.is_active:
+            group.is_active = False
+            order = Order.objects.create(
+                user=group.leader,
+                total_price=group.total_price,
+                payment_method="Cash",
+                remarks="Group Order Closed by Admin"
+            )
+            for item in group.group_items.all():
+                OrderItem.objects.create(
+                    order=order,
+                    food_item=item.food_item,
+                    quantity=item.quantity,
+                    price=item.subtotal
+                )
+            group.save()
+            messages.success(request, f"Group Order {group.code} closed and converted to Order #{order.id}.")
+        else:
+            messages.info(request, f"Group Order {group.code} is already closed.")
+    return redirect('manage_group_orders')
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def delete_group_order(request, group_id):
+    if request.method == 'POST':
+        group = get_object_or_404(GroupOrder, id=group_id)
+        group.delete()
+        messages.success(request, f"Group Order {group.code} deleted successfully!")
+    return redirect('manage_group_orders')
