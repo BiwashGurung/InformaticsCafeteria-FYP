@@ -188,18 +188,21 @@ def cart_summary(request):
         return redirect('view_cart')
 
     total_price = cart.total_price()
-    # Check if this cart contains group items
     group_code = request.session.get('group_code', None)
-    if not group_code and cart.cart_items.filter(group_code__isnull=False).exists():
-        group_code = cart.cart_items.filter(group_code__isnull=False).first().group_code
+
+    # Check for group_code field existence to avoid FieldError
+    try:
+        if not group_code and hasattr(CartItem, 'group_code') and cart.cart_items.filter(group_code__isnull=False).exists():
+            group_code = cart.cart_items.filter(group_code__isnull=False).first().group_code
+    except Exception as e:
+        messages.warning(request, f"Group code tracking unavailable: {str(e)}")
 
     return render(request, 'cafeteria/cartsummary.html', {
         'cart': cart,
         'cart_items': cart.cart_items.all(),
         'total_price': total_price,
-        'group_code': group_code  
+        'group_code': group_code
     })
-
 @login_required
 def place_order(request):
     if request.method == "POST":
