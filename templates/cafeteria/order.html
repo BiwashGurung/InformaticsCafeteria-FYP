@@ -15,11 +15,12 @@
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Price</th>
-                <th>Status</th>
+                <th>Order Status</th>
                 <th>Date</th>
                 <th>Pickup Time</th>
                 <th>Dine-in Time</th>
                 <th>Group Code</th>
+                <th>Payment Method</th>
                 <th>Remarks</th>
             </tr>
         </thead>
@@ -44,6 +45,7 @@
                 <td>{{ order.pickup_time }}</td>
                 <td>{{ order.dine_in_time }}</td>
                 <td>{{ order.group_code }}</td>
+                <td>{{ order.payment_method }}</td>
                 <td>{{ order.remarks }}</td>
             </tr>
             {% endfor %}
