@@ -132,6 +132,33 @@
     background: #99190dd1;
 }
 
+/* Group Order Section */
+    .group-order-section {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      margin: 0 auto;
+      max-width: 800px;
+    }
+    .group-order-section h3 {
+      font-size: 1.8rem;
+      color: #333;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    .group-order-section p {
+      font-size: 1.1rem;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    .group-order-btn:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+  
+
 /* Responsive design for mobile view */
 
 @media (max-width: 768px) {

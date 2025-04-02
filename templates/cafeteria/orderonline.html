@@ -66,11 +66,18 @@
       <button class="view-menu">View Menu</button>
     </a>
   </div>
-  <div class="menu-box">
-    <img src="{% static 'Images/GroupOrder.png' %}" alt="Group Ordering" />
-    <a href="{% url 'group_order_page' %}">
-      <button class="view-menu">Group Order</button>
-    </a>
-  </div>
 </div>
+
+
+<div class="group-order-section">
+  <h3>Planning a Group Meal?</h3>
+  <p>Collaborate with friends or colleagues to create or join a shared order—perfect for gatherings!</p>
+  <a href="{% url 'group_order_page' %}">
+    <button class="group-order-btn" style="background: #99180d; color: white; padding: 12px 25px; border: none; border-radius: 5px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s;">
+      Group Ordering
+    </button>
+  </a>
+</div>
+</div>
+
 {% endblock content %}
