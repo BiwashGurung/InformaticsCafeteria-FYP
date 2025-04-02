@@ -1,59 +1,205 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <head>
   <link rel="stylesheet" href="{% static 'cafeteria_css/orderonline.css' %}" />
+  <style>
+  
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    .menu-title {
+      font-size: 2.5rem;
+      color: #99180d;
+      text-align: center;
+      margin: 40px 0 10px;
+      font-weight: bold;
+    }
+    .intro-text {
+      font-size: 1.2rem;
+      color: #666;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .group-actions {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-bottom: 50px;
+    }
+    .group-box {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 100%;
+      max-width: 350px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .group-box:hover {
+      transform: translateY(-5px);
+    }
+    .group-box img {
+      max-width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .group-box form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .group-box input[type="text"] {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .group-btn {
+      background: #99180d;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .group-btn:hover {
+      background: #d9534f;
+    }
+    .active-groups-section h3 {
+      font-size: 1.8rem;
+      color: #333;
+      margin: 40px 0 20px;
+      text-align: center;
+      font-weight: 600;
+    }
+    .group-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .group-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: box-shadow 0.3s;
+    }
+    .group-card:hover {
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    .group-details p {
+      margin: 5px 0;
+      color: #555;
+    }
+    .group-details h3 {
+      font-size: 1.4rem;
+      color: #99180d;
+      margin: 0 0 10px;
+    }
+    .group-actions .btn {
+      background: #99180d;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .group-actions .btn:hover {
+      background: #d9534f;
+    }
+    .no-groups {
+      background: #e9ecef;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      color: #666;
+      font-size: 1.1rem;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      color: #99180d;
+      text-decoration: none;
+      font-size: 1.1rem;
+      margin: 20px 0;
+      transition: color 0.3s;
+    }
+    .back-link:hover {
+      color: #d9534f;
+    }
+    .back-link i {
+      margin-right: 8px;
+    }
+  </style>
 </head>
 
 <div class="container mt-5 px-0">
   <h2 class="menu-title">Group Ordering</h2>
-  <p class="text-center">Order together, eat together—share the fun!</p>
+  <p class="intro-text">Order together, eat together—share the fun!</p>
 
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} mt-4">{{ message }}</div>
-    {% endfor %}
-  {% endif %}
-
-  <section class="menu-table">
-    <div class="menu-box">
-      <img src="{% static 'Images/GroupOrder.png' %}" alt="Start Group" />
+  <section class="group-actions">
+    <div class="group-box">
+      <img src="{% static 'Images/group_order.jpg' %}" alt="Start Group" />
       <form method="POST">
         {% csrf_token %}
-        <button type="submit" name="create_group" class="view-menu">Create Group Order</button>
+        <button type="submit" name="create_group" class="group-btn">
+          Create Group Order
+        </button>
       </form>
     </div>
-    <div class="menu-box">
-      <img src="{% static 'Images/GroupOrder.png' %}" alt="Join Group" />
+    <div class="group-box">
+      <img src="{% static 'Images/join-group.jpg' %}" alt="Join Group" />
       <form method="POST">
         {% csrf_token %}
-        <input type="text" name="code" placeholder="Enter Group Code" class="form-control mb-2" required />
-        <button type="submit" name="join_group" class="view-menu">Join Group</button>
+        <input
+          type="text"
+          name="code"
+          placeholder="Enter Group Code"
+          class="form-control mb-2"
+          required
+        />
+        <button type="submit" name="join_group" class="group-btn">
+          Join Group
+        </button>
       </form>
     </div>
   </section>
 
-  <section>
+  <section class="active-groups-section">
     <h3>Your Active Groups</h3>
     {% if active_groups %}
-    <div class="food-container">
+    <div class="group-container">
       {% for group in active_groups %}
-      <div class="food-item">
-        <div class="food-details">
+      <div class="group-card">
+        <div class="group-details">
           <h3>Code: {{ group.code }}</h3>
           <p>Leader: {{ group.leader.username }}</p>
           <p>Total: NPR {{ group.total_price }}</p>
           <p>Participants: {{ group.participants_count }}</p>
         </div>
-        <div class="food-actions">
-          <a href="{% url 'group_order_detail' group.code %}" class="btn btn-primary">View & Add Items</a>
+        <div class="group-actions">
+          <a
+            href="{% url 'group_order_detail' group.code %}"
+            class="btn btn-primary"
+            >View & Add Items</a
+          >
         </div>
       </div>
       {% endfor %}
     </div>
     {% else %}
-    <div class="alert alert-info text-center">No active group orders yet.</div>
+    <div class="no-groups">No active group orders yet.</div>
     {% endif %}
   </section>
 
@@ -62,7 +208,13 @@
   </a>
 </div>
 
-<link href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animation.min.css" rel="stylesheet" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+<link
+  href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animation.min.css"
+  rel="stylesheet"
+/>
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+  rel="stylesheet"
+/>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
