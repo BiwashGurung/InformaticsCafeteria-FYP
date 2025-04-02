@@ -203,19 +203,24 @@ def cart_summary(request):
         'total_price': total_price,
         'group_code': group_code
     })
+
+
 @login_required
 def place_order(request):
     if request.method == "POST":
         cart = Cart.objects.filter(user=request.user).first()
         if not cart or not cart.cart_items.exists():
-            return redirect('cart') 
+            # Debugging message for empty cart
+            print("Cart is empty or not found!")  
+            return redirect('view_cart')  
 
         payment_method = request.POST.get("payment_method")
         pickup_time = request.POST.get("pickup_time")
         dine_in_time = request.POST.get("dine_in_time")
-        remarks = request.POST.get("remarks", "")  
-
+        remarks = request.POST.get("remarks", "")
         group_code = request.session.get('group_code', None)
+
+        # Creating  the Order
         order = Order.objects.create(
             user=request.user,
             total_price=cart.total_price(),
@@ -225,26 +230,34 @@ def place_order(request):
             remarks=remarks,
             group_code=group_code
         )
+        print(f"Created Order #{order.id}") 
+
+        # Transfering all the cart items to OrderItem, regardless of group_code
+        for item in cart.cart_items.all():
+            OrderItem.objects.create(
+                order=order,
+                food_item=item.food_item,
+                quantity=item.quantity,
+                price=item.food_item.price * item.quantity
+            )
+            print(f"Saved OrderItem: {item.quantity}x {item.food_item.name}") 
+             # Deleting the cart item after transferring to OrderItem 
+            item.delete() 
+
+        # Clearing the group_code from session if it exists
         if 'group_code' in request.session:
             del request.session['group_code']
 
-            for item in cart.cart_items.all():
-                    OrderItem.objects.create(
-                        order=order,
-                        food_item=item.food_item,
-                        quantity=item.quantity,
-                        price=item.food_item.price * item.quantity
-                    )
-                    item.delete()  
+        return redirect('order_history')
 
-        return redirect('order_history') 
-
-    return redirect('cafeteria/cartsummary.html')
+    return redirect('cartsummary')
 
 
 @login_required
 def order_history(request):
-    orders = Order.objects.filter(user=request.user).order_by('-order_date')
+    orders = Order.objects.filter(user=request.user).prefetch_related('order_items__food_item').order_by('-order_date')
+    for order in orders:  # Debug
+        print(f"Order {order.id}: {order.order_items.count()} items")
     return render(request, 'cafeteria/order.html', {'orders': orders})
 
 
