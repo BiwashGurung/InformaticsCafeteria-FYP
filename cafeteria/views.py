@@ -307,7 +307,7 @@ def initkhalti(request):
         "purchase_order_name": purchase_order_name,
         "customer_info": {
             "name": request.user.username,
-            "email": request.user.email or "test@example.com",
+            "email": request.user.email or "cafeteria@gmail.com",
             "phone": request.user.profile.phone or "9800000000"
         }
     }
@@ -344,11 +344,11 @@ def khalti_callback(request):
     
     pidx = request.GET.get('pidx')
     txn_id = request.GET.get('transaction_id') or request.GET.get('tidx') or request.GET.get('txnId')
-    amount = request.GET.get('amount')
+    total_amount = request.GET.get('total_amount')  # Using total_amount as per Khalti callback
     status = request.GET.get('status')
     purchase_order_id = request.GET.get('purchase_order_id')
     
-    logger.info(f"Callback params: pidx={pidx}, txn_id={txn_id}, amount={amount}, status={status}, purchase_order_id={purchase_order_id}")
+    logger.info(f"Callback params: pidx={pidx}, txn_id={txn_id}, total_amount={total_amount}, status={status}, purchase_order_id={purchase_order_id}")
 
     if status == "Completed":
         url = "https://dev.khalti.com/api/v2/epayment/lookup/"
@@ -371,10 +371,24 @@ def khalti_callback(request):
                     messages.error(request, "Cart is empty.")
                     return redirect('cartsummary')
 
+                # Validate total_amount before conversion
+                if not total_amount:
+                    logger.error("Total amount is missing in callback")
+                    messages.error(request, "Payment amount is missing.")
+                    return redirect('cartsummary')
+
+                try:
+                    amount_in_npr = int(total_amount) / 100  # Convert paisa to NPR
+                    logger.info(f"Converted total_amount: {total_amount} paisa to {amount_in_npr} NPR")
+                except (ValueError, TypeError) as e:
+                    logger.error(f"Invalid total_amount: {total_amount}, Error: {str(e)}")
+                    messages.error(request, "Invalid payment amount.")
+                    return redirect('cartsummary')
+
                 remarks = request.session.get('order_remarks', '')
                 order = Order.objects.create(
                     user=request.user,
-                    total_price=int(amount) / 100,
+                    total_price=amount_in_npr,
                     payment_method="Online",
                     remarks=remarks
                 )
@@ -393,7 +407,7 @@ def khalti_callback(request):
                     del request.session['order_remarks']
 
                 messages.success(request, "Payment successful! Order placed.")
-                return redirect('order_history')
+                return redirect('cartsummary')  # Changed from 'order_history' to 'cartsummary'
 
         except requests.RequestException as e:
             logger.error(f"Payment verification failed: {str(e)}")
@@ -402,8 +416,6 @@ def khalti_callback(request):
     logger.warning(f"Payment not completed: status={status}")
     messages.error(request, "Payment was not completed.")
     return redirect('cartsummary')
-
-
 
 
 
