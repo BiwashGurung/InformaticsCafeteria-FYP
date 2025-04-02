@@ -433,27 +433,34 @@ def lost_found_page(request):
 
 @login_required
 def group_order_page(request):
-    if request.method == 'POST' and 'create_group' in request.POST:
-        group = GroupOrder.objects.create(leader=request.user)
-        messages.success(request, f"Group created! Share this code: {group.code}")
-        return redirect('group_order_detail', group_code=group.code)  # Redirect directly to detail page
-
-    if request.method == 'POST' and 'join_group' in request.POST:
-        code = request.POST.get('code')
-        try:
-            group = GroupOrder.objects.get(code=code, is_active=True)
+    if request.method == 'POST':
+        if 'create_group' in request.POST:
+            # Check if the user already has an active group
+            existing_active_group = GroupOrder.objects.filter(leader=request.user, is_active=True).first()
+            if existing_active_group:
+                messages.error(request, f"You already have an active group (Code: {existing_active_group.code}). Please close it before creating a new one.")
+                return redirect('group_order_page')
+            # If no active group exists, create a new one
+            group = GroupOrder.objects.create(leader=request.user)
+            messages.success(request, f"Group created! Share this code: {group.code}")
             return redirect('group_order_detail', group_code=group.code)
-        except GroupOrder.DoesNotExist:
-            messages.error(request, "Invalid or inactive group code.")
-            return redirect('group_order_page')
 
-    active_groups = GroupOrder.objects.filter(is_active=True).filter(
-        Q(leader=request.user) | Q(group_items__user=request.user)
+        if 'join_group' in request.POST:
+            code = request.POST.get('code')
+            try:
+                group = GroupOrder.objects.get(code=code, is_active=True)
+                return redirect('group_order_detail', group_code=group.code)
+            except GroupOrder.DoesNotExist:
+                messages.error(request, "Invalid or inactive group code.")
+                return redirect('group_order_page')
+
+    # Fetch active groups where the user is the leader or a participant
+    active_groups = GroupOrder.objects.filter(
+        Q(leader=request.user) | Q(group_items__user=request.user),
+        is_active=True
     ).distinct()
-    food_items = FoodItem.objects.filter(is_in_stock=True)
     return render(request, 'cafeteria/group_order_page.html', {
-        'active_groups': active_groups,
-        'food_items': food_items
+        'active_groups': active_groups
     })
 
 @login_required
