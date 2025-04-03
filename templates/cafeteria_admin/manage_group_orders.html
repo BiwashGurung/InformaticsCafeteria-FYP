@@ -46,7 +46,7 @@
                         <td>{{ group.created_at|date:"M d, Y H:i" }}</td>
                         <td>{{ group.is_active|yesno:"Active,Closed" }}</td>
                         <td>
-                            <ul>
+                            <ul style="list-style-type: none; ">
                                 {% for item in group.group_items.all %}
                                     <li>{{ item.quantity }}x {{ item.food_item.name }} (Rs. {{ item.subtotal }}) by {{ item.user.username }}</li>
                                 {% empty %}
