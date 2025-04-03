@@ -1,31 +1,136 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<head>
-    <title>Cart Summary</title>
-</head>
+{% block head %}
+<title>Cart Summary - Informatics Cafeteria</title>
+<style>
+    .cart-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+    .cart-title {
+        font-size: 2.2rem;
+        color: #99180d;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .cart-table {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        margin-bottom: 30px;
+    }
+    .cart-table th {
+        background: #99180d;
+        color: #fff;
+        font-weight: 500;
+        padding: 12px;
+        text-align: center;
+    }
+    .cart-table td {
+        padding: 12px;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    .cart-table tr:hover {
+        background: #f9fafb;
+    }
+    .form-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    .form-label {
+        font-weight: 500;
+        color: #333;
+    }
+    .form-check-label {
+        margin-left: 5px;
+    }
+    .grand-total {
+        font-size: 1.5rem;
+        color: #99180d;
+        font-weight: 600;
+        margin: 20px 0;
+    }
+    .btn-success {
+        background: #28a745;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.1rem;
+        transition: background 0.3s;
+    }
+    .btn-success:hover {
+        background: #218838;
+    }
+    .btn-primary {
+        background: #99180d;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.1rem;
+        transition: background 0.3s;
+    }
+    .btn-primary:hover {
+        background: #d9534f;
+    }
+    .payment-option img {
+        vertical-align: middle;
+        margin-left: 10px;
+    }
+    .empty-cart {
+        text-align: center;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        color: #6c757d;
+        font-size: 1.1rem;
+    }
+    .time-option {
+        display: none;
+    }
+    @media (max-width: 768px) {
+        .cart-title {
+            font-size: 1.8rem;
+        }
+        .cart-table th, .cart-table td {
+            font-size: 0.85rem;
+            padding: 8px;
+        }
+        .form-section {
+            padding: 15px;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-<div class="container mt-5">
-    <h1 class="text-center">
+<div class="container mt-5 cart-container">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <h1 class="cart-title">
         {{ user.username }}, Cart Summary
         {% if group_code %} (Group Order: {{ group_code }}) {% endif %}
     </h1>
 
-    <table class="table table-bordered mt-3">
+    {% if cart_items %}
+    <table class="table table-bordered mt-3 cart-table">
         <thead>
             <tr>
                 <th>Food Item</th>
                 <th>Food Quantity</th>
                 <th>Price</th>
-                <th>Added By</th> <!-- Optional: Show who added the item -->
+                <th>Added By</th>
             </tr>
         </thead>
         <tbody>
@@ -33,59 +138,211 @@
             <tr>
                 <td>{{ item.food_item.name }}</td>
                 <td>{{ item.quantity }}</td>
-                <td>Rs. {{ item.food_item.price }}</td>
-                <td>{{ item.username }}</td>
+                <td>Rs. {{ item.food_item.price|floatformat:2 }}</td>
+                <td>{{ item.user.username|default:user.username }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <!-- Main Order Form -->
-    <form method="POST" action="{% url 'place_order' %}" id="orderForm">
-        {% csrf_token %}
-        <div class="mt-3">
-            <label class="form-label"><strong>Pickup or Dine-in Time:</strong></label>
-            <input type="time" name="pickup_time" class="form-control">
-            <input type="time" name="dine_in_time" class="form-control mt-2">
-        </div>
-        <div class="mt-3">
-            <label for="remarks" class="form-label"><strong>Remarks (Optional):</strong></label>
-            <textarea name="remarks" id="remarks" class="form-control" rows="4" placeholder="Let us know if you have any special requests..."></textarea>
-        </div>
-        <div class="mt-3">
-            <label class="form-label"><strong>Payment Method:</strong></label>
-            <div class="form-check">
-                <input type="radio" name="payment_method" value="Cash" class="form-check-input" checked>
-                <label class="form-check-label">Payment on Delivery</label>
+    <div class="form-section">
+        {% if payment_details and payment_details.status == 'Completed' %}
+        <p>Payment of Rs. {{ payment_details.amount|floatformat:2 }} completed successfully!</p>
+        <form method="POST" action="{% url 'place_order' %}" id="orderForm">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label"><strong>Select Time Option:</strong></label>
+                <div class="form-check">
+                    <input type="radio" name="time_option" value="pickup" class="form-check-input" id="pickupOption" {% if payment_details.pickup_time %}checked{% endif %}>
+                    <label class="form-check-label" for="pickupOption">Pickup Time</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" name="time_option" value="dine_in" class="form-check-input" id="dineInOption" {% if payment_details.dine_in_time %}checked{% endif %}>
+                    <label class="form-check-label" for="dineInOption">Dine-in Time</label>
+                </div>
+                <div id="pickupTime" class="time-option mt-2">
+                    <input type="time" name="pickup_time" class="form-control" value="{{ payment_details.pickup_time|default:'' }}" placeholder="Select pickup time">
+                </div>
+                <div id="dineInTime" class="time-option mt-2">
+                    <input type="time" name="dine_in_time" class="form-control" value="{{ payment_details.dine_in_time|default:'' }}" placeholder="Select dine-in time">
+                </div>
             </div>
-            <div class="form-check">
-                <input type="radio" name="payment_method" value="Online" class="form-check-input">
-                <label class="form-check-label">Online Payment</label>
-                <img src="{% static 'Images/Esewa_logo.webp' %}" alt="Online Payment" width="50" height="50">
+            <div class="mb-3">
+                <label for="remarks" class="form-label"><strong>Remarks (Optional):</strong></label>
+                <textarea name="remarks" id="remarks" class="form-control" rows="3" placeholder="Special requests...">{{ payment_details.remarks|default:'' }}</textarea>
             </div>
-        </div>
-        <div class="mt-4">
-            <h4><strong>Grand Total:</strong> Rs. {{ total_price }}</h4>
-        </div>
-        <div class="text-center mt-4">
-            <button type="submit" class="btn btn-success">Order Now</button>
-        </div>
-    </form>
+            <input type="hidden" name="payment_method" value="Online">
+            {% if payment_details.group_code %}
+            <input type="hidden" name="group_code" value="{{ payment_details.group_code }}">
+            {% elif group_code %}
+            <input type="hidden" name="group_code" value="{{ group_code }}">
+            {% endif %}
+            <div class="grand-total">
+                <strong>Grand Total:</strong> Rs. {{ total_price|floatformat:2 }}
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Order Now</button>
+            </div>
+        </form>
+        {% else %}
+        <!-- Main Order Form -->
+        <form method="POST" action="{% url 'place_order' %}" id="orderForm">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label"><strong>Select Time Option:</strong></label>
+                <div class="form-check">
+                    <input type="radio" name="time_option" value="pickup" class="form-check-input" id="pickupOption" checked>
+                    <label class="form-check-label" for="pickupOption">Pickup Time</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" name="time_option" value="dine_in" class="form-check-input" id="dineInOption">
+                    <label class="form-check-label" for="dineInOption">Dine-in Time</label>
+                </div>
+                <div id="pickupTime" class="time-option mt-2">
+                    <input type="time" name="pickup_time" class="form-control" placeholder="Select pickup time">
+                </div>
+                <div id="dineInTime" class="time-option mt-2">
+                    <input type="time" name="dine_in_time" class="form-control" placeholder="Select dine-in time">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="remarks" class="form-label"><strong>Remarks (Optional):</strong></label>
+                <textarea name="remarks" id="remarks" class="form-control" rows="3" placeholder="Special requests..."></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label"><strong>Payment Method:</strong></label>
+                <div class="form-check">
+                    <input type="radio" name="payment_method" value="Cash" class="form-check-input" id="cashPayment" checked>
+                    <label class="form-check-label" for="cashPayment">Payment on Delivery</label>
+                </div>
+                <div class="form-check payment-option">
+                    <input type="radio" name="payment_method" value="Online" class="form-check-input" id="onlinePayment">
+                    <label class="form-check-label" for="onlinePayment">Online Payment</label>
+                    <img src="{% static 'Images/Esewa_logo.webp' %}" alt="Online Payment" width="40" height="40">
+                </div>
+            </div>
+            <div class="grand-total">
+                <strong>Grand Total:</strong> Rs. {{ total_price|floatformat:2 }}
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Order Now</button>
+            </div>
+            {% if group_code %}
+            <input type="hidden" name="group_code" value="{{ group_code }}">
+            {% endif %}
+        </form>
 
-    <!-- Khalti Payment Form -->
-    <form action="{% url 'initiate' %}" method="POST" class="mt-3" id="khaltiForm">
-        {% csrf_token %}
-        <input type="hidden" name="amount" value="{{ total_price }}">
-        <input type="hidden" name="return_url" value="http://127.0.0.1:8000/khalti-callback/">
-        <input type="hidden" name="remarks" id="khaltiRemarks">
-        <button type="submit" class="btn btn-success">Pay with Khalti</button>
-    </form>
+        <!-- Khalti Payment Form -->
+        <form action="{% url 'initiate' %}" method="POST" class="mt-3" id="khaltiForm" style="display: none;">
+            {% csrf_token %}
+            <input type="hidden" name="amount" value="{{ total_price }}">
+            <input type="hidden" name="return_url" value="http://127.0.0.1:8000/khalti-callback/">
+            <input type="hidden" name="remarks" id="khaltiRemarks">
+            <input type="hidden" name="pickup_time" id="khaltiPickupTime">
+            <input type="hidden" name="dine_in_time" id="khaltiDineInTime">
+            {% if group_code %}
+            <input type="hidden" name="group_code" value="{{ group_code }}">
+            {% endif %}
+            <button type="submit" class="btn btn-primary">Pay with Khalti</button>
+        </form>
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="empty-cart">
+        Your cart is empty. <a href="{% url 'orderonline' %}">Add items now!</a>
+    </div>
+    {% endif %}
 </div>
 
 <script>
-    document.getElementById('khaltiForm').addEventListener('submit', function() {
-        var remarks = document.getElementById('remarks').value;
-        document.getElementById('khaltiRemarks').value = remarks;
+    const orderForm = document.getElementById('orderForm');
+    const khaltiForm = document.getElementById('khaltiForm');
+    const onlinePayment = document.getElementById('onlinePayment');
+    const cashPayment = document.getElementById('cashPayment');
+    const pickupOption = document.getElementById('pickupOption');
+    const dineInOption = document.getElementById('dineInOption');
+    const pickupTimeDiv = document.getElementById('pickupTime');
+    const dineInTimeDiv = document.getElementById('dineInTime');
+    const pickupTimeInput = pickupTimeDiv.querySelector('input[name="pickup_time"]');
+    const dineInTimeInput = dineInTimeDiv.querySelector('input[name="dine_in_time"]');
+
+    // Show/hide time inputs based on radio selection
+    function toggleTimeInputs() {
+        if (pickupOption.checked) {
+            pickupTimeDiv.style.display = 'block';
+            dineInTimeDiv.style.display = 'none';
+            dineInTimeInput.value = ''; // Clear dine-in time
+        } else if (dineInOption.checked) {
+            pickupTimeDiv.style.display = 'none';
+            dineInTimeDiv.style.display = 'block';
+            pickupTimeInput.value = ''; // Clear pickup time
+        }
+    }
+
+    // Initial state
+    toggleTimeInputs();
+
+    // Event listeners for radio buttons
+    pickupOption.addEventListener('change', toggleTimeInputs);
+    dineInOption.addEventListener('change', toggleTimeInputs);
+
+    // Payment method toggle
+    if (onlinePayment && khaltiForm) {
+        onlinePayment.addEventListener('change', function() {
+            if (this.checked) {
+                khaltiForm.style.display = 'block';
+                orderForm.querySelector('button[type="submit"]').style.display = 'none';
+            }
+        });
+        cashPayment.addEventListener('change', function() {
+            if (this.checked) {
+                khaltiForm.style.display = 'none';
+                orderForm.querySelector('button[type="submit"]').style.display = 'block';
+            }
+        });
+        khaltiForm.addEventListener('submit', function() {
+            const remarks = document.getElementById('remarks').value;
+            document.getElementById('khaltiRemarks').value = remarks;
+            if (pickupOption.checked) {
+                document.getElementById('khaltiPickupTime').value = pickupTimeInput.value;
+                document.getElementById('khaltiDineInTime').value = '';
+            } else if (dineInOption.checked) {
+                document.getElementById('khaltiPickupTime').value = '';
+                document.getElementById('khaltiDineInTime').value = dineInTimeInput.value;
+            }
+        });
+    }
+
+    // Form submission validation
+    orderForm.addEventListener('submit', function(event) {
+        const pickupTime = pickupTimeInput.value;
+        const dineInTime = dineInTimeInput.value;
+
+        if (!pickupOption.checked && !dineInOption.checked) {
+            event.preventDefault();
+            alert("Please select either Pickup Time or Dine-in Time.");
+            return;
+        }
+
+        if (pickupTime && dineInTime) {
+            event.preventDefault();
+            alert("Please select only one option: Pickup Time or Dine-in Time.");
+            return;
+        }
+
+        const selectedTime = pickupTime || dineInTime;
+        if (selectedTime) {
+            const now = new Date();
+            const [hours, minutes] = selectedTime.split(':');
+            const selectedDateTime = new Date();
+            selectedDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+            if (selectedDateTime < now) {
+                event.preventDefault();
+                alert("Please don’t select a past time. Choose a time from now onwards.");
+                return;
+            }
+        }
     });
 </script>
 {% endblock %}

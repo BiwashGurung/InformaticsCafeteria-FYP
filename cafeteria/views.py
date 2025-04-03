@@ -9,6 +9,11 @@ import uuid
 import logging
 import requests
 import json
+from datetime import datetime
+#importing pytz to handle timezone(nepali time)
+import pytz  
+
+logger = logging.getLogger(__name__)
 
 # Home Page
 def HomePage(request):
@@ -185,12 +190,14 @@ def clear_cart(request):
 def cart_summary(request):
     cart = Cart.objects.filter(user=request.user).first()
     if not cart or not cart.cart_items.exists():
-        return redirect('view_cart')
+        messages.info(request, "Your cart is empty.")
+        return render(request, 'cafeteria/cartsummary.html', {'cart': None})
 
     total_price = cart.total_price()
-    group_code = request.session.get('group_code', None)
+    payment_details = request.session.get('payment_details', None)
+    group_code = payment_details.get('group_code', request.session.get('group_code', None)) if payment_details else request.session.get('group_code', None)
 
-    # Check for group_code field existence to avoid FieldError
+    # Check for group_code in cart items if not in session or payment_details
     try:
         if not group_code and hasattr(CartItem, 'group_code') and cart.cart_items.filter(group_code__isnull=False).exists():
             group_code = cart.cart_items.filter(group_code__isnull=False).first().group_code
@@ -201,7 +208,8 @@ def cart_summary(request):
         'cart': cart,
         'cart_items': cart.cart_items.all(),
         'total_price': total_price,
-        'group_code': group_code
+        'group_code': group_code,
+        'payment_details': payment_details
     })
 
 
@@ -210,29 +218,77 @@ def place_order(request):
     if request.method == "POST":
         cart = Cart.objects.filter(user=request.user).first()
         if not cart or not cart.cart_items.exists():
-            # Debugging message for empty cart
-            print("Cart is empty or not found!")  
-            return redirect('view_cart')  
+            messages.error(request, "Cart is empty.")
+            return redirect('cartsummary')
 
         payment_method = request.POST.get("payment_method")
-        pickup_time = request.POST.get("pickup_time")
-        dine_in_time = request.POST.get("dine_in_time")
         remarks = request.POST.get("remarks", "")
-        group_code = request.session.get('group_code', None)
+        pickup_time = request.POST.get("pickup_time", None)
+        dine_in_time = request.POST.get("dine_in_time", None)
+        time_option = request.POST.get("time_option")  # Pickup or Dine-in
+        group_code = request.POST.get("group_code", request.session.get('group_code', None))
+        logger.info(f"POST data: {request.POST}, Session group_code: {request.session.get('group_code')}")
 
-        # Creating  the Order
+        # Validate time option
+        if not time_option:
+            messages.error(request, "Please select either Pickup Time or Dine-in Time.")
+            return redirect('cartsummary')
+
+        if pickup_time and dine_in_time:
+            messages.error(request, "Please select only one: Pickup Time or Dine-in Time.")
+            return redirect('cartsummary')
+
+        # Time validation
+        selected_time = pickup_time if time_option == "pickup" else dine_in_time if time_option == "dine_in" else None
+        if selected_time:
+            try:
+                # Assuming Nepal time (UTC+5:45)
+                nepal_tz = pytz.timezone('Asia/Kathmandu')
+                now = datetime.now(nepal_tz)
+                time_obj = datetime.strptime(selected_time, "%H:%M").time()
+                selected_datetime = datetime.combine(now.date(), time_obj)
+                selected_datetime = nepal_tz.localize(selected_datetime)
+
+                if selected_datetime < now:
+                    messages.error(request, "Please don’t select a past time. Choose a time from now onwards.")
+                    return redirect('cartsummary')
+            except ValueError as e:
+                logger.error(f"Invalid time format: {selected_time}, Error: {str(e)}")
+                messages.error(request, "Invalid time format. Please use HH:MM format.")
+                return redirect('cartsummary')
+            except Exception as e:
+                logger.error(f"Time validation error: {str(e)}")
+                messages.error(request, "An error occurred while validating the time. Please try again.")
+                return redirect('cartsummary')
+
+        if payment_method == "Online":
+            payment_details = request.session.get('payment_details', None)
+            if not payment_details or payment_details.get('status') != "Completed":
+                messages.error(request, "Payment not completed or invalid.")
+                return redirect('cartsummary')
+            total_price = payment_details['amount']
+            remarks = payment_details.get('remarks', remarks)
+            group_code = payment_details.get('group_code', group_code)
+            # Use payment_details time if available, otherwise use form input
+            pickup_time = payment_details.get('pickup_time', pickup_time) if time_option == "pickup" else None
+            dine_in_time = payment_details.get('dine_in_time', dine_in_time) if time_option == "dine_in" else None
+        else:
+            total_price = cart.total_price()
+
+        if group_code and len(group_code) > 6:
+            group_code = group_code[:6]
+
         order = Order.objects.create(
             user=request.user,
-            total_price=cart.total_price(),
+            total_price=total_price,
             payment_method=payment_method,
-            pickup_time=pickup_time if pickup_time else None,
-            dine_in_time=dine_in_time if dine_in_time else None,
             remarks=remarks,
+            pickup_time=pickup_time if time_option == "pickup" else None,
+            dine_in_time=dine_in_time if time_option == "dine_in" else None,
             group_code=group_code
         )
-        print(f"Created Order #{order.id}") 
+        logger.info(f"Order created: ID={order.id}, Payment Method={payment_method}, Group Code={group_code}, Pickup Time={pickup_time}, Dine-in Time={dine_in_time}")
 
-        # Transfering all the cart items to OrderItem, regardless of group_code
         for item in cart.cart_items.all():
             OrderItem.objects.create(
                 order=order,
@@ -240,18 +296,17 @@ def place_order(request):
                 quantity=item.quantity,
                 price=item.food_item.price * item.quantity
             )
-            print(f"Saved OrderItem: {item.quantity}x {item.food_item.name}") 
-             # Deleting the cart item after transferring to OrderItem 
-            item.delete() 
+            item.delete()
 
-        # Clearing the group_code from session if it exists
         if 'group_code' in request.session:
             del request.session['group_code']
+        if 'payment_details' in request.session:
+            del request.session['payment_details']
 
+        messages.success(request, f"Order #{order.id} placed successfully!")
         return redirect('order_history')
 
     return redirect('cartsummary')
-
 
 @login_required
 def order_history(request):
@@ -277,13 +332,16 @@ def initkhalti(request):
     return_url = request.POST.get('return_url')
     amount = request.POST.get('amount')
     remarks = request.POST.get('remarks', '')
-    logger.info(f"Received POST data: return_url={return_url}, amount={amount}, remarks={remarks}")
+    pickup_time = request.POST.get('pickup_time', '')  # Add pickup_time
+    dine_in_time = request.POST.get('dine_in_time', '')  # Add dine_in_time
+    group_code = request.POST.get('group_code', '')  # Add group_code
+    logger.info(f"Received POST data: return_url={return_url}, amount={amount}, remarks={remarks}, pickup_time={pickup_time}, dine_in_time={dine_in_time}, group_code={group_code}")
 
     cart = Cart.objects.filter(user=request.user).first()
     if not cart or not cart.cart_items.exists():
         logger.error("Cart is empty or not found")
         messages.error(request, "Cart is empty.")
-        return redirect('view_cart')
+        return redirect('cartsummary')
 
     try:
         amount_in_paisa = int(float(amount) * 100)
@@ -297,7 +355,11 @@ def initkhalti(request):
     purchase_order_name = f"Order-{purchase_order_id[:8]}"
     logger.info(f"Generated: purchase_order_id={purchase_order_id}, purchase_order_name={purchase_order_name}")
 
+    # Store all fields in session
     request.session['order_remarks'] = remarks
+    request.session['pickup_time'] = pickup_time
+    request.session['dine_in_time'] = dine_in_time
+    request.session['group_code'] = group_code if group_code else None
 
     payload = {
         "return_url": return_url,
@@ -319,7 +381,7 @@ def initkhalti(request):
     }
 
     try:
-        response = requests.post(url, headers=headers, data=json.dumps(payload))
+        response = requests.post(url, headers=headers, data=json.dumps(payload), timeout=10)
         logger.info(f"Khalti API Response: Status={response.status_code}, Body={response.text}")
         response.raise_for_status()
         new_response = response.json()
@@ -344,7 +406,7 @@ def khalti_callback(request):
     
     pidx = request.GET.get('pidx')
     txn_id = request.GET.get('transaction_id') or request.GET.get('tidx') or request.GET.get('txnId')
-    total_amount = request.GET.get('total_amount')  # Using total_amount as per Khalti callback
+    total_amount = request.GET.get('total_amount')
     status = request.GET.get('status')
     purchase_order_id = request.GET.get('purchase_order_id')
     
@@ -371,52 +433,50 @@ def khalti_callback(request):
                     messages.error(request, "Cart is empty.")
                     return redirect('cartsummary')
 
-                # Validate total_amount before conversion
                 if not total_amount:
                     logger.error("Total amount is missing in callback")
                     messages.error(request, "Payment amount is missing.")
                     return redirect('cartsummary')
 
                 try:
-                    amount_in_npr = int(total_amount) / 100  # Convert paisa to NPR
+                    amount_in_npr = int(total_amount) / 100
                     logger.info(f"Converted total_amount: {total_amount} paisa to {amount_in_npr} NPR")
                 except (ValueError, TypeError) as e:
                     logger.error(f"Invalid total_amount: {total_amount}, Error: {str(e)}")
                     messages.error(request, "Invalid payment amount.")
                     return redirect('cartsummary')
 
-                remarks = request.session.get('order_remarks', '')
-                order = Order.objects.create(
-                    user=request.user,
-                    total_price=amount_in_npr,
-                    payment_method="Online",
-                    remarks=remarks
-                )
-                logger.info(f"Order created: ID={order.id}, Remarks={order.remarks}")
+                # Retrieve fields from session, not POST
+                group_code = request.session.get('group_code', None)
+                if group_code and len(group_code) > 6:
+                    group_code = group_code[:6]
+                request.session['payment_details'] = {
+                    'pidx': pidx,
+                    'txn_id': txn_id,
+                    'amount': amount_in_npr,
+                    'status': 'Completed',
+                    'purchase_order_id': purchase_order_id,
+                    'remarks': request.session.get('order_remarks', ''),
+                    'pickup_time': request.session.get('pickup_time', ''),
+                    'dine_in_time': request.session.get('dine_in_time', ''),
+                    'group_code': group_code
+                }
+                # Clean up temporary session data
+                for key in ['order_remarks', 'pickup_time', 'dine_in_time', 'group_code']:
+                    if key in request.session:
+                        del request.session[key]
 
-                for item in cart.cart_items.all():
-                    OrderItem.objects.create(
-                        order=order,
-                        food_item=item.food_item,
-                        quantity=item.quantity,
-                        price=item.food_item.price * item.quantity
-                    )
-                    item.delete()
-
-                if 'order_remarks' in request.session:
-                    del request.session['order_remarks']
-
-                messages.success(request, "Payment successful! Order placed.")
-                return redirect('cartsummary')  # Changed from 'order_history' to 'cartsummary'
+                messages.success(request, "Payment successful! Please review your cart and place the order.")
+                return redirect('cartsummary')
 
         except requests.RequestException as e:
             logger.error(f"Payment verification failed: {str(e)}")
             messages.error(request, f"Payment verification failed: {str(e)}")
+            return redirect('cartsummary')
 
     logger.warning(f"Payment not completed: status={status}")
     messages.error(request, "Payment was not completed.")
     return redirect('cartsummary')
-
 
 
 @login_required
@@ -478,10 +538,8 @@ def group_order_page(request):
 @login_required
 def group_order_detail(request, group_code):
     try:
-        # Attempt to fetch the active group order
         group = GroupOrder.objects.get(code=group_code, is_active=True)
     except GroupOrder.DoesNotExist:
-        # If no active group exists, redirect with a message
         messages.error(request, f"Group order {group_code} is either closed or does not exist.")
         return redirect('group_order_page')
 
@@ -524,6 +582,9 @@ def group_order_detail(request, group_code):
                     quantity=group_item.quantity,
                     username=group_item.user.username
                 )
+
+            # Set group_code in session
+            request.session['group_code'] = group.code
 
             messages.success(request, f"Group order {group.code} closed. Please review and confirm your order.")
             return redirect('cartsummary')
