@@ -1,14 +1,164 @@
 {% extends 'base.html' %}
-
-<head>
-    <title>Your Orders</title>
-</head>
+{% load static %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="text-center">{{ user.username}}, Your Order Details</h2>
+<title> Order History - Informatics Cafeteria</title>
 
-    <table class="table table-bordered mt-3">
+<style>
+    .orders-container {
+        max-width: 1200px;
+
+        margin: 0 auto;
+        padding: 50px 20px;
+        background: linear-gradient(135deg, #f9f9f9, #ffffff);
+        min-height: 100vh;
+    }
+    .orders-title {
+        font-size: 2.5rem;
+        color: #99180d;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 40px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    .orders-table {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        margin-bottom: 40px;
+        overflow: hidden;
+    }
+    .orders-table th {
+        background: linear-gradient(to right, #99180d, #b32118);
+        color: #fff;
+        font-weight: 600;
+        padding: 15px;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 1rem;
+    }
+    .orders-table td {
+        padding: 15px;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 1rem;
+        border-bottom: 1px solid #f1f3f5;
+        transition: background 0.3s ease;
+    }
+    .orders-table tr:hover {
+        background: #f9fafb;
+    }
+    .item-list ,{
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 5px 0;
+    }
+    .item-name {
+        color: #333;
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    .item-quantity {
+        background: #99180d;
+        color: #fff;
+
+        border-radius: 12px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+        margin-bottom: 25%;
+    }
+    .status-pending {
+        color: #ff9800;
+        font-weight: 600;
+    }
+    .status-completed {
+        color: #28a745;
+        font-weight: 600;
+    }
+    .status-cancelled {
+        color: #dc3545;
+        font-weight: 600;
+    }
+    .no-orders {
+        text-align: center;
+        padding: 30px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        color: #6c757d;
+        font-size: 1.2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    .no-orders a {
+        color: #99180d;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    .no-orders a:hover {
+        color: #b32118;
+    }
+    @media (max-width: 992px) {
+        .orders-table th, .orders-table td {
+            font-size: 0.9rem;
+            padding: 12px;
+        }
+        .orders-title {
+            font-size: 2.2rem;
+        }
+        .item-name, .item-quantity {
+            font-size: 0.9rem;
+        }
+        .item-quantity {
+            padding: 3px 8px;
+        }
+    }
+    @media (max-width: 768px) {
+        .orders-container {
+            padding: 30px 15px;
+        }
+        .orders-table th, .orders-table td {
+            font-size: 0.85rem;
+            padding: 10px;
+        }
+        .orders-title {
+            font-size: 2rem;
+        }
+        .item-name, .item-quantity {
+            font-size: 0.85rem;
+        }
+    }
+    @media (max-width: 576px) {
+        .orders-table {
+            font-size: 0.8rem;
+        }
+        .orders-table th, .orders-table td {
+            padding: 8px;
+        }
+        .orders-title {
+            font-size: 1.8rem;
+        }
+        .item-name, .item-quantity {
+            font-size: 0.8rem;
+        }
+        .item-quantity {
+            padding: 2px 6px;
+        }
+    }
+</style>
+
+
+
+<div class="container mt-5 orders-container">
+    <h2 class="orders-title">{{ user.username }}, Your Order Details</h2>
+
+    {% if orders %}
+    <table class="table table-bordered mt-3 orders-table">
         <thead>
             <tr>
                 <th>Order ID</th>
@@ -25,31 +175,37 @@
             </tr>
         </thead>
         <tbody>
-            
             {% for order in orders %}
             <tr>
                 <td>{{ order.id }}</td>
-                <td>
+                <td class="item-list">
                     {% for item in order.order_items.all %}
-                    <span>{{ item.food_item.name }}</span><br>
+                    <div class="item-name">{{ item.food_item.name }}</div>
                     {% endfor %}
                 </td>
-                <td>
+                <td class="item-list" >
                     {% for item in order.order_items.all %}
-                    <span>{{ item.quantity }}</span><br>
+                    <div class="item-quantity">{{ item.quantity }}</div>
                     {% endfor %}
                 </td>
-                <td>Rs. {{ order.total_price }}</td>
-                <td>{{ order.status }}</td>
-                <td>{{ order.order_date|date:"Y-m-d " }}</td>
-                <td>{{ order.pickup_time }}</td>
-                <td>{{ order.dine_in_time }}</td>
-                <td>{{ order.group_code }}</td>
+                <td>Rs. {{ order.total_price|floatformat:2 }}</td>
+                <td class="{% if order.status == 'Pending' %}status-pending{% elif order.status == 'Completed' %}status-completed{% else %}status-cancelled{% endif %}">
+                    {{ order.status }}
+                </td>
+                <td>{{ order.order_date|date:"Y-m-d" }}</td>
+                <td>{{ order.pickup_time|default:'N/A' }}</td>
+                <td>{{ order.dine_in_time|default:'N/A' }}</td>
+                <td>{{ order.group_code|default:'N/A' }}</td>
                 <td>{{ order.payment_method }}</td>
-                <td>{{ order.remarks }}</td>
+                <td>{{ order.remarks|default:'None' }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <div class="no-orders">
+        You have no orders yet. <a href="{% url 'orderonline' %}">Place an order now!</a>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
