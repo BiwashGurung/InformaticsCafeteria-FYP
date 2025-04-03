@@ -75,11 +75,7 @@
         </section>
     {% endif %}
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-success mt-4">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+   
 
     <a href="{% url 'orderonline' %}" class="back-link">
         <i class="fa-solid fa-arrow-left"></i> Back to Menus
