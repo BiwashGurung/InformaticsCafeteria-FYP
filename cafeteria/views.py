@@ -229,21 +229,30 @@ def place_order(request):
         group_code = request.POST.get("group_code", request.session.get('group_code', None))
         logger.info(f"POST data: {request.POST}, Session group_code: {request.session.get('group_code')}")
 
-        # Validate time option
+        # Validate time option selection
         if not time_option:
             messages.error(request, "Please select either Pickup Time or Dine-in Time.")
             return redirect('cartsummary')
 
+        # Ensure mutual exclusivity
         if pickup_time and dine_in_time:
-            messages.error(request, "Please select only one: Pickup Time or Dine-in Time.")
+            messages.error(request, "Please select only one option: Pickup Time or Dine-in Time.")
             return redirect('cartsummary')
 
-        # Time validation
-        selected_time = pickup_time if time_option == "pickup" else dine_in_time if time_option == "dine_in" else None
+        # Determine selected time based on time_option
+        selected_time = None
+        if time_option == "pickup" and pickup_time:
+            selected_time = pickup_time
+        elif time_option == "dine_in" and dine_in_time:
+            selected_time = dine_in_time
+        else:
+            messages.error(request, f"Please provide a time for the selected option ({time_option.capitalize()}).")
+            return redirect('cartsummary')
+
+        # Validate time against current time
         if selected_time:
             try:
-                # Assuming Nepal time (UTC+5:45)
-                nepal_tz = pytz.timezone('Asia/Kathmandu')
+                nepal_tz = pytz.timezone('Asia/Kathmandu')  # Adjust timezone as needed
                 now = datetime.now(nepal_tz)
                 time_obj = datetime.strptime(selected_time, "%H:%M").time()
                 selected_datetime = datetime.combine(now.date(), time_obj)
@@ -254,7 +263,7 @@ def place_order(request):
                     return redirect('cartsummary')
             except ValueError as e:
                 logger.error(f"Invalid time format: {selected_time}, Error: {str(e)}")
-                messages.error(request, "Invalid time format. Please use HH:MM format.")
+                messages.error(request, "Invalid time format. Please use HH:MM format (e.g., 14:30).")
                 return redirect('cartsummary')
             except Exception as e:
                 logger.error(f"Time validation error: {str(e)}")

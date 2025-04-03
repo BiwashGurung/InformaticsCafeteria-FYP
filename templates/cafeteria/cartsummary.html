@@ -1,126 +1,201 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block head %}
+
+
+
+{% block content %}
 <title>Cart Summary - Informatics Cafeteria</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 <style>
     .cart-container {
-        max-width: 1000px;
+        max-width: 1100px;
         margin: 0 auto;
-        padding: 40px 20px;
+        padding: 50px 20px;
+        background: linear-gradient(135deg, #f9f9f9, #ffffff);
+        min-height: 100vh;
     }
     .cart-title {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
         color: #99180d;
-        font-weight: 600;
+        font-weight: 700;
         text-align: center;
-        margin-bottom: 30px;
+        margin-bottom: 40px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
     .cart-table {
         background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        margin-bottom: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        margin-bottom: 40px;
+        overflow: hidden;
     }
     .cart-table th {
-        background: #99180d;
+        background: linear-gradient(to right, #99180d, #b32118);
         color: #fff;
-        font-weight: 500;
-        padding: 12px;
+        font-weight: 600;
+        padding: 15px;
         text-align: center;
+        text-transform: uppercase;
+        font-size: 1rem;
     }
     .cart-table td {
-        padding: 12px;
+        padding: 15px;
         text-align: center;
         vertical-align: middle;
-        font-size: 0.95rem;
+        font-size: 1rem;
         border-bottom: 1px solid #f1f3f5;
+        transition: background 0.3s ease;
     }
     .cart-table tr:hover {
         background: #f9fafb;
     }
     .form-section {
-        background: #f8f9fa;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e9ecef;
     }
     .form-label {
-        font-weight: 500;
+        font-weight: 600;
         color: #333;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
     }
     .form-check-label {
-        margin-left: 5px;
+        margin-left: 8px;
+        font-size: 1rem;
+        color: #555;
+    }
+    .form-check-input {
+        cursor: pointer;
     }
     .grand-total {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         color: #99180d;
-        font-weight: 600;
-        margin: 20px 0;
+        font-weight: 700;
+        margin: 25px 0;
+        text-align: center;
     }
     .btn-success {
         background: #28a745;
         border: none;
-        padding: 10px 20px;
-        font-size: 1.1rem;
-        transition: background 0.3s;
+        padding: 12px 30px;
+        font-size: 1.2rem;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
     }
     .btn-success:hover {
         background: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
     }
     .btn-primary {
         background: #99180d;
         border: none;
-        padding: 10px 20px;
-        font-size: 1.1rem;
-        transition: background 0.3s;
+        padding: 12px 30px;
+        font-size: 1.2rem;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(153, 24, 13, 0.3);
     }
     .btn-primary:hover {
-        background: #d9534f;
+        background: #b32118;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(153, 24, 13, 0.4);
     }
     .payment-option img {
         vertical-align: middle;
         margin-left: 10px;
+        border-radius: 5px;
+        transition: transform 0.3s ease;
+    }
+    .payment-option img:hover {
+        transform: scale(1.1);
     }
     .empty-cart {
         text-align: center;
-        padding: 20px;
+        padding: 30px;
         background: #f8f9fa;
-        border-radius: 8px;
+        border-radius: 12px;
         color: #6c757d;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    .empty-cart a {
+        color: #99180d;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    .empty-cart a:hover {
+        color: #b32118;
     }
     .time-option {
         display: none;
     }
+    .messages {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 20px;
+    }
+    .messages li {
+        padding: 12px 20px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+    .messages .error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    .messages .success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
     @media (max-width: 768px) {
         .cart-title {
-            font-size: 1.8rem;
+            font-size: 2rem;
         }
         .cart-table th, .cart-table td {
-            font-size: 0.85rem;
-            padding: 8px;
+            font-size: 0.9rem;
+            padding: 10px;
         }
         .form-section {
-            padding: 15px;
+            padding: 20px;
+        }
+        .grand-total {
+            font-size: 1.5rem;
+        }
+        .btn-success, .btn-primary {
+            padding: 10px 20px;
+            font-size: 1rem;
+        }
+    }
+    @media (max-width: 576px) {
+        .cart-container {
+            padding: 20px 10px;
+        }
+        .cart-table {
+            font-size: 0.85rem;
+        }
+        .form-check-label {
+            font-size: 0.9rem;
         }
     }
 </style>
-{% endblock %}
-
-{% block content %}
 <div class="container mt-5 cart-container">
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+
 
     <h1 class="cart-title">
         {{ user.username }}, Cart Summary
-        {% if group_code %} (Group Order: {{ group_code }}) {% endif %}
+        {% if group_code %} <span style="font-size: 1.2rem; color: #555;">(Group Order: {{ group_code }})</span> {% endif %}
     </h1>
 
     {% if cart_items %}
@@ -128,7 +203,7 @@
         <thead>
             <tr>
                 <th>Food Item</th>
-                <th>Food Quantity</th>
+                <th>Quantity</th>
                 <th>Price</th>
                 <th>Added By</th>
             </tr>
@@ -147,29 +222,31 @@
 
     <div class="form-section">
         {% if payment_details and payment_details.status == 'Completed' %}
-        <p>Payment of Rs. {{ payment_details.amount|floatformat:2 }} completed successfully!</p>
+        <p style="color: #28a745; font-weight: 600; text-align: center; margin-bottom: 20px;">
+            Payment of Rs. {{ payment_details.amount|floatformat:2 }} completed successfully!
+        </p>
         <form method="POST" action="{% url 'place_order' %}" id="orderForm">
             {% csrf_token %}
-            <div class="mb-3">
-                <label class="form-label"><strong>Select Time Option:</strong></label>
-                <div class="form-check">
+            <div class="mb-4">
+                <label class="form-label">Select Time Option</label>
+                <div class="form-check mb-2">
                     <input type="radio" name="time_option" value="pickup" class="form-check-input" id="pickupOption" {% if payment_details.pickup_time %}checked{% endif %}>
                     <label class="form-check-label" for="pickupOption">Pickup Time</label>
                 </div>
-                <div class="form-check">
+                <div class="form-check mb-2">
                     <input type="radio" name="time_option" value="dine_in" class="form-check-input" id="dineInOption" {% if payment_details.dine_in_time %}checked{% endif %}>
                     <label class="form-check-label" for="dineInOption">Dine-in Time</label>
                 </div>
-                <div id="pickupTime" class="time-option mt-2">
-                    <input type="time" name="pickup_time" class="form-control" value="{{ payment_details.pickup_time|default:'' }}" placeholder="Select pickup time">
+                <div id="pickupTime" class="time-option mt-3">
+                    <input type="time" name="pickup_time" class="form-control" value="{{ payment_details.pickup_time|default:'' }}" placeholder="Select pickup time" title="Choose a pickup time">
                 </div>
-                <div id="dineInTime" class="time-option mt-2">
-                    <input type="time" name="dine_in_time" class="form-control" value="{{ payment_details.dine_in_time|default:'' }}" placeholder="Select dine-in time">
+                <div id="dineInTime" class="time-option mt-3">
+                    <input type="time" name="dine_in_time" class="form-control" value="{{ payment_details.dine_in_time|default:'' }}" placeholder="Select dine-in time" title="Choose a dine-in time">
                 </div>
             </div>
-            <div class="mb-3">
-                <label for="remarks" class="form-label"><strong>Remarks (Optional):</strong></label>
-                <textarea name="remarks" id="remarks" class="form-control" rows="3" placeholder="Special requests...">{{ payment_details.remarks|default:'' }}</textarea>
+            <div class="mb-4">
+                <label for="remarks" class="form-label">Remarks (Optional)</label>
+                <textarea name="remarks" id="remarks" class="form-control" rows="3" placeholder="Add any special requests..." title="Enter special instructions here">{{ payment_details.remarks|default:'' }}</textarea>
             </div>
             <input type="hidden" name="payment_method" value="Online">
             {% if payment_details.group_code %}
@@ -188,34 +265,34 @@
         <!-- Main Order Form -->
         <form method="POST" action="{% url 'place_order' %}" id="orderForm">
             {% csrf_token %}
-            <div class="mb-3">
-                <label class="form-label"><strong>Select Time Option:</strong></label>
-                <div class="form-check">
+            <div class="mb-4">
+                <label class="form-label">Select Time Option</label>
+                <div class="form-check mb-2">
                     <input type="radio" name="time_option" value="pickup" class="form-check-input" id="pickupOption" checked>
                     <label class="form-check-label" for="pickupOption">Pickup Time</label>
                 </div>
-                <div class="form-check">
+                <div class="form-check mb-2">
                     <input type="radio" name="time_option" value="dine_in" class="form-check-input" id="dineInOption">
                     <label class="form-check-label" for="dineInOption">Dine-in Time</label>
                 </div>
-                <div id="pickupTime" class="time-option mt-2">
-                    <input type="time" name="pickup_time" class="form-control" placeholder="Select pickup time">
+                <div id="pickupTime" class="time-option mt-3">
+                    <input type="time" name="pickup_time" class="form-control" placeholder="Select pickup time" title="Choose a pickup time">
                 </div>
-                <div id="dineInTime" class="time-option mt-2">
-                    <input type="time" name="dine_in_time" class="form-control" placeholder="Select dine-in time">
+                <div id="dineInTime" class="time-option mt-3">
+                    <input type="time" name="dine_in_time" class="form-control" placeholder="Select dine-in time" title="Choose a dine-in time">
                 </div>
             </div>
-            <div class="mb-3">
-                <label for="remarks" class="form-label"><strong>Remarks (Optional):</strong></label>
-                <textarea name="remarks" id="remarks" class="form-control" rows="3" placeholder="Special requests..."></textarea>
+            <div class="mb-4">
+                <label for="remarks" class="form-label">Remarks (Optional)</label>
+                <textarea name="remarks" id="remarks" class="form-control" rows="3" placeholder="Add any special requests..." title="Enter special instructions here"></textarea>
             </div>
-            <div class="mb-3">
-                <label class="form-label"><strong>Payment Method:</strong></label>
-                <div class="form-check">
+            <div class="mb-4">
+                <label class="form-label">Payment Method</label>
+                <div class="form-check mb-2">
                     <input type="radio" name="payment_method" value="Cash" class="form-check-input" id="cashPayment" checked>
                     <label class="form-check-label" for="cashPayment">Payment on Delivery</label>
                 </div>
-                <div class="form-check payment-option">
+                <div class="form-check payment-option mb-2">
                     <input type="radio" name="payment_method" value="Online" class="form-check-input" id="onlinePayment">
                     <label class="form-check-label" for="onlinePayment">Online Payment</label>
                     <img src="{% static 'Images/Esewa_logo.webp' %}" alt="Online Payment" width="40" height="40">
@@ -233,7 +310,7 @@
         </form>
 
         <!-- Khalti Payment Form -->
-        <form action="{% url 'initiate' %}" method="POST" class="mt-3" id="khaltiForm" style="display: none;">
+        <form action="{% url 'initiate' %}" method="POST" class="mt-4" id="khaltiForm" style="display: none;">
             {% csrf_token %}
             <input type="hidden" name="amount" value="{{ total_price }}">
             <input type="hidden" name="return_url" value="http://127.0.0.1:8000/khalti-callback/">
@@ -271,11 +348,11 @@
         if (pickupOption.checked) {
             pickupTimeDiv.style.display = 'block';
             dineInTimeDiv.style.display = 'none';
-            dineInTimeInput.value = ''; // Clear dine-in time
+            dineInTimeInput.value = '';
         } else if (dineInOption.checked) {
             pickupTimeDiv.style.display = 'none';
             dineInTimeDiv.style.display = 'block';
-            pickupTimeInput.value = ''; // Clear pickup time
+            pickupTimeInput.value = '';
         }
     }
 
@@ -312,37 +389,5 @@
             }
         });
     }
-
-    // Form submission validation
-    orderForm.addEventListener('submit', function(event) {
-        const pickupTime = pickupTimeInput.value;
-        const dineInTime = dineInTimeInput.value;
-
-        if (!pickupOption.checked && !dineInOption.checked) {
-            event.preventDefault();
-            alert("Please select either Pickup Time or Dine-in Time.");
-            return;
-        }
-
-        if (pickupTime && dineInTime) {
-            event.preventDefault();
-            alert("Please select only one option: Pickup Time or Dine-in Time.");
-            return;
-        }
-
-        const selectedTime = pickupTime || dineInTime;
-        if (selectedTime) {
-            const now = new Date();
-            const [hours, minutes] = selectedTime.split(':');
-            const selectedDateTime = new Date();
-            selectedDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-
-            if (selectedDateTime < now) {
-                event.preventDefault();
-                alert("Please don’t select a past time. Choose a time from now onwards.");
-                return;
-            }
-        }
-    });
 </script>
 {% endblock %}
