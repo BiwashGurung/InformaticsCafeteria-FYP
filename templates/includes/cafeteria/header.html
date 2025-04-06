@@ -4,8 +4,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary py-4 py-lg-0 shadow">
   <div class="container px-4">
     <a href="{% url 'home' %}">
-    
-      <img src="{% static 'Images/navlogo.png' %}" alt="Informatics Cafeteria"  />
+      <img src="{% static 'Images/navlogo.png' %}" alt="Informatics Cafeteria" />
     </a>
     <!-- For mobile UI, offcanvas is used -->
     <button
@@ -55,52 +54,43 @@
           <a class="nav-link {% if request.path == '/aboutus/' %}active{% endif %}" href="{% url 'aboutus' %}">About Us</a>
         </li>
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-          <a class="nav-link {% if request.path == '/order_online/' %}active{% endif %}" href="{% url 'orderonline' %}"> Menu</a>
+          <a class="nav-link {% if request.path == '/order_online/' %}active{% endif %}" href="{% url 'orderonline' %}">Menu</a>
         </li>
-
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
           <a class="nav-link {% if request.path == '/contactus/' %}active{% endif %}" href="{% url 'contactus' %}">Contact</a>
         </li>
-
         {% if request.user.is_authenticated %}
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
           <a class="nav-link {% if request.path == '/lost-found/' %}active{% endif %}" href="{% url 'lost_found_page' %}">Lost & Found</a>
         </li>
         {% endif %}
-       
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4 dropdown">
-          <a class="nav-link  {% if request.user.is_authenticated %}logged-in-user{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link {% if request.user.is_authenticated %}logged-in-user{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa-solid fa-user"></i>
             {% if request.user.is_authenticated %} {{ request.user.username }} {% else %} Account {% endif %}
             <span class="custom-arrow">▼</span>
           </a>
-        
           <ul class="dropdown-menu">
             {% if request.user.is_authenticated %}
             <li><a class="dropdown-item" href="{% url 'order_history' %}">Your Order</a></li>
             <li><hr class="dropdown-divider" /></li>
-            <li>
-              <a class="dropdown-item" href="{% url 'logout' %}">LogOut</a>
-            </li>
+            <li><a class="dropdown-item" href="{% url 'logout' %}">LogOut</a></li>
             {% else %}
-            <li>
-              <a class="dropdown-item" href="{% url 'login' %}">LogIn</a>
-            </li>
+            <li><a class="dropdown-item" href="{% url 'login' %}">LogIn</a></li>
             {% endif %}
           </ul>
         </li>
-        
-        {% comment %} <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-          <a href="{% url 'orderonline' %}" class="btn order-btn">
-            <i class="lni lni-cart"></i> Order Online
-          </a>
-        </li> {% endcomment %}
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
           <a class="nav-link {% if request.path == '/cart/' %}active{% endif %}" href="{% url 'view_cart' %}">
             <i class="lni lni-cart"></i> Cart
           </a>
         </li>
-        
+        <!-- Canteen Load Indicator -->
+        <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+          <span class="nav-link" style="color: {{ load_color }}; font-weight: bold;">
+            Canteen Load: {{ load_label }}
+          </span>
+        </li>
       </ul>
     </div>
   </div>
