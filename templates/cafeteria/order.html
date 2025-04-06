@@ -103,6 +103,23 @@
     .no-orders a:hover {
         color: #b32118;
     }
+
+    .queue-info {
+        text-align: center;
+        padding: 20px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        margin-bottom: 40px;
+    }
+    .queue-position {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #99180d;
+    }
+    .eta {
+        font-size: 1.5rem;
+        color: #555;
     @media (max-width: 992px) {
         .orders-table th, .orders-table td {
             font-size: 0.9rem;
@@ -156,6 +173,13 @@
 
 <div class="container mt-5 orders-container">
     <h2 class="orders-title">{{ user.username }}, Your Order Details</h2>
+
+    {% if queue_info.queue_position %}
+    <div class="queue-info">
+        <p>You are at <span class="queue-position">Position {{ queue_info.queue_position }}</span> in the queue.</p>
+        <p class="eta">Estimated Wait Time: {{ queue_info.eta_minutes }} minutes</p>
+    </div>
+    {% endif %}
 
     {% if orders %}
     <table class="table table-bordered mt-3 orders-table">

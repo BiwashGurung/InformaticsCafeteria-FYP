@@ -317,12 +317,30 @@ def place_order(request):
 
     return redirect('cartsummary')
 
+# cafeteria/views.py
 @login_required
 def order_history(request):
     orders = Order.objects.filter(user=request.user).prefetch_related('order_items__food_item').order_by('-order_date')
-    for order in orders:  # Debug
-        print(f"Order {order.id}: {order.order_items.count()} items")
-    return render(request, 'cafeteria/order.html', {'orders': orders})
+    # Queue logic for the most recent pending order
+    pending_order = orders.filter(status="Pending").first()
+    queue_info = {}
+    if pending_order:
+        # Calculate queue position (orders before this one with "Pending" or "Preparing" status)
+        queue_position = Order.objects.filter(
+            status__in=["Pending", "Preparing"],
+            order_date__lt=pending_order.order_date
+        ).count() + 1
+        # Estimate wait time (5 mins per order)
+        eta_minutes = queue_position * 5
+        queue_info = {
+            "queue_position": queue_position,
+            "eta_minutes": eta_minutes,
+        }
+    context = {
+        'orders': orders,
+        'queue_info': queue_info,
+    }
+    return render(request, 'cafeteria/order.html', context)
 
 
 
