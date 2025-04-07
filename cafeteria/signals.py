@@ -7,13 +7,13 @@ from .models import Order
 
 @receiver(pre_save, sender=Order)
 def send_order_status_email(sender, instance, **kwargs):
-    if instance.pk:  # Only trigger on updates, not creation
+    if instance.pk:  
         try:
             old_order = Order.objects.get(pk=instance.pk)
-            if old_order.status != instance.status:  # Status changed
+            if old_order.status != instance.status:  
                 subject = f"Order #{instance.id} Status Update"
                 
-                # Plain text message (fallback)
+                # Plain text message (fallback for email clients that don't support HTML)
                 plain_message = (
                     f"Dear {instance.user.username},\n\n"
                     f"Your order #{instance.id} status has been updated to '{instance.status}'.\n"
@@ -24,7 +24,7 @@ def send_order_status_email(sender, instance, **kwargs):
                     plain_message += "Your order is ready! Please pick it up or enjoy your dine-in soon.\n"
                 elif instance.status == "Cancelled":
                     plain_message += "Your order has been cancelled. Contact us at informaticscafetera@gmail.com if this was an error.\n"
-                else:  # "Pending"
+                else:  # THIs is for pending status
                     plain_message += "Your order status has been updated to Pending. We'll keep you posted!\n"
                 plain_message += (
                     f"\nOrder Details:\n"
@@ -37,7 +37,7 @@ def send_order_status_email(sender, instance, **kwargs):
                     plain_message += f"  - {item.food_item.name} (x{item.quantity})\n"
                 plain_message += "\nThank you,\nInformatics Cafeteria Team"
 
-                # HTML message (styled with items in table)
+                # Adding html so that the email looks good
                 html_message = f"""
                 <html>
                 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
@@ -74,7 +74,7 @@ def send_order_status_email(sender, instance, **kwargs):
                 """
                 # Add items to the table
                 for index, item in enumerate(instance.order_items.all()):
-                    bg_color = "#f5f5f5" if index % 2 == 0 else "#ffffff"  # Alternating background colors
+                    bg_color = "#f5f5f5" if index % 2 == 0 else "#ffffff"  
                     html_message += f"""
                             <tr style="background-color: {bg_color};">
                                 <td style="padding: 8px; border: 1px solid #ddd;">Food Item {index + 1}</td>
@@ -95,11 +95,12 @@ def send_order_status_email(sender, instance, **kwargs):
 
                 send_mail(
                     subject=subject,
-                    message=plain_message,  # Plain text fallback
+                    message=plain_message,  
                     from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[instance.user.email],
-                    html_message=html_message,  # Styled HTML version with items in table
+                    html_message=html_message,  
                     fail_silently=False,
                 )
         except Order.DoesNotExist:
-            pass  # Handle case where old instance isn’t found
+            #Handling the case where the order does not exist in the database
+            pass 
