@@ -48,9 +48,6 @@
           >
         </li>
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-          <a class="nav-link {% if request.path == '/college/' %}active{% endif %}" href="{% url 'college' %}">College</a>
-        </li>
-        <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
           <a class="nav-link {% if request.path == '/aboutus/' %}active{% endif %}" href="{% url 'aboutus' %}">About Us</a>
         </li>
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
@@ -80,16 +77,17 @@
             {% endif %}
           </ul>
         </li>
-        <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-          <a class="nav-link {% if request.path == '/cart/' %}active{% endif %}" href="{% url 'view_cart' %}">
-            <i class="lni lni-cart"></i> Cart
-          </a>
-        </li>
+        
         <!-- Canteen Load Indicator -->
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
           <span class="nav-link" style="color: {{ load_color }}; font-weight: bold; ">
             Canteen Load: {{ load_label }}
           </span>
+        </li>
+        <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+          <a class="nav-link {% if request.path == '/cart/' %}active{% endif %}" href="{% url 'view_cart' %}">
+            <i class="lni lni-cart"></i> Cart
+          </a>
         </li>
       </ul>
     </div>

@@ -98,9 +98,7 @@ def LogoutPage(request):
     messages.success(request, "You have successfully logged out.")
     return redirect('login')
 
-# Other Static Pages
-def CollegePage(request):
-    return render(request, 'cafeteria/college.html')
+
 
 def AboutUsPage(request):
     return render(request, 'cafeteria/aboutus.html')
