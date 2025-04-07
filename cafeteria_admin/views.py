@@ -9,7 +9,8 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 # Importing Profile from cafeteria app
-from cafeteria.models import Profile  , FoodItem , OrderItem, Order , LostFound , GroupOrder, GroupOrderItem
+from cafeteria.models import Profile  , FoodItem , OrderItem, Order , LostFound , GroupOrder, GroupOrderItem , Feedback
+from django.db.models import Q
 from django.db.models import Sum
 
 
@@ -334,3 +335,35 @@ def delete_group_order(request, group_id):
         group.delete()
         messages.success(request, f"Group Order {group.code} deleted successfully!")
     return redirect('manage_group_orders')
+
+
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def manage_feedback(request):
+    try:
+        query = request.GET.get('q', '')
+        if query:
+            feedbacks = Feedback.objects.filter(
+                Q(content__icontains=query) | Q(user__username__icontains=query)
+            ).order_by('-created_at')
+        else:
+            feedbacks = Feedback.objects.all().order_by('-created_at')
+
+        if request.method == "POST":
+            action = request.POST.get('action')
+            feedback_id = request.POST.get('feedback_id')
+            feedback = get_object_or_404(Feedback, id=feedback_id)
+
+            if action == "approve":
+                feedback.is_approved = True
+                feedback.save()
+                messages.success(request, f"Feedback #{feedback_id} approved.")
+            elif action == "delete":
+                feedback.delete()
+                messages.success(request, f"Feedback #{feedback_id} deleted.")
+            return redirect('manage_feedback')
+
+        return render(request, 'cafeteria_admin/manage_feedback.html', {'feedbacks': feedbacks, 'query': query})
+    except Exception as e:
+        messages.error(request, "An error occurred while managing feedback.")
+        return redirect('cafeteria_admin_dashboard')

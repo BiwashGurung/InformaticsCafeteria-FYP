@@ -213,3 +213,20 @@ class GroupOrderItem(models.Model):
 
     class Meta:
         db_table = 'cafeteria_group_order_items'        
+
+
+
+class Feedback(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    image = models.ImageField(upload_to='feedback_images/', null=True, blank=True)
+    tags = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Feedback by {self.user.username}"
+
+    class Meta:
+        ordering = ['-created_at']
+        db_table = 'cafeteria_feedback'        

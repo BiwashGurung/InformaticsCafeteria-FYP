@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Profile, FoodItem, Cart, CartItem, OrderItem, Order , LostFound , GroupOrder, GroupOrderItem
+from .models import Profile, FoodItem, Cart, CartItem, OrderItem, Order , LostFound , GroupOrder, GroupOrderItem , Feedback
 from django.db.models import Q
 import uuid
 import logging
@@ -209,6 +209,51 @@ def cart_summary(request):
         'group_code': group_code,
         'payment_details': payment_details
     })
+
+
+@login_required
+def feedback_page(request):
+    try:
+        feedbacks = Feedback.objects.filter(is_approved=True)  
+
+        # Search functionality
+        query = request.GET.get('q', '')
+        if query:
+            feedbacks = feedbacks.filter(
+                Q(content__icontains=query) | Q(tags__icontains=query)
+            )
+
+        if request.method == "POST":
+            content = request.POST.get('content')
+            image = request.FILES.get('image')
+            tags = ','.join(request.POST.getlist('tags')) 
+            if not content:
+                messages.error(request, "Feedback content cannot be empty.")
+                return redirect('feedback_page')
+
+            try:
+                Feedback.objects.create(
+                    user=request.user,
+                    content=content,
+                    image=image,
+                    tags=tags,
+                    is_approved=False  
+                )
+                messages.success(request, "Your feedback has been submitted and is awaiting admin approval.")
+            except Exception as e:
+                logger.error(f"Error saving feedback: {str(e)}")
+                messages.error(request, "An error occurred while submitting your feedback. Please try again.")
+            return redirect('feedback_page')
+
+        context = {
+            'feedbacks': feedbacks,
+            'query': query,
+        }
+        return render(request, 'cafeteria/feedback.html', context)
+    except Exception as e:
+        logger.error(f"Error in feedback_page: {str(e)}")
+        messages.error(request, "An unexpected error occurred. Please try again later.")
+        return redirect('home')
 
 
 @login_required

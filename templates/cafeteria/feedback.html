@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+    <link rel="stylesheet" href="{% static 'cafeteria_css/feedback.css' %}" />
+
+
+{% block content %}
+<div class="feedback-wrapper">
+    <h2>Feedback Forum</h2>
+
+    <!-- Feedback Form -->
+    <div class="feedback-form">
+        <h3>Share Your Experience</h3>
+        {% if messages %}
+            {% for message in messages %}
+                <p class="{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <textarea name="content" rows="5" placeholder="Write your review here..." required></textarea>
+            <input type="file" name="image" accept="image/*">
+            <div class="tags-section">
+                <label>Tags:</label>
+                <input type="checkbox" name="tags" value="breakfast"> #breakfast
+                <input type="checkbox" name="tags" value="snacks"> #snacks
+                <input type="checkbox" name="tags" value="appetizer"> #appetizer
+                <input type="checkbox" name="tags" value="maincourse"> #maincourse
+                <input type="checkbox" name="tags" value="beverages"> #beverages
+                <input type="checkbox" name="tags" value="dessert"> #dessert
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Feedback</button>
+        </form>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <form method="GET">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search by food name or category (e.g., #breakfast)">
+            <button type="submit" class="btn btn-secondary">Search</button>
+        </form>
+    </div>
+
+    <!-- Existing Feedbacks -->
+    <div class="feedback-list">
+        <h3>User Reviews</h3>
+        {% for feedback in feedbacks %}
+        <div class="feedback-item">
+            <p><strong>{{ feedback.user.username }}</strong> - {{ feedback.created_at|date:"Y-m-d H:i" }}</p>
+            <p>{{ feedback.content }}</p>
+            {% if feedback.image %}
+                <img src="{{ feedback.image.url }}" alt="Feedback Image" style="max-width: 200px;">
+            {% endif %}
+            <p class="tags">Tags: {{ feedback.tags|default:"None" }}</p>
+        </div>
+        {% empty %}
+        <p>No approved feedback yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

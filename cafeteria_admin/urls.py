@@ -30,6 +30,7 @@ urlpatterns = [
     path('manage_group_orders/', views.manage_group_orders, name='manage_group_orders'),
     path('close_group_order/<int:group_id>/', views.close_group_order, name='close_group_order'),
     path('delete_group_order/<int:group_id>/', views.delete_group_order, name='delete_group_order'), 
+    path('manage_feedback/', views.manage_feedback, name='manage_feedback'),
 
 ]
   

@@ -1,0 +1,68 @@
+<!-- cafeteria_admin/templates/cafeteria_admin/manage_feedback.html -->
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-content">
+    <h2><i class="fas fa-comment-alt"></i> Manage Feedback</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <p class="{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Search Bar -->
+    <div class="search-bar" style="margin: 20px 0;">
+        <form method="GET">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search by content or username" style="padding: 8px; width: 70%; border-radius: 5px; border: 1px solid #ddd;">
+            <button type="submit" class="btn" style="padding: 8px 15px; background: #99180d; color: #fff; border-radius: 5px;">Search</button>
+        </form>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Order</th>
+                <th>Content</th>
+                <th>Image</th>
+                <th>Tags</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for feedback in feedbacks %}
+            <tr>
+                <td>{{ feedback.id }}</td>
+                <td>{{ feedback.user.username }}</td>
+                <td>{{ feedback.order.id }}</td>
+                <td>{{ feedback.content|truncatewords:10 }}</td>
+                <td>
+                    {% if feedback.image %}
+                        <img src="{{ feedback.image.url }}" alt="Feedback Image" style="max-width: 100px;">
+                    {% else %}
+                        None
+                    {% endif %}
+                </td>
+                <td>{{ feedback.tags|default:"None" }}</td>
+                <td>{{ feedback.is_approved|yesno:"Approved,Pending" }}</td>
+                <td>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="feedback_id" value="{{ feedback.id }}">
+                        {% if not feedback.is_approved %}
+                            <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+                        {% endif %}
+                        <button type="submit" name="action" value="delete" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="8">No feedback yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+/* static/cafeteria_css/feedback.css */
+.feedback-wrapper {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+}
+.feedback-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+.feedback-form textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.feedback-form input[type="file"] {
+    margin-bottom: 10px;
+}
+.tags-section {
+    margin: 10px 0;
+}
+.tags-section label {
+    margin-right: 10px;
+    font-weight: 600;
+}
+.tags-section input {
+    margin-right: 5px;
+}
+.search-bar {
+    margin: 20px 0;
+}
+.search-bar input {
+    width: 70%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.search-bar button {
+    padding: 8px 15px;
+    margin-left: 10px;
+    background: #99180d;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+.feedback-list {
+    margin-top: 20px;
+}
+.feedback-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+.tags {
+    color: #2980b9;
+    font-size: 0.9em;
+}
