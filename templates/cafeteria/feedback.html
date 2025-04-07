@@ -1,300 +1,398 @@
-<!-- cafeteria/templates/cafeteria/feedback.html -->
 {% extends 'base.html' %}
-{% load static %}
+{% load static tz %}
+
+{% block extra_css %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-    <style>
-        .feedback-wrapper {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
-        }
-        .intro-section {
-            text-align: center;
-            padding: 30px 20px;
-            background: linear-gradient(135deg, #99180d, #b32118);
-            color: #fff;
-            border-radius: 20px 20px 0 0;
-        }
-        .intro-section h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-        .intro-section p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-        .add-feedback-btn {
-            padding: 12px 30px;
-            background: #fff;
-            color: #99180d;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            text-decoration: none;
-            margin-top: 20px;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
-        .add-feedback-btn:hover {
-            background: #b32118;
-            color: #fff;
-        }
-        .form-section {
-            padding: 30px 20px;
-            background: #f8f9fa;
-        }
-        .form-section h2 {
-            font-size: 1.8rem;
-            color: #333;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .feedback-form {
-            background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-        .feedback-form textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            font-size: 1rem;
-            height: 120px;
-            resize: none;
-        }
-        .feedback-form textarea:focus {
-            border-color: #99180d;
-            box-shadow: 0 0 8px rgba(153, 24, 13, 0.2);
-            outline: none;
-        }
-        .tags-section {
-            margin: 15px 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .tags-section label {
-            font-weight: 600;
-            color: #555;
-        }
-        .tags-section .tag-option {
-            display: flex;
-            align-items: center;
-            font-size: 0.95rem;
-            color: #2980b9;
-        }
-        .feedback-form .btn-primary {
-            width: 100%;
-            padding: 12px;
-            background: #99180d;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-        }
-        .feedback-form .btn-primary:hover {
-            background: #b32118;
-        }
-        .search-section {
-            padding: 20px;
-            text-align: center;
-        }
-        .search-section form {
-            display: inline-flex;
-            width: 100%;
-            max-width: 600px;
-        }
-        .search-section input {
-            flex-grow: 1;
-            padding: 12px 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px 0 0 10px;
-            font-size: 1rem;
-        }
-        .search-section .btn-secondary {
-            padding: 12px 25px;
-            border-radius: 0 10px 10px 0;
-            background: #6c757d;
-            border: none;
-        }
-        .reviews-section {
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 20px;
-            margin-top: 20px;
-        }
-        .reviews-section h2 {
-            font-size: 1.8rem;
-            color: #333;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .feedback-item {
-            background: #fff;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease;
-        }
-        .feedback-item:hover {
-            transform: translateY(-3px);
-        }
-        .feedback-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .feedback-header strong {
-            color: #99180d;
-            font-weight: 600;
-        }
-        .feedback-header span {
-            color: #888;
-            font-size: 0.9rem;
-        }
-        .feedback-content {
-            margin: 0 0 10px 0;
-            color: #555;
-            font-size: 1rem;
-        }
-        .feedback-item img {
-            max-width: 100%;
-            width: 180px;
-            border-radius: 8px;
-            margin: 5px 0;
-        }
-        .tags {
-            color: #2980b9;
-            font-size: 0.85rem;
-            margin: 0;
-        }
-        .reaction-bar {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-        }
-        .reaction-btn {
-            background: none;
-            border: none;
-            color: #6c757d;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-        .reaction-btn.liked { color: #28a745; }
-        .reaction-btn.disliked { color: #dc3545; }
-        .reaction-btn i { margin-right: 5px; }
-        .replies {
-            margin-top: 15px;
-            padding-left: 20px;
-            border-left: 2px solid #ddd;
-        }
-        .reply-item {
-            padding: 10px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-        .reply-item strong {
-            color: #555;
-            font-weight: 600;
-        }
-        .reply-form {
-            margin-top: 10px;
-        }
-        .reply-form textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            height: 60px;
-            resize: none;
-        }
-        .reply-form .btn {
-            padding: 8px 15px;
-            background: #99180d;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-        }
-        .no-feedback {
-            text-align: center;
-            padding: 15px;
-            background: #fff;
-            border-radius: 10px;
-            color: #6c757d;
-            font-size: 1.1rem;
-        }
-        .spotlight {
-            background: #fff3e0;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            border: 2px dashed #99180d;
-        }
-        .spotlight h3 {
-            color: #99180d;
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-        .top-reviewer {
-            color: #f39c12;
-            font-size: 0.9rem;
-            margin-left: 10px;
-        }
-        @media (max-width: 768px) {
-            .feedback-wrapper { margin: 20px 10px; padding: 15px; }
-            .intro-section h1 { font-size: 1.8rem; }
-            .intro-section p { font-size: 1rem; }
-            .add-feedback-btn { padding: 10px 20px; font-size: 1rem; }
-            .form-section, .reviews-section { padding: 15px; }
-            .feedback-item { padding: 10px; }
-            .feedback-header { flex-direction: column; align-items: flex-start; }
-            .feedback-item img { width: 100%; max-width: 120px; }
-            .reaction-bar { gap: 10px; }
-            .reply-form textarea { height: 50px; }
-        }
-    </style>
-
-
+<style>
+    .feedback-wrapper {
+        max-width: 1100px;
+        margin: 50px auto;
+        padding: 30px;
+        background: linear-gradient(to bottom, #ffffff, #f9f9f9);
+        border-radius: 25px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+    .intro-section {
+        text-align: center;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #99180d, #b32118);
+        color: #fff;
+        border-radius: 25px 25px 0 0;
+        position: relative;
+    }
+    .intro-section h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    .intro-section p {
+        font-size: 1.3rem;
+        max-width: 750px;
+        margin: 0 auto;
+        line-height: 1.7;
+        opacity: 0.9;
+    }
+    .add-feedback-btn {
+        padding: 14px 35px;
+        background: #fff;
+        color: #99180d;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.2rem;
+        text-decoration: none;
+        margin-top: 25px;
+        display: inline-block;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .add-feedback-btn:hover {
+        background: #b32118;
+        color: #fff;
+        transform: scale(1.05);
+    }
+    .form-section {
+        padding: 40px 25px;
+        background: #f8f9fa;
+    }
+    .form-section h2 {
+        font-size: 2rem;
+        color: #333;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    .feedback-form {
+        background: #fff;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        transition: box-shadow 0.3s ease;
+    }
+    .feedback-form:hover {
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+    }
+    .feedback-form textarea {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        font-size: 1rem;
+        height: 140px;
+        resize: none;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .feedback-form textarea:focus {
+        border-color: #99180d;
+        box-shadow: 0 0 10px rgba(153, 24, 13, 0.2);
+        outline: none;
+    }
+    .feedback-form input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        margin: 15px 0;
+        border: 1px dashed #ddd;
+        border-radius: 10px;
+        font-size: 0.95rem;
+    }
+    .tags-section {
+        margin: 20px 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: center;
+    }
+    .tags-section label {
+        font-weight: 600;
+        color: #555;
+        font-size: 1.1rem;
+    }
+    .tags-section .tag-option {
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        color: #2980b9;
+        transition: color 0.3s ease;
+    }
+    .tags-section .tag-option:hover {
+        color: #1b5e90;
+    }
+    .feedback-form .btn-primary {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #99180d, #b32118);
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+    .feedback-form .btn-primary:hover {
+        background: linear-gradient(135deg, #b32118, #99180d);
+        transform: scale(1.02);
+    }
+    .search-section {
+        padding: 25px 20px;
+        text-align: center;
+    }
+    .search-section form {
+        display: inline-flex;
+        width: 100%;
+        max-width: 650px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .search-section input {
+        flex-grow: 1;
+        padding: 12px 20px;
+        border: none;
+        font-size: 1rem;
+        border-radius: 10px 0 0 10px;
+    }
+    .search-section .btn-secondary {
+        padding: 12px 30px;
+        background: #6c757d;
+        border: none;
+        border-radius: 0 10px 10px 0;
+        font-weight: 600;
+        transition: background 0.3s ease;
+    }
+    .search-section .btn-secondary:hover {
+        background: #5a6268;
+    }
+    .reviews-section {
+        padding: 30px 25px;
+        background: #f8f9fa;
+        border-radius: 20px;
+        margin-top: 25px;
+    }
+    .reviews-section h2 {
+        font-size: 2rem;
+        color: #333;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .feedback-item {
+        background: #fff;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 15px;
+        border: 1px solid #eee;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .feedback-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    }
+    .spotlight {
+        background: #fff8f0;
+        border: 2px dashed #99180d;
+        box-shadow: 0 6px 20px rgba(153, 24, 13, 0.1);
+        position: relative;
+    }
+    .spotlight::before {
+        content: "Featured";
+        position: absolute;
+        top: -10px;
+        left: 20px;
+        background: #99180d;
+        color: #fff;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    .feedback-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+    .feedback-header strong {
+        color: #99180d;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    .feedback-header span {
+        color: #888;
+        font-size: 0.95rem;
+    }
+    .feedback-content {
+        margin: 0 0 15px 0;
+        color: #555;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    .feedback-item img {
+        max-width: 100%;
+        width: 220px;
+        border-radius: 10px;
+        margin: 10px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+    }
+    .feedback-item img:hover {
+        transform: scale(1.05);
+    }
+    .tags {
+        color: #2980b9;
+        font-size: 0.9rem;
+        margin: 0;
+        font-style: italic;
+    }
+    .reaction-bar {
+        display: flex;
+        gap: 20px;
+        margin-top: 15px;
+    }
+    .reaction-btn {
+        background: none;
+        border: none;
+        color: #6c757d;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: color 0.3s ease, transform 0.2s ease;
+    }
+    .reaction-btn:hover {
+        transform: scale(1.1);
+    }
+    .reaction-btn.liked { color: #28a745; }
+    .reaction-btn.disliked { color: #dc3545; }
+    .reaction-btn i { margin-right: 6px; }
+    .replies {
+        margin-top: 20px;
+        padding-left: 25px;
+        border-left: 3px solid #ddd;
+    }
+    .reply-item {
+        padding: 12px;
+        background: #f9f9f9;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        transition: background 0.3s ease;
+    }
+    .reply-item.hidden {
+        display: none;
+    }
+    .reply-item:hover {
+        background: #f1f1f1;
+    }
+    .reply-item strong {
+        color: #555;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+    .view-more-replies {
+        color: #99180d;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: underline;
+        transition: color 0.3s ease;
+        display: block;
+        margin-top: 10px;
+    }
+    .view-more-replies:hover {
+        color: #b32118;
+    }
+    .reply-form textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        height: 70px;
+        resize: none;
+        transition: border-color 0.3s ease;
+    }
+    .reply-form textarea:focus {
+        border-color: #99180d;
+        box-shadow: 0 0 8px rgba(153, 24, 13, 0.2);
+        outline: none;
+    }
+    .reply-form .btn {
+        padding: 10px 20px;
+        background: #99180d;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        margin-top: 10px;
+        transition: background 0.3s ease;
+    }
+    .reply-form .btn:hover {
+        background: #b32118;
+    }
+    .no-feedback {
+        text-align: center;
+        padding: 20px;
+        background: #fff;
+        border-radius: 15px;
+        color: #6c757d;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+    .top-reviewer {
+        color: #f39c12;
+        font-size: 0.95rem;
+        margin-left: 12px;
+        font-weight: 600;
+    }
+    @media (max-width: 768px) {
+        .feedback-wrapper { margin: 20px 15px; padding: 20px; }
+        .intro-section { padding: 30px 15px; }
+        .intro-section h1 { font-size: 2rem; }
+        .intro-section p { font-size: 1.1rem; }
+        .add-feedback-btn { padding: 12px 25px; font-size: 1rem; }
+        .form-section, .reviews-section { padding: 20px 15px; }
+        .form-section h2, .reviews-section h2 { font-size: 1.6rem; }
+        .feedback-item { padding: 15px; }
+        .feedback-header { flex-direction: column; align-items: flex-start; gap: 5px; }
+        .feedback-item img { width: 100%; max-width: 160px; }
+        .reaction-bar { gap: 15px; }
+        .replies { padding-left: 15px; }
+        .reply-form textarea { height: 60px; }
+    }
+</style>
 
 <div class="feedback-wrapper">
     <!-- Intro Section -->
     <div class="intro-section">
-        <h1>Join the Cafeteria Conversation</h1>
-        <p>Love our food? Got a suggestion? Share it here, react to others, and spark a chat—your feedback shapes our menu!</p>
+        <h1><i class="fas fa-utensils me-2"></i>Join the Cafeteria Conversation</h1>
+        <p>Love our food? Got a suggestion? Share your thoughts, react to others, and help shape our menu!</p>
         <a href="#feedbackForm" class="add-feedback-btn" data-bs-toggle="collapse"><i class="fas fa-comment-dots me-2"></i>Share Feedback</a>
     </div>
 
     <!-- Form Section -->
     <div class="form-section">
-        <h2>Your Voice Matters</h2>
+        <h2><i class="fas fa-bullhorn me-2"></i>Your Voice Matters</h2>
         <div id="feedbackForm" class="collapse feedback-form">
             {% if messages %}
-                {% for message in messages %}
-                    <p class="{% if message.tags == 'success' %}text-success{% else %}text-danger{% endif %}">{{ message }}</p>
-                {% endfor %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
             {% endif %}
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <textarea name="content" placeholder="What’s on your mind?" required></textarea>
                 <input type="file" name="image" accept="image/*">
                 <div class="tags-section">
-                    <label>Tags:</label>
+                    <label><i class="fas fa-tags me-2"></i>Tags:</label>
                     <span class="tag-option"><input type="checkbox" name="tags" value="breakfast"> #breakfast</span>
                     <span class="tag-option"><input type="checkbox" name="tags" value="snacks"> #snacks</span>
                     <span class="tag-option"><input type="checkbox" name="tags" value="lunch"> #lunch</span>
@@ -316,12 +414,12 @@
 
     <!-- Reviews Section -->
     <div class="reviews-section">
-        <h2>Community Buzz</h2>
+        <h2><i class="fas fa-users me-2"></i>Community Buzz</h2>
         {% for feedback in feedbacks %}
         <div class="feedback-item {% if forloop.first %}spotlight{% endif %}">
             <div class="feedback-header">
-                <strong>{{ feedback.user.username }}{% if feedback.user.username == top_reviewer %}<span class="top-reviewer"><i class="fas fa-crown"></i> Top Reviewer</span>{% endif %}</strong>
-                <span>{{ feedback.created_at|date:"M d, Y H:i" }}</span>
+                <strong>{{ feedback.user.username }}{% if feedback.user.username == top_reviewer %}<span class="top-reviewer"><i class="fas fa-crown me-1"></i>Top Reviewer</span>{% endif %}</strong>
+                <span>{% localtime on %}{{ feedback.created_at|date:"M d, Y H:i" }}{% endlocaltime %}</span>
             </div>
             <p class="feedback-content">{{ feedback.content }}</p>
             {% if feedback.image %}
@@ -336,13 +434,18 @@
                     <i class="fas fa-thumbs-down"></i>{{ feedback.dislikes.count }}
                 </button>
             </div>
-            <div class="replies">
+            <div class="replies" id="replies-{{ feedback.id }}">
                 {% for reply in feedback.replies.all %}
-                <div class="reply-item">
-                    <strong>{{ reply.user.username }}</strong> - <span style="color: #888;">{{ reply.created_at|date:"M d, H:i" }}</span>
+                <div class="reply-item {% if forloop.counter > 5 %}hidden{% endif %}" data-reply-id="{{ reply.id }}">
+                    <strong>{{ reply.user.username }}</strong> - <span>{% localtime on %}{{ reply.created_at|date:"M d, Y H:i" }}{% endlocaltime %}</span>
                     <p>{{ reply.content }}</p>
                 </div>
                 {% endfor %}
+                {% if feedback.replies.count > 5 %}
+                <span class="view-more-replies" onclick="toggleReplies('{{ feedback.id }}')">
+                    View More Replies ({{ feedback.replies.count|add:-5 }} more)
+                </span>
+                {% endif %}
                 <div class="reply-form">
                     <form method="POST" action="{% url 'add_reply' feedback.id %}">
                         {% csrf_token %}
@@ -358,9 +461,7 @@
     </div>
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-<!-- Reaction Script -->
 <script>
     function react(type, feedbackId) {
         fetch(`/react/${feedbackId}/${type}/`, {
@@ -371,9 +472,20 @@
             }
         }).then(response => response.json()).then(data => {
             if (data.success) {
-                location.reload(); // Refresh to update counts
+                location.reload();
             }
         });
+    }
+
+    function toggleReplies(feedbackId) {
+        const repliesContainer = document.getElementById(`replies-${feedbackId}`);
+        const hiddenReplies = repliesContainer.querySelectorAll('.reply-item.hidden');
+        const viewMoreLink = repliesContainer.querySelector('.view-more-replies');
+
+        hiddenReplies.forEach(reply => {
+            reply.classList.remove('hidden');
+        });
+        viewMoreLink.style.display = 'none'; // Hide the "View More" link after showing all replies
     }
 </script>
 {% endblock %}
