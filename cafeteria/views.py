@@ -216,7 +216,7 @@ def cart_summary(request):
 @login_required
 def feedback_page(request):
     feedbacks = Feedback.objects.filter(is_approved=True).order_by('-created_at')
-    top_reviewer = User.objects.filter(feedback__is_approved=True).annotate(feedback_count=models.Count('feedback')).order_by('-feedback_count').first()
+    top_reviewer = Feedback.objects.filter(is_approved=True).values('user__username').annotate(count=models.Count('id')).order_by('-count').first()
 
     if request.method == "POST":
         content = request.POST.get('content')
@@ -231,7 +231,7 @@ def feedback_page(request):
 
     context = {
         'feedbacks': feedbacks,
-        'top_reviewer': top_reviewer.username if top_reviewer else None,
+        'top_reviewer': top_reviewer['user__username'] if top_reviewer else None,
         'query': request.GET.get('q', '')
     }
     return render(request, 'cafeteria/feedback.html', context)
@@ -239,7 +239,7 @@ def feedback_page(request):
 @login_required
 def add_reply(request, feedback_id):
     if request.method == "POST":
-        feedback = Feedback.objects.get(id=feedback_id)
+        feedback = get_object_or_404(Feedback, id=feedback_id)
         content = request.POST.get('content')
         if content:
             Reply.objects.create(feedback=feedback, user=request.user, content=content)
@@ -249,8 +249,39 @@ def add_reply(request, feedback_id):
     return redirect('feedback_page')
 
 @login_required
+def edit_reply(request, reply_id):
+    reply = get_object_or_404(Reply, id=reply_id)
+    if request.user != reply.user:
+        messages.error(request, "You can only edit your own replies.")
+        return redirect('feedback_page')
+    
+    if request.method == "POST":
+        content = request.POST.get('content')
+        if content:
+            reply.content = content
+            reply.save()
+            messages.success(request, "Reply updated successfully!")
+        else:
+            messages.error(request, "Reply content cannot be empty.")
+        return redirect('feedback_page')
+    return redirect('feedback_page')
+
+@login_required
+def delete_reply(request, reply_id):
+    reply = get_object_or_404(Reply, id=reply_id)
+    if request.user != reply.user:
+        messages.error(request, "You can only delete your own replies.")
+        return redirect('feedback_page')
+    
+    if request.method == "POST":
+        reply.delete()
+        messages.success(request, "Reply deleted successfully!")
+        return redirect('feedback_page')
+    return redirect('feedback_page')
+
+@login_required
 def react(request, feedback_id, reaction_type):
-    feedback = Feedback.objects.get(id=feedback_id)
+    feedback = get_object_or_404(Feedback, id=feedback_id)
     user = request.user
     if reaction_type == 'like':
         if user in feedback.dislikes.all():

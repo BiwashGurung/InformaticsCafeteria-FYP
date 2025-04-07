@@ -281,6 +281,7 @@
         border-radius: 10px;
         margin-bottom: 12px;
         transition: background 0.3s ease;
+        position: relative;
     }
     .reply-item.hidden {
         display: none;
@@ -292,6 +293,63 @@
         color: #555;
         font-weight: 600;
         font-size: 0.95rem;
+    }
+    .reply-actions {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        display: flex;
+        gap: 10px;
+    }
+    .reply-actions .edit-btn, .reply-actions .delete-btn {
+        background: none;
+        border: none;
+        font-size: 0.9rem;
+        cursor: pointer;
+        padding: 5px;
+        transition: color 0.3s ease;
+    }
+    .reply-actions .edit-btn {
+        color: #2980b9;
+    }
+    .reply-actions .edit-btn:hover {
+        color: #1b5e90;
+    }
+    .reply-actions .delete-btn {
+        color: #dc3545;
+    }
+    .reply-actions .delete-btn:hover {
+        color: #b02a37;
+    }
+    .reply-item.edit-mode .reply-content {
+        display: none;
+    }
+    .reply-item.edit-mode .edit-form {
+        display: block;
+    }
+    .edit-form {
+        display: none;
+    }
+    .edit-form textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        height: 60px;
+        resize: none;
+    }
+    .edit-form .btn {
+        padding: 8px 15px;
+        background: #99180d;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        margin-top: 8px;
+    }
+    .edit-form .btn:hover {
+        background: #b32118;
     }
     .view-more-replies {
         color: #99180d;
@@ -363,6 +421,7 @@
         .reaction-bar { gap: 15px; }
         .replies { padding-left: 15px; }
         .reply-form textarea { height: 60px; }
+        .reply-actions { position: static; margin-top: 5px; }
     }
 </style>
 
@@ -438,7 +497,23 @@
                 {% for reply in feedback.replies.all %}
                 <div class="reply-item {% if forloop.counter > 5 %}hidden{% endif %}" data-reply-id="{{ reply.id }}">
                     <strong>{{ reply.user.username }}</strong> - <span>{% localtime on %}{{ reply.created_at|date:"M d, Y H:i" }}{% endlocaltime %}</span>
-                    <p>{{ reply.content }}</p>
+                    <p class="reply-content">{{ reply.content }}</p>
+                    {% if request.user == reply.user %}
+                    <div class="reply-actions">
+                        <button class="edit-btn" onclick="editReply('{{ reply.id }}')"><i class="fas fa-edit"></i> Edit</button>
+                        <form method="POST" action="{% url 'delete_reply' reply.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                        </form>
+                    </div>
+                    <div class="edit-form" id="edit-form-{{ reply.id }}">
+                        <form method="POST" action="{% url 'edit_reply' reply.id %}">
+                            {% csrf_token %}
+                            <textarea name="content" required>{{ reply.content }}</textarea>
+                            <button type="submit" class="btn">Save</button>
+                        </form>
+                    </div>
+                    {% endif %}
                 </div>
                 {% endfor %}
                 {% if feedback.replies.count > 5 %}
@@ -485,7 +560,12 @@
         hiddenReplies.forEach(reply => {
             reply.classList.remove('hidden');
         });
-        viewMoreLink.style.display = 'none'; // Hide the "View More" link after showing all replies
+        viewMoreLink.style.display = 'none';
+    }
+
+    function editReply(replyId) {
+        const replyItem = document.querySelector(`[data-reply-id="${replyId}"]`);
+        replyItem.classList.toggle('edit-mode');
     }
 </script>
 {% endblock %}
