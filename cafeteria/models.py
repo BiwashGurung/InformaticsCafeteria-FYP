@@ -223,10 +223,37 @@ class Feedback(models.Model):
     tags = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_approved = models.BooleanField(default=False)
+    likes = models.ManyToManyField(User, related_name='liked_feedback', blank=True)
+    dislikes = models.ManyToManyField(User, related_name='disliked_feedback', blank=True)
 
     def __str__(self):
         return f"Feedback by {self.user.username}"
 
     class Meta:
+        # Custom table name in MySQL
+        db_table = 'cafeteria_feedback'
+        # Order by creation date, newest first
         ordering = ['-created_at']
-        db_table = 'cafeteria_feedback'        
+        # Ensure unique feedback per user/content combo (optional, uncomment if needed)
+        # unique_together = [['user', 'content']]
+        # Verbose name for admin interface
+        verbose_name = 'Feedback'
+        verbose_name_plural = 'Feedbacks'
+
+class Reply(models.Model):
+    feedback = models.ForeignKey(Feedback, on_delete=models.CASCADE, related_name='replies')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Reply by {self.user.username} on {self.feedback}"
+
+    class Meta:
+        
+        db_table = 'cafeteria_reply'
+        # Order by creation date, newest first
+        ordering = ['-created_at']
+        # Verbose name for admin interface
+        verbose_name = 'Reply'
+        verbose_name_plural = 'Replies'

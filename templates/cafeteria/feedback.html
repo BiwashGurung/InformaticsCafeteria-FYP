@@ -1,62 +1,379 @@
+<!-- cafeteria/templates/cafeteria/feedback.html -->
 {% extends 'base.html' %}
 {% load static %}
 
-
-    <link rel="stylesheet" href="{% static 'cafeteria_css/feedback.css' %}" />
-
-
 {% block content %}
+    <style>
+        .feedback-wrapper {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        }
+        .intro-section {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #99180d, #b32118);
+            color: #fff;
+            border-radius: 20px 20px 0 0;
+        }
+        .intro-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .intro-section p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .add-feedback-btn {
+            padding: 12px 30px;
+            background: #fff;
+            color: #99180d;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            margin-top: 20px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .add-feedback-btn:hover {
+            background: #b32118;
+            color: #fff;
+        }
+        .form-section {
+            padding: 30px 20px;
+            background: #f8f9fa;
+        }
+        .form-section h2 {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .feedback-form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        .feedback-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            height: 120px;
+            resize: none;
+        }
+        .feedback-form textarea:focus {
+            border-color: #99180d;
+            box-shadow: 0 0 8px rgba(153, 24, 13, 0.2);
+            outline: none;
+        }
+        .tags-section {
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .tags-section label {
+            font-weight: 600;
+            color: #555;
+        }
+        .tags-section .tag-option {
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            color: #2980b9;
+        }
+        .feedback-form .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: #99180d;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .feedback-form .btn-primary:hover {
+            background: #b32118;
+        }
+        .search-section {
+            padding: 20px;
+            text-align: center;
+        }
+        .search-section form {
+            display: inline-flex;
+            width: 100%;
+            max-width: 600px;
+        }
+        .search-section input {
+            flex-grow: 1;
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px 0 0 10px;
+            font-size: 1rem;
+        }
+        .search-section .btn-secondary {
+            padding: 12px 25px;
+            border-radius: 0 10px 10px 0;
+            background: #6c757d;
+            border: none;
+        }
+        .reviews-section {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+        .reviews-section h2 {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .feedback-item {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+        .feedback-item:hover {
+            transform: translateY(-3px);
+        }
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .feedback-header strong {
+            color: #99180d;
+            font-weight: 600;
+        }
+        .feedback-header span {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .feedback-content {
+            margin: 0 0 10px 0;
+            color: #555;
+            font-size: 1rem;
+        }
+        .feedback-item img {
+            max-width: 100%;
+            width: 180px;
+            border-radius: 8px;
+            margin: 5px 0;
+        }
+        .tags {
+            color: #2980b9;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        .reaction-bar {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .reaction-btn {
+            background: none;
+            border: none;
+            color: #6c757d;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .reaction-btn.liked { color: #28a745; }
+        .reaction-btn.disliked { color: #dc3545; }
+        .reaction-btn i { margin-right: 5px; }
+        .replies {
+            margin-top: 15px;
+            padding-left: 20px;
+            border-left: 2px solid #ddd;
+        }
+        .reply-item {
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .reply-item strong {
+            color: #555;
+            font-weight: 600;
+        }
+        .reply-form {
+            margin-top: 10px;
+        }
+        .reply-form textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            height: 60px;
+            resize: none;
+        }
+        .reply-form .btn {
+            padding: 8px 15px;
+            background: #99180d;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        .no-feedback {
+            text-align: center;
+            padding: 15px;
+            background: #fff;
+            border-radius: 10px;
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+        .spotlight {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px dashed #99180d;
+        }
+        .spotlight h3 {
+            color: #99180d;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .top-reviewer {
+            color: #f39c12;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        @media (max-width: 768px) {
+            .feedback-wrapper { margin: 20px 10px; padding: 15px; }
+            .intro-section h1 { font-size: 1.8rem; }
+            .intro-section p { font-size: 1rem; }
+            .add-feedback-btn { padding: 10px 20px; font-size: 1rem; }
+            .form-section, .reviews-section { padding: 15px; }
+            .feedback-item { padding: 10px; }
+            .feedback-header { flex-direction: column; align-items: flex-start; }
+            .feedback-item img { width: 100%; max-width: 120px; }
+            .reaction-bar { gap: 10px; }
+            .reply-form textarea { height: 50px; }
+        }
+    </style>
+
+
+
 <div class="feedback-wrapper">
-    <h2>Feedback Forum</h2>
-
-    <!-- Feedback Form -->
-    <div class="feedback-form">
-        <h3>Share Your Experience</h3>
-        {% if messages %}
-            {% for message in messages %}
-                <p class="{{ message.tags }}">{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <textarea name="content" rows="5" placeholder="Write your review here..." required></textarea>
-            <input type="file" name="image" accept="image/*">
-            <div class="tags-section">
-                <label>Tags:</label>
-                <input type="checkbox" name="tags" value="breakfast"> #breakfast
-                <input type="checkbox" name="tags" value="snacks"> #snacks
-                <input type="checkbox" name="tags" value="appetizer"> #appetizer
-                <input type="checkbox" name="tags" value="maincourse"> #maincourse
-                <input type="checkbox" name="tags" value="beverages"> #beverages
-                <input type="checkbox" name="tags" value="dessert"> #dessert
-            </div>
-            <button type="submit" class="btn btn-primary">Submit Feedback</button>
-        </form>
+    <!-- Intro Section -->
+    <div class="intro-section">
+        <h1>Join the Cafeteria Conversation</h1>
+        <p>Love our food? Got a suggestion? Share it here, react to others, and spark a chat—your feedback shapes our menu!</p>
+        <a href="#feedbackForm" class="add-feedback-btn" data-bs-toggle="collapse"><i class="fas fa-comment-dots me-2"></i>Share Feedback</a>
     </div>
 
-    <!-- Search Bar -->
-    <div class="search-bar">
-        <form method="GET">
-            <input type="text" name="q" value="{{ query }}" placeholder="Search by food name or category (e.g., #breakfast)">
-            <button type="submit" class="btn btn-secondary">Search</button>
-        </form>
-    </div>
-
-    <!-- Existing Feedbacks -->
-    <div class="feedback-list">
-        <h3>User Reviews</h3>
-        {% for feedback in feedbacks %}
-        <div class="feedback-item">
-            <p><strong>{{ feedback.user.username }}</strong> - {{ feedback.created_at|date:"Y-m-d H:i" }}</p>
-            <p>{{ feedback.content }}</p>
-            {% if feedback.image %}
-                <img src="{{ feedback.image.url }}" alt="Feedback Image" style="max-width: 200px;">
+    <!-- Form Section -->
+    <div class="form-section">
+        <h2>Your Voice Matters</h2>
+        <div id="feedbackForm" class="collapse feedback-form">
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="{% if message.tags == 'success' %}text-success{% else %}text-danger{% endif %}">{{ message }}</p>
+                {% endfor %}
             {% endif %}
-            <p class="tags">Tags: {{ feedback.tags|default:"None" }}</p>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <textarea name="content" placeholder="What’s on your mind?" required></textarea>
+                <input type="file" name="image" accept="image/*">
+                <div class="tags-section">
+                    <label>Tags:</label>
+                    <span class="tag-option"><input type="checkbox" name="tags" value="breakfast"> #breakfast</span>
+                    <span class="tag-option"><input type="checkbox" name="tags" value="snacks"> #snacks</span>
+                    <span class="tag-option"><input type="checkbox" name="tags" value="lunch"> #lunch</span>
+                    <span class="tag-option"><input type="checkbox" name="tags" value="dinner"> #dinner</span>
+                    <span class="tag-option"><input type="checkbox" name="tags" value="drinks"> #drinks</span>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-2"></i>Post</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <form method="GET">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search posts or tags (e.g., #snacks)">
+            <button type="submit" class="btn btn-secondary"><i class="fas fa-search me-2"></i>Search</button>
+        </form>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="reviews-section">
+        <h2>Community Buzz</h2>
+        {% for feedback in feedbacks %}
+        <div class="feedback-item {% if forloop.first %}spotlight{% endif %}">
+            <div class="feedback-header">
+                <strong>{{ feedback.user.username }}{% if feedback.user.username == top_reviewer %}<span class="top-reviewer"><i class="fas fa-crown"></i> Top Reviewer</span>{% endif %}</strong>
+                <span>{{ feedback.created_at|date:"M d, Y H:i" }}</span>
+            </div>
+            <p class="feedback-content">{{ feedback.content }}</p>
+            {% if feedback.image %}
+                <img src="{{ feedback.image.url }}" alt="Feedback Image">
+            {% endif %}
+            <p class="tags"><i class="fas fa-tags me-1"></i>Tags: {{ feedback.tags|default:"None" }}</p>
+            <div class="reaction-bar">
+                <button class="reaction-btn {% if request.user in feedback.likes.all %}liked{% endif %}" onclick="react('like', {{ feedback.id }})">
+                    <i class="fas fa-thumbs-up"></i>{{ feedback.likes.count }}
+                </button>
+                <button class="reaction-btn {% if request.user in feedback.dislikes.all %}disliked{% endif %}" onclick="react('dislike', {{ feedback.id }})">
+                    <i class="fas fa-thumbs-down"></i>{{ feedback.dislikes.count }}
+                </button>
+            </div>
+            <div class="replies">
+                {% for reply in feedback.replies.all %}
+                <div class="reply-item">
+                    <strong>{{ reply.user.username }}</strong> - <span style="color: #888;">{{ reply.created_at|date:"M d, H:i" }}</span>
+                    <p>{{ reply.content }}</p>
+                </div>
+                {% endfor %}
+                <div class="reply-form">
+                    <form method="POST" action="{% url 'add_reply' feedback.id %}">
+                        {% csrf_token %}
+                        <textarea name="content" placeholder="Add a reply..." required></textarea>
+                        <button type="submit" class="btn"><i class="fas fa-reply me-2"></i>Reply</button>
+                    </form>
+                </div>
+            </div>
         </div>
         {% empty %}
-        <p>No approved feedback yet.</p>
+        <p class="no-feedback"><i class="fas fa-comment-slash me-2"></i>No posts yet—start the buzz!</p>
         {% endfor %}
     </div>
 </div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<!-- Reaction Script -->
+<script>
+    function react(type, feedbackId) {
+        fetch(`/react/${feedbackId}/${type}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json()).then(data => {
+            if (data.success) {
+                location.reload(); // Refresh to update counts
+            }
+        });
+    }
+</script>
 {% endblock %}

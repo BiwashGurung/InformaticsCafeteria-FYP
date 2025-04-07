@@ -46,6 +46,8 @@ urlpatterns = [
 
     #Feedback
     path('feedback/', views.feedback_page, name='feedback_page'),
+    path('reply/<int:feedback_id>/', views.add_reply, name='add_reply'),
+    path('react/<int:feedback_id>/<str:reaction_type>/', views.react, name='react'),
     
     # Password reset views
     path('reset_password/', auth_views.PasswordResetView.as_view(), name='password_reset'),

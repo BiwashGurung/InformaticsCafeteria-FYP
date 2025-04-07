@@ -3,12 +3,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Profile, FoodItem, Cart, CartItem, OrderItem, Order , LostFound , GroupOrder, GroupOrderItem , Feedback
+from .models import Profile, FoodItem, Cart, CartItem, OrderItem, Order , LostFound , GroupOrder, GroupOrderItem , Feedback , Reply
 from django.db.models import Q
+from django.db import models
 import uuid
 import logging
 import requests
 import json
+from django.http import JsonResponse
 from datetime import datetime
 #importing pytz to handle timezone(nepali time)
 import pytz  
@@ -213,47 +215,58 @@ def cart_summary(request):
 
 @login_required
 def feedback_page(request):
-    try:
-        feedbacks = Feedback.objects.filter(is_approved=True)  
+    feedbacks = Feedback.objects.filter(is_approved=True).order_by('-created_at')
+    top_reviewer = User.objects.filter(feedback__is_approved=True).annotate(feedback_count=models.Count('feedback')).order_by('-feedback_count').first()
 
-        # Search functionality
-        query = request.GET.get('q', '')
-        if query:
-            feedbacks = feedbacks.filter(
-                Q(content__icontains=query) | Q(tags__icontains=query)
-            )
+    if request.method == "POST":
+        content = request.POST.get('content')
+        image = request.FILES.get('image')
+        tags = ','.join(request.POST.getlist('tags'))
+        if content:
+            Feedback.objects.create(user=request.user, content=content, image=image, tags=tags, is_approved=False)
+            messages.success(request, "Feedback submitted for approval!")
+        else:
+            messages.error(request, "Content cannot be empty.")
+        return redirect('feedback_page')
 
-        if request.method == "POST":
-            content = request.POST.get('content')
-            image = request.FILES.get('image')
-            tags = ','.join(request.POST.getlist('tags')) 
-            if not content:
-                messages.error(request, "Feedback content cannot be empty.")
-                return redirect('feedback_page')
+    context = {
+        'feedbacks': feedbacks,
+        'top_reviewer': top_reviewer.username if top_reviewer else None,
+        'query': request.GET.get('q', '')
+    }
+    return render(request, 'cafeteria/feedback.html', context)
 
-            try:
-                Feedback.objects.create(
-                    user=request.user,
-                    content=content,
-                    image=image,
-                    tags=tags,
-                    is_approved=False  
-                )
-                messages.success(request, "Your feedback has been submitted and is awaiting admin approval.")
-            except Exception as e:
-                logger.error(f"Error saving feedback: {str(e)}")
-                messages.error(request, "An error occurred while submitting your feedback. Please try again.")
-            return redirect('feedback_page')
+@login_required
+def add_reply(request, feedback_id):
+    if request.method == "POST":
+        feedback = Feedback.objects.get(id=feedback_id)
+        content = request.POST.get('content')
+        if content:
+            Reply.objects.create(feedback=feedback, user=request.user, content=content)
+            messages.success(request, "Reply added!")
+        else:
+            messages.error(request, "Reply cannot be empty.")
+    return redirect('feedback_page')
 
-        context = {
-            'feedbacks': feedbacks,
-            'query': query,
-        }
-        return render(request, 'cafeteria/feedback.html', context)
-    except Exception as e:
-        logger.error(f"Error in feedback_page: {str(e)}")
-        messages.error(request, "An unexpected error occurred. Please try again later.")
-        return redirect('home')
+@login_required
+def react(request, feedback_id, reaction_type):
+    feedback = Feedback.objects.get(id=feedback_id)
+    user = request.user
+    if reaction_type == 'like':
+        if user in feedback.dislikes.all():
+            feedback.dislikes.remove(user)
+        if user in feedback.likes.all():
+            feedback.likes.remove(user)
+        else:
+            feedback.likes.add(user)
+    elif reaction_type == 'dislike':
+        if user in feedback.likes.all():
+            feedback.likes.remove(user)
+        if user in feedback.dislikes.all():
+            feedback.dislikes.remove(user)
+        else:
+            feedback.dislikes.add(user)
+    return JsonResponse({'success': True})
 
 
 @login_required
