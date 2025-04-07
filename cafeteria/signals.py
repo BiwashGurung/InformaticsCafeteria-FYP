@@ -1,15 +1,14 @@
-# cafeteria/signals.py
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import Order
 
-# Helper function to build email content
+# Function to build the email content and generates the subject, plain text message, and HTML message for the email.
 def build_email_content(instance, is_creation=False):
     subject = f"Order #{instance.id} Status {'Created' if is_creation else 'Update'}"
     
-    # Plain text message
+  
     plain_message = f"Dear {instance.user.username},\n\n"
     if is_creation:
         plain_message += f"Your order #{instance.id} has been successfully placed with status 'Pending'.\n"
@@ -33,9 +32,9 @@ def build_email_content(instance, is_creation=False):
     )
     for item in instance.order_items.all():
         plain_message += f"  - {item.food_item.name} (x{item.quantity})\n"
-    plain_message += "\nThank you,\nInformatics Cafeteria Team"
+    plain_message += "\nThank you,\nInformatics Cafeteria "
 
-    # HTML message
+    
     html_message = f"""
     <html>
     <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
@@ -96,10 +95,11 @@ def build_email_content(instance, is_creation=False):
 # Signal for order updates
 @receiver(pre_save, sender=Order)
 def send_order_status_update_email(sender, instance, **kwargs):
-    if instance.pk:  # Only trigger on updates
+    if instance.pk: 
         try:
             old_order = Order.objects.get(pk=instance.pk)
-            if old_order.status != instance.status:  # Status changed
+            # Checking if the status has changed and if the order is being updated and the status has changed, send an email
+            if old_order.status != instance.status:  
                 subject, plain_message, html_message = build_email_content(instance, is_creation=False)
                 send_mail(
                     subject=subject,
@@ -115,7 +115,8 @@ def send_order_status_update_email(sender, instance, **kwargs):
 # Signal for order creation
 @receiver(post_save, sender=Order)
 def send_order_creation_email(sender, instance, created, **kwargs):
-    if created and instance.status == "Pending":  # Only trigger on creation with "Pending"
+     # Only sending the email for new orders with status 'Pending'
+    if created and instance.status == "Pending":
         subject, plain_message, html_message = build_email_content(instance, is_creation=True)
         send_mail(
             subject=subject,
