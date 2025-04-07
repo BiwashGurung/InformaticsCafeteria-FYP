@@ -84,7 +84,8 @@ def build_email_content(instance, is_creation=False):
             </table>
             <p style="margin-top: 20px;">Thank you,<br><strong>Informatics Cafeteria</strong></p>
             <footer style="font-size: 12px; color: #777; margin-top: 20px; text-align: center;">
-                Informatics Cafeteria | <a href="mailto:informaticscafetera@gmail.com" style="color: #2980b9;">Contact Us</a>
+                If you like the service and food, please consider leaving a review on our <a href="http://127.0.0.1:8000/feedback/" style="color: #2980b9;">Feedback Page</a><br>
+                Informatics Cafeteria  2025 &copy; All rights reserved. | <a href="mailto:informaticscafetera@gmail.com" style="color: #2980b9;">Contact Us</a>
             </footer>
         </div>
     </body>
