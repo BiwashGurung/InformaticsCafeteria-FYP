@@ -24,6 +24,8 @@
                     <th>Food Items</th>
                     <th>Total Price</th>
                     <th>Payment Method</th>
+                    <th>Pick Up Time </th>
+                    <th>Dine In  Time</th>
                     <th>Status</th>
                     <th>Remarks</th>
                     <th>Actions</th>
@@ -43,6 +45,8 @@
                     </td>
                     <td>{{ order.total_price }}</td>
                     <td>{{ order.get_payment_method_display }}</td>
+                    <td>{{ order.pickup_time }}</td>
+                    <td>{{ order.dine_in_time }}</td>
                     <td>
                         <form method="POST" action="{% url 'update_order_status' order.id %}">
                             {% csrf_token %}
