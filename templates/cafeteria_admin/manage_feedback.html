@@ -1,30 +1,230 @@
-<!-- cafeteria_admin/templates/cafeteria_admin/manage_feedback.html -->
 {% extends 'admin_base.html' %}
 {% load static %}
 
+{% block extra_css %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
+<style>
+    .dashboard-content {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    }
+    h2 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 30px;
+        text-align: center;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    h2 i {
+        color: #99180d;
+        margin-right: 10px;
+    }
+    .search-bar {
+        margin: 30px 0;
+        text-align: center;
+    }
+    .search-bar form {
+        display: inline-flex;
+        width: 100%;
+        max-width: 700px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .search-bar input {
+        flex-grow: 1;
+        padding: 12px 20px;
+        border: none;
+        font-size: 1rem;
+        border-radius: 10px 0 0 10px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .search-bar .btn {
+        padding: 12px 25px;
+        background: linear-gradient(135deg, #99180d, #b32118);
+        border: none;
+        border-radius: 0 10px 10px 0;
+        font-weight: 600;
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+    .search-bar .btn:hover {
+        background: linear-gradient(135deg, #b32118, #99180d);
+        transform: scale(1.02);
+    }
+    .table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 15px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .table thead th {
+        background: linear-gradient(135deg, #99180d, #b32118);
+        color: #fff;
+        padding: 15px;
+        font-weight: 600;
+        text-align: center;
+        border: none;
+    }
+    .table tbody tr {
+        background: #f9f9f9;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .table tbody tr:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+    .table td {
+        padding: 15px;
+        vertical-align: middle;
+        border: 1px solid #eee;
+        color: #555;
+    }
+    .table td img {
+        max-width: 120px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+    }
+    .table td img:hover {
+        transform: scale(1.05);
+    }
+    .btn {
+        padding: 8px 15px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .btn-success {
+        background: #28a745;
+        border: none;
+    }
+    .btn-success:hover {
+        background: #218838;
+        transform: scale(1.05);
+    }
+    .btn-danger {
+        background: #dc3545;
+        border: none;
+    }
+    .btn-danger:hover {
+        background: #c82333;
+        transform: scale(1.05);
+    }
+    .btn-warning {
+        background: #f39c12;
+        border: none;
+        color: #fff;
+    }
+    .btn-warning:hover {
+        background: #e08e0b;
+        transform: scale(1.05);
+    }
+    .replies-section {
+        padding: 15px;
+        background: #f1f1f1;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+    .replies-section .reply-item {
+        padding: 10px;
+        background: #fff;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        position: relative;
+    }
+    .replies-section .reply-item strong {
+        color: #99180d;
+        font-weight: 600;
+    }
+    .replies-section .reply-item span {
+        color: #888;
+        font-size: 0.9rem;
+    }
+    .replies-section .reply-actions {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        gap: 10px;
+    }
+    .edit-form {
+        display: none;
+        margin-top: 10px;
+    }
+    .edit-form textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        height: 60px;
+        resize: none;
+    }
+    .edit-form .btn {
+        margin-top: 8px;
+    }
+    .no-data {
+        text-align: center;
+        padding: 20px;
+        color: #6c757d;
+        font-size: 1.2rem;
+    }
+    .alert {
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    @media (max-width: 768px) {
+        .dashboard-content { margin: 20px 10px; padding: 20px; }
+        h2 { font-size: 1.8rem; }
+        .search-bar form { max-width: 100%; }
+        .table thead th { font-size: 0.9rem; padding: 10px; }
+        .table td { font-size: 0.9rem; padding: 10px; }
+        .table td img { max-width: 80px; }
+        .replies-section { padding: 10px; }
+        .reply-actions { position: static; margin-top: 5px; }
+    }
+</style>
+
 <div class="dashboard-content">
     <h2><i class="fas fa-comment-alt"></i> Manage Feedback</h2>
     {% if messages %}
-        {% for message in messages %}
-            <p class="{{ message.tags }}">{{ message }}</p>
-        {% endfor %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
     {% endif %}
 
     <!-- Search Bar -->
-    <div class="search-bar" style="margin: 20px 0;">
+    <div class="search-bar">
         <form method="GET">
-            <input type="text" name="q" value="{{ query }}" placeholder="Search by content or username" style="padding: 8px; width: 70%; border-radius: 5px; border: 1px solid #ddd;">
-            <button type="submit" class="btn" style="padding: 8px 15px; background: #99180d; color: #fff; border-radius: 5px;">Search</button>
+            <input type="text" name="q" value="{{ query }}" placeholder="Search by content, username, or reply">
+            <button type="submit" class="btn"><i class="fas fa-search me-2"></i>Search</button>
         </form>
     </div>
 
-    <table class="table table-bordered">
+    <table class="table">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>User</th>
-                <th>Order</th>
+       
                 <th>Content</th>
                 <th>Image</th>
                 <th>Tags</th>
@@ -37,11 +237,11 @@
             <tr>
                 <td>{{ feedback.id }}</td>
                 <td>{{ feedback.user.username }}</td>
-                <td>{{ feedback.order.id }}</td>
+            
                 <td>{{ feedback.content|truncatewords:10 }}</td>
                 <td>
                     {% if feedback.image %}
-                        <img src="{{ feedback.image.url }}" alt="Feedback Image" style="max-width: 100px;">
+                        <img src="{{ feedback.image.url }}" alt="Feedback Image">
                     {% else %}
                         None
                     {% endif %}
@@ -53,16 +253,63 @@
                         {% csrf_token %}
                         <input type="hidden" name="feedback_id" value="{{ feedback.id }}">
                         {% if not feedback.is_approved %}
-                            <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+                            <button type="submit" name="action" value="approve" class="btn btn-success"><i class="fas fa-check me-1"></i>Approve</button>
                         {% endif %}
-                        <button type="submit" name="action" value="delete" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                        <button type="submit" name="action" value="delete" class="btn btn-danger"><i class="fas fa-trash me-1"></i>Delete</button>
                     </form>
+                    <button class="btn btn-warning mt-2" type="button" data-bs-toggle="collapse" data-bs-target="#replies-{{ feedback.id }}">
+                        <i class="fas fa-comments me-1"></i>Replies ({{ feedback.replies.count }})
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8" class="p-0">
+                    <div class="collapse replies-section" id="replies-{{ feedback.id }}">
+                        {% for reply in feedback.replies.all %}
+                        <div class="reply-item" data-reply-id="{{ reply.id }}">
+                            <strong>{{ reply.user.username }}</strong> - <span>{{ reply.created_at|date:"M d, Y H:i" }}</span>
+                            <p class="reply-content">{{ reply.content }}</p>
+                            <div class="reply-actions">
+                                <button class="btn btn-warning btn-sm" onclick="editReply('{{ reply.id }}')"><i class="fas fa-edit"></i> Edit</button>
+                                <form method="POST" action="{% url 'admin_delete_reply' reply.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</button>
+                                </form>
+                            </div>
+                            <div class="edit-form" id="edit-form-{{ reply.id }}">
+                                <form method="POST" action="{% url 'admin_edit_reply' reply.id %}">
+                                    {% csrf_token %}
+                                    <textarea name="content" required>{{ reply.content }}</textarea>
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                </form>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="no-data">No replies yet.</p>
+                        {% endfor %}
+                    </div>
                 </td>
             </tr>
             {% empty %}
-            <tr><td colspan="8">No feedback yet.</td></tr>
+            <tr><td colspan="8" class="no-data">No feedback found.</td></tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script>
+    function editReply(replyId) {
+        const replyItem = document.querySelector(`[data-reply-id="${replyId}"]`);
+        replyItem.classList.toggle('edit-mode');
+        const editForm = document.getElementById(`edit-form-${replyId}`);
+        if (replyItem.classList.contains('edit-mode')) {
+            editForm.style.display = 'block';
+            replyItem.querySelector('.reply-content').style.display = 'none';
+        } else {
+            editForm.style.display = 'none';
+            replyItem.querySelector('.reply-content').style.display = 'block';
+        }
+    }
+</script>
 {% endblock %}

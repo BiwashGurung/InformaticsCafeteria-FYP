@@ -31,6 +31,8 @@ urlpatterns = [
     path('close_group_order/<int:group_id>/', views.close_group_order, name='close_group_order'),
     path('delete_group_order/<int:group_id>/', views.delete_group_order, name='delete_group_order'), 
     path('manage_feedback/', views.manage_feedback, name='manage_feedback'),
+    path('edit_reply/<int:reply_id>/', views.admin_edit_reply, name='admin_edit_reply'),
+    path('delete_reply/<int:reply_id>/', views.admin_delete_reply, name='admin_delete_reply')
 
 ]
   

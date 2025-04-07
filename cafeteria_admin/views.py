@@ -9,12 +9,13 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 # Importing Profile from cafeteria app
-from cafeteria.models import Profile  , FoodItem , OrderItem, Order , LostFound , GroupOrder, GroupOrderItem , Feedback
+from cafeteria.models import Profile  , FoodItem , OrderItem, Order , LostFound , GroupOrder, GroupOrderItem , Feedback , Reply
 from django.db.models import Q
 from django.db.models import Sum
+import logging
 
 
-
+logger = logging.getLogger(__name__)
 #Helper function to check whether the user is an admin or not
 def is_admin(user):
     return user.is_staff
@@ -344,8 +345,10 @@ def manage_feedback(request):
         query = request.GET.get('q', '')
         if query:
             feedbacks = Feedback.objects.filter(
-                Q(content__icontains=query) | Q(user__username__icontains=query)
-            ).order_by('-created_at')
+                Q(content__icontains=query) | 
+                Q(user__username__icontains=query) | 
+                Q(replies__content__icontains=query)
+            ).distinct().order_by('-created_at')
         else:
             feedbacks = Feedback.objects.all().order_by('-created_at')
 
@@ -365,5 +368,27 @@ def manage_feedback(request):
 
         return render(request, 'cafeteria_admin/manage_feedback.html', {'feedbacks': feedbacks, 'query': query})
     except Exception as e:
+        logger.error(f"Error in manage_feedback: {str(e)}")
         messages.error(request, "An error occurred while managing feedback.")
         return redirect('cafeteria_admin_dashboard')
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def admin_edit_reply(request, reply_id):
+    reply = get_object_or_404(Reply, id=reply_id)
+    if request.method == "POST":
+        content = request.POST.get('content')
+        if content:
+            reply.content = content
+            reply.save()
+            messages.success(request, f"Reply #{reply_id} updated successfully!")
+        else:
+            messages.error(request, "Reply content cannot be empty.")
+    return redirect('manage_feedback')
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def admin_delete_reply(request, reply_id):
+    reply = get_object_or_404(Reply, id=reply_id)
+    if request.method == "POST":
+        reply.delete()
+        messages.success(request, f"Reply #{reply_id} deleted successfully!")
+    return redirect('manage_feedback')
