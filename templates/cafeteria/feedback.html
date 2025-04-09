@@ -106,23 +106,44 @@
         margin: 20px 0;
         display: flex;
         flex-wrap: wrap;
-        gap: 20px;
+        gap: 10px;
         align-items: center;
     }
     .tags-section label {
         font-weight: 600;
         color: #555;
         font-size: 1.1rem;
+        margin-right: 15px;
     }
-    .tags-section .tag-option {
-        display: flex;
-        align-items: center;
-        font-size: 1rem;
-        color: #2980b9;
-        transition: color 0.3s ease;
+    .tag-option {
+        display: inline-block;
+        position: relative;
     }
-    .tags-section .tag-option:hover {
-        color: #1b5e90;
+    .tag-option input[type="checkbox"] {
+        display: none; /* Hide the default checkbox */
+    }
+    .tag-option label {
+        display: inline-block;
+        padding: 8px 15px;
+        background: #e9ecef;
+        color: #495057;
+        border-radius: 20px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        user-select: none;
+    }
+    .tag-option label:hover {
+        background: #dee2e6;
+        color: #343a40;
+    }
+    .tag-option input[type="checkbox"]:checked + label {
+        background: #99180d;
+        color: #fff;
+    }
+    .tag-option input[type="checkbox"]:checked + label:hover {
+        background: #b32118;
     }
     .feedback-form .btn-primary {
         width: 100%;
@@ -315,7 +336,7 @@
         display: block;
     }
     .edit-form {
-        display: none;
+        display: None;
     }
     .edit-form textarea {
         width: 100%;
@@ -338,7 +359,7 @@
     .edit-form .btn:hover {
         background: #b32118;
     }
-    .view-more-replies {
+    .view-more-replies, .show-more-subreplies, .show-less-comments, .show-less-subreplies {
         color: #99180d;
         font-size: 0.95rem;
         font-weight: 600;
@@ -348,8 +369,11 @@
         display: block;
         margin-top: 10px;
     }
-    .view-more-replies:hover {
+    .view-more-replies:hover, .show-more-subreplies:hover, .show-less-comments:hover, .show-less-subreplies:hover {
         color: #b32118;
+    }
+    .show-less-comments, .show-less-subreplies {
+        display: none; /* Hidden by default */
     }
     .reply-form textarea, .subreply-form textarea {
         width: 100%;
@@ -494,6 +518,8 @@
         .reply-form textarea, .subreply-form textarea { height: 60px; }
         .reply-actions, .post-actions { position: static; margin-top: 5px; }
         .delete-popup { width: 80%; padding: 15px; }
+        .tags-section { gap: 8px; }
+        .tag-option label { padding: 6px 12px; font-size: 0.9rem; }
     }
 </style>
 
@@ -524,11 +550,26 @@
                 <input type="file" name="image" accept="image/*">
                 <div class="tags-section">
                     <label><i class="fas fa-tags me-2"></i>Tags:</label>
-                    <span class="tag-option"><input type="checkbox" name="tags" value="breakfast"> #breakfast</span>
-                    <span class="tag-option"><input type="checkbox" name="tags" value="snacks"> #snacks</span>
-                    <span class="tag-option"><input type="checkbox" name="tags" value="lunch"> #lunch</span>
-                    <span class="tag-option"><input type="checkbox" name="tags" value="dinner"> #dinner</span>
-                    <span class="tag-option"><input type="checkbox" name="tags" value="drinks"> #drinks</span>
+                    <div class="tag-option">
+                        <input type="checkbox" name="tags" value="breakfast" id="tag-breakfast">
+                        <label for="tag-breakfast">#breakfast</label>
+                    </div>
+                    <div class="tag-option">
+                        <input type="checkbox" name="tags" value="snacks" id="tag-snacks">
+                        <label for="tag-snacks">#snacks</label>
+                    </div>
+                    <div class="tag-option">
+                        <input type="checkbox" name="tags" value="lunch" id="tag-lunch">
+                        <label for="tag-lunch">#lunch</label>
+                    </div>
+                    <div class="tag-option">
+                        <input type="checkbox" name="tags" value="dinner" id="tag-dinner">
+                        <label for="tag-dinner">#dinner</label>
+                    </div>
+                    <div class="tag-option">
+                        <input type="checkbox" name="tags" value="drinks" id="tag-drinks">
+                        <label for="tag-drinks">#drinks</label>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-2"></i>Post</button>
             </form>
@@ -599,7 +640,7 @@
                     </div>
                     <!-- Nested Replies -->
                     {% for subreply in reply.subreplies.all %}
-                    <div class="reply-item level-2" data-reply-id="{{ subreply.id }}">
+                    <div class="reply-item level-2 {% if forloop.counter > 1 %}hidden{% endif %}" data-reply-id="{{ subreply.id }}">
                         <strong>{{ subreply.user.username }}</strong> - <span>{% localtime on %}{{ subreply.created_at|date:"M d, Y H:i" }}{% endlocaltime %}</span>
                         <p class="reply-content">{{ subreply.content }}</p>
                         {% if request.user == subreply.user %}
@@ -617,12 +658,23 @@
                         {% endif %}
                     </div>
                     {% endfor %}
+                    {% if reply.subreplies.count > 1 %}
+                    <span class="show-more-subreplies" onclick="showMoreSubreplies('{{ reply.id }}')">
+                        Show More Replies ({{ reply.subreplies.count|add:-1 }} more)
+                    </span>
+                    <span class="show-less-subreplies" onclick="showLessSubreplies('{{ reply.id }}')">
+                        Show Less Replies
+                    </span>
+                    {% endif %}
                 </div>
                 {% endif %}
                 {% endfor %}
                 {% if feedback.replies.count > 5 %}
-                <span class="view-more-replies" onclick="toggleReplies('{{ feedback.id }}')">
+                <span class="view-more-replies" onclick="showMoreReplies('{{ feedback.id }}')">
                     View More Replies ({{ feedback.replies.count|add:-5 }} more)
+                </span>
+                <span class="show-less-comments" onclick="showLessReplies('{{ feedback.id }}')">
+                    Show Less Comments
                 </span>
                 {% endif %}
                 <div class="reply-form">
@@ -667,15 +719,32 @@
         });
     }
 
-    function toggleReplies(feedbackId) {
+    function showMoreReplies(feedbackId) {
         const repliesContainer = document.getElementById(`replies-${feedbackId}`);
         const hiddenReplies = repliesContainer.querySelectorAll('.reply-item.hidden');
         const viewMoreLink = repliesContainer.querySelector('.view-more-replies');
+        const showLessLink = repliesContainer.querySelector('.show-less-comments');
 
         hiddenReplies.forEach(reply => {
             reply.classList.remove('hidden');
         });
         viewMoreLink.style.display = 'none';
+        showLessLink.style.display = 'block';
+    }
+
+    function showLessReplies(feedbackId) {
+        const repliesContainer = document.getElementById(`replies-${feedbackId}`);
+        const allReplies = repliesContainer.querySelectorAll('.reply-item');
+        const viewMoreLink = repliesContainer.querySelector('.view-more-replies');
+        const showLessLink = repliesContainer.querySelector('.show-less-comments');
+
+        allReplies.forEach((reply, index) => {
+            if (index >= 5) {
+                reply.classList.add('hidden');
+            }
+        });
+        viewMoreLink.style.display = 'block';
+        showLessLink.style.display = 'none';
     }
 
     function editReply(replyId) {
@@ -693,7 +762,6 @@
         const overlay = document.getElementById('popupOverlay');
         const form = document.getElementById('deleteForm');
         
-        // Set the form action based on type
         if (type === 'feedback') {
             form.action = `/delete_feedback/${id}/`;
         } else if (type === 'reply') {
@@ -709,6 +777,34 @@
         const overlay = document.getElementById('popupOverlay');
         popup.classList.remove('active');
         overlay.classList.remove('active');
+    }
+
+    function showMoreSubreplies(replyId) {
+        const replyItem = document.querySelector(`[data-reply-id="${replyId}"]`);
+        const hiddenSubreplies = replyItem.querySelectorAll('.reply-item.level-2.hidden');
+        const showMoreLink = replyItem.querySelector('.show-more-subreplies');
+        const showLessLink = replyItem.querySelector('.show-less-subreplies');
+
+        hiddenSubreplies.forEach(subreply => {
+            subreply.classList.remove('hidden');
+        });
+        showMoreLink.style.display = 'none';
+        showLessLink.style.display = 'block';
+    }
+
+    function showLessSubreplies(replyId) {
+        const replyItem = document.querySelector(`[data-reply-id="${replyId}"]`);
+        const allSubreplies = replyItem.querySelectorAll('.reply-item.level-2');
+        const showMoreLink = replyItem.querySelector('.show-more-subreplies');
+        const showLessLink = replyItem.querySelector('.show-less-subreplies');
+
+        allSubreplies.forEach((subreply, index) => {
+            if (index >= 1) {
+                subreply.classList.add('hidden');
+            }
+        });
+        showMoreLink.style.display = 'block';
+        showLessLink.style.display = 'none';
     }
 </script>
 {% endblock %}
