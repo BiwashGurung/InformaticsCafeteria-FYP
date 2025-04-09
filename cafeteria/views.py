@@ -239,13 +239,6 @@ def feedback_page(request):
             messages.error(request, "Content cannot be empty.")
         return redirect('feedback_page')
 
-    # Reset confirm_delete flag for all feedbacks and replies to False for display
-    for feedback in feedbacks:
-        feedback.confirm_delete = False
-    for feedback in feedbacks:
-        for reply in feedback.replies.all():
-            reply.confirm_delete = False
-
     context = {
         'feedbacks': feedbacks,
         'top_reviewer': top_reviewer['user__username'] if top_reviewer else None,
@@ -261,21 +254,8 @@ def delete_feedback(request, feedback_id):
         return redirect('feedback_page')
     
     if request.method == "POST":
-        if request.POST.get('confirm') == 'yes':
-            feedback.delete()
-            messages.success(request, "Your post has been deleted successfully!")
-            return redirect('feedback_page')
-        else:
-            messages.warning(request, "Are you sure you want to delete this post? Click 'Confirm Delete' to proceed.")
-            feedbacks = Feedback.objects.filter(is_approved=True).order_by('-created_at')
-            for f in feedbacks:
-                f.confirm_delete = (f.id == feedback.id)  # Set True only for the clicked feedback
-            context = {
-                'feedbacks': feedbacks,
-                'top_reviewer': Feedback.objects.filter(is_approved=True).values('user__username').annotate(count=models.Count('id')).order_by('-count').first()['user__username'] if Feedback.objects.filter(is_approved=True).exists() else None,
-                'query': request.GET.get('q', '')
-            }
-            return render(request, 'cafeteria/feedback.html', context)
+        feedback.delete()
+        messages.success(request, "Your post has been deleted successfully!")
     return redirect('feedback_page')
 
 @login_required
@@ -328,22 +308,8 @@ def delete_reply(request, reply_id):
         return redirect('feedback_page')
     
     if request.method == "POST":
-        if request.POST.get('confirm') == 'yes':
-            reply.delete()
-            messages.success(request, "Reply deleted successfully!")
-            return redirect('feedback_page')
-        else:
-            messages.warning(request, "Are you sure you want to delete this reply? Click 'Confirm Delete' to proceed.")
-            feedbacks = Feedback.objects.filter(is_approved=True).order_by('-created_at')
-            for feedback in feedbacks:
-                for r in feedback.replies.all():
-                    r.confirm_delete = (r.id == reply.id)  # Set True only for the clicked reply
-            context = {
-                'feedbacks': feedbacks,
-                'top_reviewer': Feedback.objects.filter(is_approved=True).values('user__username').annotate(count=models.Count('id')).order_by('-count').first()['user__username'] if Feedback.objects.filter(is_approved=True).exists() else None,
-                'query': request.GET.get('q', '')
-            }
-            return render(request, 'cafeteria/feedback.html', context)
+        reply.delete()
+        messages.success(request, "Reply deleted successfully!")
     return redirect('feedback_page')
 
 @login_required
