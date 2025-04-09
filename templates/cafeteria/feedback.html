@@ -120,7 +120,7 @@
         position: relative;
     }
     .tag-option input[type="checkbox"] {
-        display: none; /* Hide the default checkbox */
+        display: none; 
     }
     .tag-option label {
         display: inline-block;
@@ -373,7 +373,7 @@
         color: #b32118;
     }
     .show-less-comments, .show-less-subreplies {
-        display: none; /* Hidden by default */
+        display: none; 
     }
     .reply-form textarea, .subreply-form textarea {
         width: 100%;
@@ -502,25 +502,7 @@
     .delete-popup .confirm-delete-btn:hover {
         background: #b02a37;
     }
-    @media (max-width: 768px) {
-        .feedback-wrapper { margin: 20px 15px; padding: 20px; }
-        .intro-section { padding: 30px 15px; }
-        .intro-section h1 { font-size: 2rem; }
-        .intro-section p { font-size: 1.1rem; }
-        .add-feedback-btn { padding: 12px 25px; font-size: 1rem; }
-        .form-section, .reviews-section { padding: 20px 15px; }
-        .form-section h2, .reviews-section h2 { font-size: 1.6rem; }
-        .feedback-item { padding: 15px; }
-        .feedback-header { flex-direction: column; align-items: flex-start; gap: 5px; }
-        .feedback-item img { width: 100%; max-width: 160px; }
-        .reaction-bar { gap: 15px; }
-        .replies { padding-left: 15px; }
-        .reply-form textarea, .subreply-form textarea { height: 60px; }
-        .reply-actions, .post-actions { position: static; margin-top: 5px; }
-        .delete-popup { width: 80%; padding: 15px; }
-        .tags-section { gap: 8px; }
-        .tag-option label { padding: 6px 12px; font-size: 0.9rem; }
-    }
+  
 </style>
 
 <div class="feedback-wrapper">
@@ -591,15 +573,15 @@
         <div class="feedback-item">
             <div class="feedback-header">
                 <strong>{{ feedback.user.username }}{% if feedback.user.username == top_reviewer %}<span class="top-reviewer"><i class="fas fa-crown me-1"></i>Top Reviewer</span>{% endif %}</strong>
-                <span>{% localtime on %}{{ feedback.created_at|date:"M d, Y H:i" }}{% endlocaltime %}</span>
+                <span >{% localtime on %}{{ feedback.created_at|date:"M d, Y H:i" }}{% endlocaltime %}</span>
             </div>
-            <p class="feedback-content">{{ feedback.content }}</p>
             {% if feedback.image %}
-                <img src="{{ feedback.image.url }}" alt="Feedback Image">
+            <img src="{{ feedback.image.url }}" alt="Feedback Image">
             {% endif %}
             <p class="tags"><i class="fas fa-tags me-1"></i>Tags: {{ feedback.tags|default:"None" }}</p>
+            <p class="feedback-content">{{ feedback.content }}</p>
             {% if request.user == feedback.user %}
-            <div class="post-actions">
+            <div class="post-actions" style="margin-top: 15px;">
                 <button class="delete-btn" onclick="showDeletePopup('feedback', {{ feedback.id }})"><i class="fas fa-trash"></i> Delete Post</button>
             </div>
             {% endif %}
