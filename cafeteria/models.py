@@ -230,13 +230,8 @@ class Feedback(models.Model):
         return f"Feedback by {self.user.username}"
 
     class Meta:
-        # Custom table name in MySQL
         db_table = 'cafeteria_feedback'
-        # Order by creation date, newest first
         ordering = ['-created_at']
-        # Ensure unique feedback per user/content combo (optional, uncomment if needed)
-        # unique_together = [['user', 'content']]
-        # Verbose name for admin interface
         verbose_name = 'Feedback'
         verbose_name_plural = 'Feedbacks'
 
@@ -245,15 +240,13 @@ class Reply(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    parent_reply = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='subreplies')  # Added for nested replies
 
     def __str__(self):
         return f"Reply by {self.user.username} on {self.feedback}"
 
     class Meta:
-        
         db_table = 'cafeteria_reply'
-        # Order by creation date, newest first
-        ordering = ['-created_at']
-        # Verbose name for admin interface
+        ordering = ['created_at']  # Changed to oldest first for reply threading
         verbose_name = 'Reply'
         verbose_name_plural = 'Replies'

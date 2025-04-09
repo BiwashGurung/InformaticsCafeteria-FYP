@@ -46,10 +46,12 @@ urlpatterns = [
 
     #Feedback
     path('feedback/', views.feedback_page, name='feedback_page'),
+    path('delete_feedback/<int:feedback_id>/', views.delete_feedback, name='delete_feedback'),
     path('add_reply/<int:feedback_id>/', views.add_reply, name='add_reply'),
+    path('add_subreply/<int:reply_id>/', views.add_subreply, name='add_subreply'),
     path('edit_reply/<int:reply_id>/', views.edit_reply, name='edit_reply'),
     path('delete_reply/<int:reply_id>/', views.delete_reply, name='delete_reply'),
-    path('react/<int:feedback_id>/<str:reaction_type>/', views.react, name='react'),
+    path('react/<int:feedback_id>/<str:reaction_type>/', views.react, name='react'),    
     
     # Password reset views
     path('reset_password/', auth_views.PasswordResetView.as_view(), name='password_reset'),

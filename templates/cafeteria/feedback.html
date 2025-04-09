@@ -190,28 +190,11 @@
         border: 1px solid #eee;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
+        position: relative;
     }
     .feedback-item:hover {
         transform: translateY(-5px);
         box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
-    }
-    .spotlight {
-        background: #fff8f0;
-        border: 2px dashed #99180d;
-        box-shadow: 0 6px 20px rgba(153, 24, 13, 0.1);
-        position: relative;
-    }
-    .spotlight::before {
-        content: "Featured";
-        position: absolute;
-        top: -10px;
-        left: 20px;
-        background: #99180d;
-        color: #fff;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
     }
     .feedback-header {
         display: flex;
@@ -294,6 +277,10 @@
         font-weight: 600;
         font-size: 0.95rem;
     }
+    .reply-item.level-2 {
+        margin-left: 20px;
+        border-left: 2px dashed #ccc;
+    }
     .reply-actions {
         position: absolute;
         top: 12px;
@@ -301,7 +288,7 @@
         display: flex;
         gap: 10px;
     }
-    .reply-actions .edit-btn, .reply-actions .delete-btn {
+    .reply-actions .edit-btn, .reply-actions .delete-btn, .post-actions .delete-btn, .post-actions .confirm-btn {
         background: none;
         border: none;
         font-size: 0.9rem;
@@ -315,11 +302,17 @@
     .reply-actions .edit-btn:hover {
         color: #1b5e90;
     }
-    .reply-actions .delete-btn {
+    .reply-actions .delete-btn, .post-actions .delete-btn {
         color: #dc3545;
     }
-    .reply-actions .delete-btn:hover {
+    .reply-actions .delete-btn:hover, .post-actions .delete-btn:hover {
         color: #b02a37;
+    }
+    .post-actions .confirm-btn {
+        color: #99180d;
+    }
+    .post-actions .confirm-btn:hover {
+        color: #b32118;
     }
     .reply-item.edit-mode .reply-content {
         display: none;
@@ -364,7 +357,7 @@
     .view-more-replies:hover {
         color: #b32118;
     }
-    .reply-form textarea {
+    .reply-form textarea, .subreply-form textarea {
         width: 100%;
         padding: 10px;
         border: 1px solid #ddd;
@@ -374,12 +367,12 @@
         resize: none;
         transition: border-color 0.3s ease;
     }
-    .reply-form textarea:focus {
+    .reply-form textarea:focus, .subreply-form textarea:focus {
         border-color: #99180d;
         box-shadow: 0 0 8px rgba(153, 24, 13, 0.2);
         outline: none;
     }
-    .reply-form .btn {
+    .reply-form .btn, .subreply-form .btn {
         padding: 10px 20px;
         background: #99180d;
         color: #fff;
@@ -389,8 +382,29 @@
         margin-top: 10px;
         transition: background 0.3s ease;
     }
-    .reply-form .btn:hover {
+    .reply-form .btn:hover, .subreply-form .btn:hover {
         background: #b32118;
+    }
+    .subreply-toggle {
+        color: #2980b9;
+        font-size: 0.9rem;
+        cursor: pointer;
+        margin-top: 5px;
+        text-decoration: underline;
+    }
+    .subreply-toggle:hover {
+        color: #1b5e90;
+    }
+    .subreply-form {
+        display: none;
+        margin-top: 10px;
+    }
+    .post-actions {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        gap: 10px; /* Added gap for spacing between buttons */
     }
     .no-feedback {
         text-align: center;
@@ -420,8 +434,8 @@
         .feedback-item img { width: 100%; max-width: 160px; }
         .reaction-bar { gap: 15px; }
         .replies { padding-left: 15px; }
-        .reply-form textarea { height: 60px; }
-        .reply-actions { position: static; margin-top: 5px; }
+        .reply-form textarea, .subreply-form textarea { height: 60px; }
+        .reply-actions, .post-actions { position: static; margin-top: 5px; flex-direction: column; gap: 5px; }
     }
 </style>
 
@@ -440,7 +454,7 @@
             {% if messages %}
                 <div class="messages">
                     {% for message in messages %}
-                        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+                        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-warning{% endif %}">
                             {{ message }}
                         </div>
                     {% endfor %}
@@ -475,7 +489,7 @@
     <div class="reviews-section">
         <h2><i class="fas fa-users me-2"></i>Community Buzz</h2>
         {% for feedback in feedbacks %}
-        <div class="feedback-item {% if forloop.first %}spotlight{% endif %}">
+        <div class="feedback-item">
             <div class="feedback-header">
                 <strong>{{ feedback.user.username }}{% if feedback.user.username == top_reviewer %}<span class="top-reviewer"><i class="fas fa-crown me-1"></i>Top Reviewer</span>{% endif %}</strong>
                 <span>{% localtime on %}{{ feedback.created_at|date:"M d, Y H:i" }}{% endlocaltime %}</span>
@@ -485,6 +499,18 @@
                 <img src="{{ feedback.image.url }}" alt="Feedback Image">
             {% endif %}
             <p class="tags"><i class="fas fa-tags me-1"></i>Tags: {{ feedback.tags|default:"None" }}</p>
+            {% if request.user == feedback.user %}
+            <div class="post-actions">
+                <form method="POST" action="{% url 'delete_feedback' feedback.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-btn"><i class="fas fa-trash"></i> Delete Post</button>
+                    {% if feedback.confirm_delete %}
+                    <input type="hidden" name="confirm" value="yes">
+                    <button type="submit" class="confirm-btn"><i class="fas fa-check"></i> Confirm Delete</button>
+                    {% endif %}
+                </form>
+            </div>
+            {% endif %}
             <div class="reaction-bar">
                 <button class="reaction-btn {% if request.user in feedback.likes.all %}liked{% endif %}" onclick="react('like', {{ feedback.id }})">
                     <i class="fas fa-thumbs-up"></i>{{ feedback.likes.count }}
@@ -495,6 +521,7 @@
             </div>
             <div class="replies" id="replies-{{ feedback.id }}">
                 {% for reply in feedback.replies.all %}
+                {% if not reply.parent_reply %}
                 <div class="reply-item {% if forloop.counter > 5 %}hidden{% endif %}" data-reply-id="{{ reply.id }}">
                     <strong>{{ reply.user.username }}</strong> - <span>{% localtime on %}{{ reply.created_at|date:"M d, Y H:i" }}{% endlocaltime %}</span>
                     <p class="reply-content">{{ reply.content }}</p>
@@ -504,6 +531,10 @@
                         <form method="POST" action="{% url 'delete_reply' reply.id %}" style="display:inline;">
                             {% csrf_token %}
                             <button type="submit" class="delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                            {% if reply.confirm_delete %}
+                            <input type="hidden" name="confirm" value="yes">
+                            <button type="submit" class="confirm-btn"><i class="fas fa-check"></i> Confirm Delete</button>
+                            {% endif %}
                         </form>
                     </div>
                     <div class="edit-form" id="edit-form-{{ reply.id }}">
@@ -514,7 +545,43 @@
                         </form>
                     </div>
                     {% endif %}
+                    <span class="subreply-toggle" onclick="toggleSubreplyForm('{{ reply.id }}')">Reply</span>
+                    <div class="subreply-form" id="subreply-form-{{ reply.id }}">
+                        <form method="POST" action="{% url 'add_subreply' reply.id %}">
+                            {% csrf_token %}
+                            <textarea name="content" placeholder="Reply to this comment..." required></textarea>
+                            <button type="submit" class="btn"><i class="fas fa-reply me-2"></i>Reply</button>
+                        </form>
+                    </div>
+                    <!-- Nested Replies -->
+                    {% for subreply in reply.subreplies.all %}
+                    <div class="reply-item level-2" data-reply-id="{{ subreply.id }}">
+                        <strong>{{ subreply.user.username }}</strong> - <span>{% localtime on %}{{ subreply.created_at|date:"M d, Y H:i" }}{% endlocaltime %}</span>
+                        <p class="reply-content">{{ subreply.content }}</p>
+                        {% if request.user == subreply.user %}
+                        <div class="reply-actions">
+                            <button class="edit-btn" onclick="editReply('{{ subreply.id }}')"><i class="fas fa-edit"></i> Edit</button>
+                            <form method="POST" action="{% url 'delete_reply' subreply.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                                {% if subreply.confirm_delete %}
+                                <input type="hidden" name="confirm" value="yes">
+                                <button type="submit" class="confirm-btn"><i class="fas fa-check"></i> Confirm Delete</button>
+                                {% endif %}
+                            </form>
+                        </div>
+                        <div class="edit-form" id="edit-form-{{ subreply.id }}">
+                            <form method="POST" action="{% url 'edit_reply' subreply.id %}">
+                                {% csrf_token %}
+                                <textarea name="content" required>{{ subreply.content }}</textarea>
+                                <button type="submit" class="btn">Save</button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
                 </div>
+                {% endif %}
                 {% endfor %}
                 {% if feedback.replies.count > 5 %}
                 <span class="view-more-replies" onclick="toggleReplies('{{ feedback.id }}')">
@@ -566,6 +633,11 @@
     function editReply(replyId) {
         const replyItem = document.querySelector(`[data-reply-id="${replyId}"]`);
         replyItem.classList.toggle('edit-mode');
+    }
+
+    function toggleSubreplyForm(replyId) {
+        const subreplyForm = document.getElementById(`subreply-form-${replyId}`);
+        subreplyForm.style.display = subreplyForm.style.display === 'block' ? 'none' : 'block';
     }
 </script>
 {% endblock %}

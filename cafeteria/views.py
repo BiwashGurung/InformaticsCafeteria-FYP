@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+
+
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profile, FoodItem, Cart, CartItem, OrderItem, Order , LostFound , GroupOrder, GroupOrderItem , Feedback , Reply
@@ -215,7 +217,15 @@ def cart_summary(request):
 
 @login_required
 def feedback_page(request):
-    feedbacks = Feedback.objects.filter(is_approved=True).order_by('-created_at')
+    query = request.GET.get('q', '').strip()
+    if query:
+        feedbacks = Feedback.objects.filter(
+            Q(content__icontains=query) | Q(tags__icontains=query),
+            is_approved=True
+        ).order_by('-created_at')
+    else:
+        feedbacks = Feedback.objects.filter(is_approved=True).order_by('-created_at')
+
     top_reviewer = Feedback.objects.filter(is_approved=True).values('user__username').annotate(count=models.Count('id')).order_by('-count').first()
 
     if request.method == "POST":
@@ -229,20 +239,64 @@ def feedback_page(request):
             messages.error(request, "Content cannot be empty.")
         return redirect('feedback_page')
 
+    # Reset confirm_delete flag for all feedbacks and replies to False for display
+    for feedback in feedbacks:
+        feedback.confirm_delete = False
+    for feedback in feedbacks:
+        for reply in feedback.replies.all():
+            reply.confirm_delete = False
+
     context = {
         'feedbacks': feedbacks,
         'top_reviewer': top_reviewer['user__username'] if top_reviewer else None,
-        'query': request.GET.get('q', '')
+        'query': query
     }
     return render(request, 'cafeteria/feedback.html', context)
 
 @login_required
-def add_reply(request, feedback_id):
+def delete_feedback(request, feedback_id):
+    feedback = get_object_or_404(Feedback, id=feedback_id)
+    if request.user != feedback.user:
+        messages.error(request, "You can only delete your own posts.")
+        return redirect('feedback_page')
+    
     if request.method == "POST":
-        feedback = get_object_or_404(Feedback, id=feedback_id)
+        if request.POST.get('confirm') == 'yes':
+            feedback.delete()
+            messages.success(request, "Your post has been deleted successfully!")
+            return redirect('feedback_page')
+        else:
+            messages.warning(request, "Are you sure you want to delete this post? Click 'Confirm Delete' to proceed.")
+            feedbacks = Feedback.objects.filter(is_approved=True).order_by('-created_at')
+            for f in feedbacks:
+                f.confirm_delete = (f.id == feedback.id)  # Set True only for the clicked feedback
+            context = {
+                'feedbacks': feedbacks,
+                'top_reviewer': Feedback.objects.filter(is_approved=True).values('user__username').annotate(count=models.Count('id')).order_by('-count').first()['user__username'] if Feedback.objects.filter(is_approved=True).exists() else None,
+                'query': request.GET.get('q', '')
+            }
+            return render(request, 'cafeteria/feedback.html', context)
+    return redirect('feedback_page')
+
+@login_required
+def add_reply(request, feedback_id):
+    feedback = get_object_or_404(Feedback, id=feedback_id)
+    if request.method == "POST":
         content = request.POST.get('content')
         if content:
             Reply.objects.create(feedback=feedback, user=request.user, content=content)
+            messages.success(request, "Reply added!")
+        else:
+            messages.error(request, "Reply cannot be empty.")
+    return redirect('feedback_page')
+
+@login_required
+def add_subreply(request, reply_id):
+    parent_reply = get_object_or_404(Reply, id=reply_id)
+    if request.method == "POST":
+        content = request.POST.get('content')
+        if content:
+            Reply.objects.create(feedback=parent_reply.feedback, user=request.user, content=content, parent_reply=parent_reply)
             messages.success(request, "Reply added!")
         else:
             messages.error(request, "Reply cannot be empty.")
@@ -274,9 +328,22 @@ def delete_reply(request, reply_id):
         return redirect('feedback_page')
     
     if request.method == "POST":
-        reply.delete()
-        messages.success(request, "Reply deleted successfully!")
-        return redirect('feedback_page')
+        if request.POST.get('confirm') == 'yes':
+            reply.delete()
+            messages.success(request, "Reply deleted successfully!")
+            return redirect('feedback_page')
+        else:
+            messages.warning(request, "Are you sure you want to delete this reply? Click 'Confirm Delete' to proceed.")
+            feedbacks = Feedback.objects.filter(is_approved=True).order_by('-created_at')
+            for feedback in feedbacks:
+                for r in feedback.replies.all():
+                    r.confirm_delete = (r.id == reply.id)  # Set True only for the clicked reply
+            context = {
+                'feedbacks': feedbacks,
+                'top_reviewer': Feedback.objects.filter(is_approved=True).values('user__username').annotate(count=models.Count('id')).order_by('-count').first()['user__username'] if Feedback.objects.filter(is_approved=True).exists() else None,
+                'query': request.GET.get('q', '')
+            }
+            return render(request, 'cafeteria/feedback.html', context)
     return redirect('feedback_page')
 
 @login_required
