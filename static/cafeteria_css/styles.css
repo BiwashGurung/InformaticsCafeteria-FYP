@@ -247,12 +247,14 @@ margin-top: -1%;
     font-weight: 700;
     font-size: 62px;
     font-family: 'Poppins', sans-serif;
+    
 
 }
 .hero-text h1,
-.text p {
+.hero-text p {
 margin-bottom: 20px;
 font-family: 'Poppins', sans-serif;
+animation: text 3s 1;
 }
 
 /* Transparent button styles */
@@ -264,11 +266,30 @@ color: #fff !important;
 padding: 10px 20px;
 text-decoration: none;
 transition: background-color 0.2s ease-in;
+animation: text 3s 1;
+
 }
 
 .btn-transparent:hover {
 background-color: #111;
 border: 1px solid #99180d;
+}
+
+@keyframes text {
+    0%{
+        color:transparent;
+        margin-bottom: -40px;
+    }
+    30%{
+        /* color: transparent; */
+        letter-spacing: 10px;
+        margin-bottom: -40px;
+    }
+    85%{
+        /* color: transparent; */
+        letter-spacing: 5x;
+        margin-bottom: -40px;
+    }
 }
 
 /*************** About Banner  ************/
