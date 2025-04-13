@@ -5,9 +5,12 @@ from .models import EventPopup , FoodItem
 # handling EventPopup model data
 class EventPopupForm(forms.ModelForm):
     class Meta:
-        #Specifies the model for tthe form
         model = EventPopup
         fields = ['event_title', 'image', 'start_date', 'end_date']
+        widgets = {
+            'start_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'end_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
 
 #handeling FoodItem model daa
 class FoodItemForm(forms.ModelForm):

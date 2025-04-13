@@ -97,6 +97,26 @@ def view_event_history(request):
     return render(request, 'cafeteria_admin/view_event_history.html', {'events': events})
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def edit_event(request, event_id):
+    try:
+        event = get_object_or_404(EventPopup, event_id=event_id)
+        if request.method == 'POST':
+            form = EventPopupForm(request.POST, request.FILES, instance=event)
+            if form.is_valid():
+                form.save()
+                messages.success(request, f"Event '{event.event_title}' updated successfully!")
+                return redirect('view_event_history')
+            else:
+                messages.error(request, 'Error updating event. Please check the form.')
+        else:
+            form = EventPopupForm(instance=event)
+        return render(request, 'cafeteria_admin/edit_event.html', {'form': form, 'event': event})
+    except Exception as e:
+        logger.error(f"Error in edit_event: {str(e)}")
+        messages.error(request, "An error occurred while editing the event.")
+        return redirect('view_event_history')
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def delete_event(request, event_id):
     event = get_object_or_404(EventPopup, event_id=event_id)
     event.delete()

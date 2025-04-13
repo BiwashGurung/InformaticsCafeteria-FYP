@@ -683,7 +683,7 @@ def group_order_page(request):
                 messages.error(request, "Invalid or inactive group code.")
                 return redirect('group_order_page')
 
-    # Fetch active groups where the user is the leader or a participant
+    # Fetching the active groups where the user is the leader or a participant
     active_groups = GroupOrder.objects.filter(
         Q(leader=request.user) | Q(group_items__user=request.user),
         is_active=True
@@ -730,7 +730,7 @@ def group_order_detail(request, group_code):
             group.save()
 
             leader_cart, created = Cart.objects.get_or_create(user=group.leader)
-            leader_cart.cart_items.all().delete()  # Clear existing cart items
+            leader_cart.cart_items.all().delete()  
 
             for group_item in group.group_items.all():
                 CartItem.objects.create(
