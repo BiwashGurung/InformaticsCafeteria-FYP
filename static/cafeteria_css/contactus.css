@@ -1,4 +1,4 @@
-/* Her osection */
+/* Hero Section */
 .hero-section {
     height: calc(70vh - 64px);
     width: 100%;
@@ -7,11 +7,13 @@
         rgba(4, 9, 30, 0.7)
       ),
       url(../Images/canteen.jpg);
-    background-position: center;  
+    background-position: center;
     background-size: cover;
     position: relative;
     background-attachment: fixed;
   }
+  
+
   .text-box {
     width: 90%;
     color: #fff;
@@ -20,20 +22,51 @@
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
+    opacity: 0; 
+    animation: fadeInText 2s ease-out forwards; 
   }
-
+  
   .text-box h1 {
     font-size: 62px;
     font-family: 'Poppins', sans-serif;
+    opacity: 0; 
+    transform: translateY(30px); 
+    animation: slideUpText 1.5s ease-out forwards;
   }
-
+  
   .text-box p {
     margin: 10px 0 40px;
     font-size: 14px;
     color: #fff;
     font-family: 'Poppins', sans-serif;
-
+    opacity: 0;  
+    transform: translateY(30px); 
+    animation: slideUpText 1.5s ease-out 0.5s forwards; 
   }
+  
+  /*  for fading and sliding up text */
+  @keyframes fadeInText {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Slide-up effect */
+  @keyframes slideUpText {
+    from {
+      opacity: 0;
+      transform: translateY(30px); 
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0); 
+    }
+  }
+  
+
 
   
 /* Opening hour section */

@@ -266,7 +266,7 @@ color: #fff !important;
 padding: 10px 20px;
 text-decoration: none;
 transition: background-color 0.2s ease-in;
-animation: text 4s 1;
+animation: text 3s 1;
 
 }
 
@@ -282,12 +282,12 @@ border: 1px solid #99180d;
     }
     30%{
         /* color: transparent; */
-        letter-spacing: 10px;
+        letter-spacing: 5px;
         margin-bottom: -40px;
     }
     85%{
         /* color: transparent; */
-        letter-spacing: 5x;
+        letter-spacing: 2x;
         margin-bottom: -40px;
     }
 }
