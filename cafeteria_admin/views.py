@@ -5,17 +5,6 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from .models import EventPopup
 from .forms import EventPopupForm, FoodItemForm 
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-from io import BytesIO
-import base64
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
-from reportlab.lib.styles import getSampleStyleSheet
-import openpyxl
-from django.utils import timezone
 from datetime import datetime , timedelta
 from django.utils import timezone
 from django import forms
