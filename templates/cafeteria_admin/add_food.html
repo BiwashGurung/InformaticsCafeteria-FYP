@@ -1,40 +1,135 @@
 {% extends "admin_base.html" %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'admin_css/add_food.css' %}">
+{% endblock %}
+
 {% block content %}
-<link rel="stylesheet" href="{% static 'admin_css/add_food.css' %}">
 <div class="add-food-form">
     <h2>Add Food Item</h2>
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" id="add-food-form">
         {% csrf_token %}
-
-        <label for="id_name">Food Name:</label>
-        {{ form.name }}
-
-        <label for="id_category">Category:</label>
-        {{ form.category }}
-
-        <label for="id_description">Description:</label>
-        {{ form.description }}
-
-        <label for="id_price">Price (Rs.):</label>
-        {{ form.price }}
-
-        <label for="id_image">Upload Image:</label>
-        {{ form.image }}
-
-        <div class="checkbox-container">
-            <label for="id_is_in_stock">Is in Stock:</label>
+        <div class="mb-3">
+            <label for="id_name" class="form-label">Food Name:</label>
+            {{ form.name }}
+        </div>
+        <div class="mb-3">
+            <label for="id_category" class="form-label">Category:</label>
+            {{ form.category }}
+        </div>
+        <div class="mb-3">
+            <label for="id_description" class="form-label">Description:</label>
+            {{ form.description }}
+        </div>
+        <div class="mb-3">
+            <label for="id_price" class="form-label">Price (Rs.):</label>
+            {{ form.price }}
+        </div>
+        <div class="mb-3">
+            <label for="id_image" class="form-label">Upload Image:</label>
+            {{ form.image }}
+        </div>
+        <div class="mb-3 checkbox-container">
+            <label for="id_is_in_stock" class="form-label">Is in Stock:</label>
             <label class="switch">
                 <input type="checkbox" name="is_in_stock" id="id_is_in_stock" {% if form.is_in_stock.value %}checked{% endif %}>
                 <span class="slider round"></span>
             </label>
         </div>
-
-        <button type="submit">Add Food Item</button>
+        <button type="submit" class="btn btn-primary w-100">Add Food Item</button>
     </form>
     <a href="{% url 'manage_menu' %}" class="back-link">
         <i class="fa-solid fa-arrow-left"></i> Back to Manage Menu
     </a>
 </div>
+
+<style>
+    .add-food-form {
+        max-width: 500px;
+        margin: 30px auto;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-label {
+        display: block;
+        margin: 10px 0 5px;
+        font-weight: bold;
+        color: #555;
+    }
+    input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+    .btn-primary {
+        background: #99180d;
+        border: none;
+    }
+    .btn-primary:hover {
+        background: #b32118;
+    }
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        font-size: 16px;
+        text-decoration: none;
+        color: #99180d;
+        text-align: center;
+        width: 100%;
+    }
+    .back-link:hover {
+        color: #b32118;
+        text-decoration: underline;
+    }
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 20px;
+    }
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #ccc;
+        transition: 0.3s;
+        border-radius: 20px;
+    }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 2px;
+        bottom: 2px;
+        background: #fff;
+        transition: 0.3s;
+        border-radius: 50%;
+    }
+    input:checked + .slider {
+        background: #99180d;
+    }
+    input:checked + .slider:before {
+        transform: translateX(20px);
+    }
+</style>
 {% endblock %}

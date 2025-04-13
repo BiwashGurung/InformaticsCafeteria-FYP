@@ -12,9 +12,33 @@ class EventPopupForm(forms.ModelForm):
             'end_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
 
-#handeling FoodItem model daa
+#handeling FoodItem model data
 class FoodItemForm(forms.ModelForm):
+    CATEGORY_CHOICES = [
+        ('', 'Select a category'),  
+        ('BreakFast', 'BreakFast'),
+        ('Appetizer', 'Appetizer'),
+        ('Beverages', 'Beverages'),
+        ('Desserts', 'Desserts'),
+        ('Main Course', 'Main Course'),
+        ('Snacks', 'Snacks'),
+    ]
+
+    category = forms.ChoiceField(
+        choices=CATEGORY_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=True
+    )
+
     class Meta:
         model = FoodItem
-        # Specifies the fields to include in the form
-        fields = ['name', 'category', 'description', 'price', 'image', 'is_in_stock']        
+        fields = ['name', 'category', 'description', 'price', 'image', 'is_in_stock']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'is_in_stock': forms.CheckboxInput(),
+        }
+
+       
