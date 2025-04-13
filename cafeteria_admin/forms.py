@@ -40,7 +40,6 @@ class FoodItemForm(forms.ModelForm):
             'image': forms.FileInput(attrs={'class': 'form-control'}),
             'is_in_stock': forms.CheckboxInput(),
         }
-
         
 
        

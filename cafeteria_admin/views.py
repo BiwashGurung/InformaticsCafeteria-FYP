@@ -4,7 +4,18 @@ from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from .models import EventPopup
-from .forms import EventPopupForm, FoodItemForm
+from .forms import EventPopupForm, FoodItemForm , PaymentReportForm
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
+from reportlab.lib.styles import getSampleStyleSheet
+import openpyxl
+from django.utils import timezone
 from datetime import datetime , timedelta
 from django.utils import timezone
 from django import forms
@@ -425,7 +436,7 @@ class TopSellingForm(forms.Form):
         max_length=100,
         required=False,
         label='Food Name',
-        widget=forms.TextInput(attrs={'placeholder': 'e.g., Burger', 'class': 'form-control'})
+        widget=forms.TextInput(attrs={'placeholder': 'e.g., Momo', 'class': 'form-control'})
     )
     period = forms.ChoiceField(
         choices=[
@@ -529,3 +540,4 @@ def top_selling_food(request):
         logger.error(f"Error in top_selling_food: {str(e)}")
         messages.error(request, "An error occurred while loading top-selling items.")
         return render(request, 'cafeteria_admin/top_selling_food.html', {'form': form})
+        
