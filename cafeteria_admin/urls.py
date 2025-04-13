@@ -36,6 +36,7 @@ urlpatterns = [
     path('delete_reply/<int:reply_id>/', views.admin_delete_reply, name='admin_delete_reply'),
     path('top_selling_food/', views.top_selling_food, name='top_selling_food'),
     
+    
 
 ]
   

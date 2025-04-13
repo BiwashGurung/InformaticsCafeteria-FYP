@@ -41,4 +41,6 @@ class FoodItemForm(forms.ModelForm):
             'is_in_stock': forms.CheckboxInput(),
         }
 
+        
+
        
