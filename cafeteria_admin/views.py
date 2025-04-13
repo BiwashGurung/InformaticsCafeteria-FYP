@@ -142,7 +142,7 @@ def manage_users(request):
                 Profile.objects.filter(email__icontains=query)
     else:
         # If no search query, fetching all the users
-        users = Profile.objects.all()
+        users = Profile.objects.all().order_by('username')
 
     return render(request, 'cafeteria_admin/manage_users.html', {'users': users, 'query': query})
 
@@ -200,7 +200,7 @@ def manage_menu(request):
         food_items = FoodItem.objects.filter(name__icontains=query) | FoodItem.objects.filter(category__icontains=query)
     else:
          # If no search query, fetch all food items
-        food_items = FoodItem.objects.all()
+        food_items = FoodItem.objects.all().order_by('category')
 
     return render(request, 'cafeteria_admin/manage_menu.html', {'food_items': food_items, 'query': query})
 
