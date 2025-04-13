@@ -80,11 +80,11 @@
 
     <!-- Found Items Card Grid -->
     <section>
-        <h2 class="mb-5 text-center animate__animated animate__fadeIn" style="color: #99180d; font-size: 2.5rem;">Found Items</h2>
+        <h2 id="founditems" class="mb-5 text-center animate__animated animate__fadeIn" style="color: #99180d; font-size: 2.5rem;">Found Items</h2>
         {% if approved_items %}
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 {% for item in approved_items %}
-                    <div class="col">
+                    <div id="items" class="col">
                         <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; background: linear-gradient(135deg, #fff, #f9ecec); transition: transform 0.3s;">
                             {% if item.image %}
                                 <img src="{{ item.image.url }}" class="card-img-top w-100" alt="{{ item.item_name }}" style="height: 220px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px;">
@@ -121,10 +121,10 @@
     </section>
 
     <!--Recently Resolved Items -->
-    <section class="mt-5">
+    <section id="resolved-items" class="mt-5">
         <h2 class="mb-5 text-center animate__animated animate__fadeIn" style="color: #28a745; font-size: 2.5rem;">Recently Resolved Items</h2>
         {% if resolved_items %}
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div id="items" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 {% for item in resolved_items %}
                     <div class="col">
                         <div class="card h-100 shadow-sm border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; background: linear-gradient(135deg, #fff, #e6f4ea); transition: transform 0.3s;">
