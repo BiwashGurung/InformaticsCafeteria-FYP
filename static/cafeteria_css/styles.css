@@ -247,12 +247,12 @@ margin-top: -1%;
     font-weight: 700;
     font-size: 62px;
     font-family: 'Poppins', sans-serif;
-    
+animation: text 3s 1;
 
 }
-.hero-text h1,
 .hero-text p {
 margin-bottom: 20px;
+font-weight: 500;
 font-family: 'Poppins', sans-serif;
 animation: text 3s 1;
 }
@@ -266,7 +266,7 @@ color: #fff !important;
 padding: 10px 20px;
 text-decoration: none;
 transition: background-color 0.2s ease-in;
-animation: text 3s 1;
+animation: text 4s 1;
 
 }
 
@@ -278,7 +278,7 @@ border: 1px solid #99180d;
 @keyframes text {
     0%{
         color:transparent;
-        margin-bottom: -40px;
+        /* margin-bottom: -40px; */
     }
     30%{
         /* color: transparent; */
