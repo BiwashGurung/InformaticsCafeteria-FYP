@@ -5,7 +5,9 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from .models import EventPopup
 from .forms import EventPopupForm, FoodItemForm
-from datetime import datetime
+from datetime import datetime , timedelta
+from django.utils import timezone
+from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 # Importing Profile from cafeteria app
@@ -413,3 +415,117 @@ def admin_delete_reply(request, reply_id):
         reply.delete()
         messages.success(request, f"Reply #{reply_id} deleted successfully!")
     return redirect('manage_feedback')
+
+
+
+
+# Form for top-selling food filters
+class TopSellingForm(forms.Form):
+    food_name = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Food Name',
+        widget=forms.TextInput(attrs={'placeholder': 'e.g., Burger', 'class': 'form-control'})
+    )
+    period = forms.ChoiceField(
+        choices=[
+            ('month', 'Last Month'),
+            ('week', 'Last Week'),
+            ('year', 'Last Year'),
+            ('custom', 'Custom Range'),
+        ],
+        required=True,
+        label='Time Period',
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    start_date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        required=False,
+        label='Start Date'
+    )
+    end_date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        required=False,
+        label='End Date'
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        period = cleaned_data.get('period')
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+        if period == 'custom':
+            if not (start_date and end_date):
+                raise forms.ValidationError('Start and end dates are required for custom range.')
+            if end_date < start_date:
+                raise forms.ValidationError('End date must be after start date.')
+        return cleaned_data
+
+# Top-Selling Food Tracking
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def top_selling_food(request):
+    try:
+        # Default: last 30 days
+        default_end = timezone.now().date()
+        default_start = default_end - timedelta(days=30)
+        initial_data = {'period': 'month', 'start_date': default_start, 'end_date': default_end}
+        form = TopSellingForm(request.GET or initial_data)
+
+        top_items = []
+        total_sales = 0
+        selected_period = 'month'
+        food_name = ''
+
+        if form.is_valid():
+            food_name = form.cleaned_data['food_name'].strip()
+            period = form.cleaned_data['period']
+            selected_period = period
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+
+            # Set date range
+            if period == 'week':
+                start_date = default_end - timedelta(days=7)
+                end_date = default_end
+            elif period == 'month':
+                start_date = default_end - timedelta(days=30)
+                end_date = default_end
+            elif period == 'year':
+                start_date = default_end - timedelta(days=365)
+                end_date = default_end
+
+            # Convert to timezone-aware datetimes
+            start_datetime = timezone.make_aware(datetime.combine(start_date, datetime.min.time()))
+            end_datetime = timezone.make_aware(datetime.combine(end_date, datetime.max.time()))
+
+            # Build query
+            query = OrderItem.objects.filter(
+                order__order_date__range=[start_datetime, end_datetime]
+            )
+            if food_name:
+                query = query.filter(food_item__name__icontains=food_name)
+
+            logger.debug(f"Querying OrderItem for {food_name or 'all items'}, {start_datetime} to {end_datetime}")
+            top_items = query.values(
+                'food_item__name', 'food_item__category'
+            ).annotate(
+                total_quantity=Sum('quantity'),
+                total_revenue=Sum('price')
+            ).order_by('-total_quantity')[:10]
+            logger.debug(f"Top items: {list(top_items)}")
+            total_sales = sum(item['total_revenue'] for item in top_items) or 0
+
+        context = {
+            'form': form,
+            'top_items': top_items,
+            'total_sales': total_sales,
+            'selected_period': selected_period,
+            'food_name': food_name,
+            'start_date': start_date if form.is_valid() else default_start,
+            'end_date': end_date if form.is_valid() else default_end,
+        }
+        return render(request, 'cafeteria_admin/top_selling_food.html', context)
+    except Exception as e:
+        logger.error(f"Error in top_selling_food: {str(e)}")
+        messages.error(request, "An error occurred while loading top-selling items.")
+        return render(request, 'cafeteria_admin/top_selling_food.html', {'form': form})

@@ -463,7 +463,7 @@ def order_history(request):
     return render(request, 'cafeteria/order.html', context)
 
 # cafeteria/context_processors.py
-from .models import Order
+
 
 def canteen_load(request):
     pending_orders = Order.objects.filter(status__in=["Pending", "Preparing"]).count()
