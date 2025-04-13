@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from .models import EventPopup
-from .forms import EventPopupForm, FoodItemForm , PaymentReportForm
+from .forms import EventPopupForm, FoodItemForm 
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
