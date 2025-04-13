@@ -247,6 +247,6 @@ class Reply(models.Model):
 
     class Meta:
         db_table = 'cafeteria_reply'
-        ordering = ['created_at']  # Changed to oldest first for reply threading
+        ordering = ['created_at']  
         verbose_name = 'Reply'
         verbose_name_plural = 'Replies'

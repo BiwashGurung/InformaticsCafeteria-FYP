@@ -9,7 +9,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 # Importing Profile from cafeteria app
-from cafeteria.models import Profile  , FoodItem , OrderItem, Order , LostFound , GroupOrder, GroupOrderItem , Feedback , Reply
+from cafeteria.models import Profile  , FoodItem , OrderItem, Order , LostFound , GroupOrder, Feedback , Reply
 from django.db.models import Q
 from django.db.models import Sum
 import logging
@@ -92,9 +92,10 @@ def show_popup(request):
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def view_event_history(request):
-    #Fetching all events from the database
-    events = EventPopup.objects.all() 
+    # Fetching all events ordered by newest first
+    events = EventPopup.objects.all().order_by('-start_date')  
     return render(request, 'cafeteria_admin/view_event_history.html', {'events': events})
+
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def edit_event(request, event_id):
