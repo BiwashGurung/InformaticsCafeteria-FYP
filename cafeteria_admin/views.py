@@ -41,7 +41,7 @@ def cafeteria_admin_login(request):
 def cafeteria_admin_dashboard(request):
     # Counting the total number of users
     total_users = Profile.objects.count()  
-    total_orders = FoodItem.objects.count()
+    total_orders = Order.objects.count()
     order_items = OrderItem.objects.count()
     pending_orders = Order.objects.filter(status='Pending').select_related('user').order_by('-order_date')[:5]
     total_revenue = OrderItem.objects.aggregate(total=Sum('price'))['total'] or 0
