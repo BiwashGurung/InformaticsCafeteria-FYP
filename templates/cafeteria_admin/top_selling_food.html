@@ -1,5 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "admin_base.html" %}
+{% load static %}
+
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,7 +50,7 @@
         .form-label { font-weight: 500; }
     </style>
 </head>
-<body>
+
     <div class="dashboard-content">
         <h2><i class="fas fa-chart-line"></i> Top-Selling Food Items</h2>
         {% if messages %}
@@ -109,7 +111,7 @@
                         <th>Food Item</th>
                         <th>Category</th>
                         <th>Total Quantity Sold</th>
-                        <th>Total Revenue ($)</th>
+                        <th>Total Revenue (Rs.)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -123,7 +125,7 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <p class="text-end"><strong>Total Sales:</strong> ${{ total_sales|floatformat:2 }}</p>
+            <p class="text-end"><strong>Total Sales:</strong> Rs.{{ total_sales|floatformat:2 }}</p>
         {% else %}
             <p class="text-center">
                 No sales data available
@@ -152,5 +154,4 @@
         }
         toggleDateFields();
     </script>
-</body>
-</html>
+    {% endblock %}
