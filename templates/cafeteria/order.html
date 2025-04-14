@@ -2,16 +2,17 @@
 {% load static %}
 
 {% block content %}
-<title> Order History - Informatics Cafeteria</title>
+<title>Order History - Informatics Cafeteria</title>
 
 <style>
     .orders-container {
         max-width: 1200px;
-
         margin: 0 auto;
-        padding: 50px 20px;
+        padding: 40px 20px;
         background: linear-gradient(135deg, #f9f9f9, #ffffff);
         min-height: 100vh;
+  
+        
     }
     .orders-title {
         font-size: 2.5rem;
@@ -22,13 +23,37 @@
         text-transform: uppercase;
         letter-spacing: 1px;
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.5s ease-in;
+        font-family: 'Poppins', sans-serif;
+    }
+    .queue-info {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        position: sticky;
+        top:87px;
+        z-index: 10;
+        animation: slideIn 0.5s ease-out;
+    }
+    .queue-position {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #99180d;
+    }
+    .eta {
+        font-size: 1.25rem;
+        color: #555;
+        margin-top: 10px;
     }
     .orders-table {
         background: #fff;
         border-radius: 12px;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-        margin-bottom: 40px;
         overflow: hidden;
+        margin-bottom: 40px;
     }
     .orders-table th {
         background: linear-gradient(to right, #99180d, #b32118);
@@ -50,49 +75,63 @@
     .orders-table tr:hover {
         background: #f9fafb;
     }
-    .item-list ,{
+    .item-list {
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        padding: 5px 0;
+        gap: 10px;
+    }
+    .item-entry {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
     }
     .item-name {
         color: #333;
         font-size: 0.95rem;
         font-weight: 600;
-        margin-bottom: 5px;
     }
     .item-quantity {
         background: #99180d;
         color: #fff;
-
+        padding: 4px 10px;
         border-radius: 12px;
-        font-weight: 500;
         font-size: 0.9rem;
+        font-weight: 500;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-
-        margin-bottom: 25%;
+    }
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 500;
     }
     .status-pending {
-        color: #ff9800;
-        font-weight: 600;
+        background: #ff9800;
+        color: #fff;
+    }
+    .status-preparing{
+        background: #007bff;
+        color: #fff;
     }
     .status-completed {
-        color: #28a745;
-        font-weight: 600;
+        background: #28a745;
+        color: #fff;
     }
     .status-cancelled {
-        color: #dc3545;
-        font-weight: 600;
+        background: #dc3545;
+        color: #fff;
     }
     .no-orders {
         text-align: center;
-        padding: 30px;
-        background: #f8f9fa;
+        padding: 40px;
+        background: #fff;
         border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         color: #6c757d;
-        font-size: 1.2rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        font-size: 1.25rem;
+        margin-bottom: 40px;
+        animation: fadeIn 0.5s ease-in;
     }
     .no-orders a {
         color: #99180d;
@@ -103,76 +142,160 @@
     .no-orders a:hover {
         color: #b32118;
     }
-
-    .queue-info {
-        text-align: center;
-        padding: 20px;
+    .btn-reorder {
+        background: #99180d;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .btn-reorder:hover {
+        background: #b32118;
+        transform: scale(1.05);
+    }
+    .order-card {
         background: #fff;
         border-radius: 12px;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-        margin-bottom: 40px;
+        margin-bottom: 20px;
+        padding: 15px;
+        animation: fadeIn 0.5s ease-in;
     }
-    .queue-position {
-        font-size: 2rem;
-        font-weight: 600;
-        color: #99180d;
+    .order-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        padding: 10px;
+        background: #f9fafb;
+        border-radius: 8px;
     }
-    .eta {
-        font-size: 1.5rem;
-        color: #555;
-    @media (max-width: 992px) {
-        .orders-table th, .orders-table td {
-            font-size: 0.9rem;
-            padding: 12px;
+    .order-card-body {
+        padding: 15px;
+        display: none;
+    }
+    .order-card-body.show {
+        display: block;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    @keyframes slideIn {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1;  }
+    }
+
+    /* Desktop */
+    @media (min-width: 992px) {
+        .orders-table {
+            display: table;
         }
+        .order-card {
+            display: none;
+        }
+    }
+
+    /* Tablet */
+    @media (max-width: 991px) {
         .orders-title {
             font-size: 2.2rem;
         }
+        .queue-position {
+            font-size: 1.8rem;
+        }
+        .eta {
+            font-size: 1.2rem;
+        }
+        .orders-table th, .orders-table td {
+            font-size: 0.95rem;
+            padding: 12px;
+        }
         .item-name, .item-quantity {
             font-size: 0.9rem;
         }
-        .item-quantity {
-            padding: 3px 8px;
+        .btn-reorder {
+            font-size: 0.85rem;
+            padding: 6px 12px;
         }
     }
-    @media (max-width: 768px) {
+
+    /* Mobile */
+    @media (max-width: 767px) {
         .orders-container {
             padding: 30px 15px;
-        }
-        .orders-table th, .orders-table td {
-            font-size: 0.85rem;
-            padding: 10px;
-        }
-        .orders-title {
-            font-size: 2rem;
-        }
-        .item-name, .item-quantity {
-            font-size: 0.85rem;
-        }
-    }
-    @media (max-width: 576px) {
-        .orders-table {
-            font-size: 0.8rem;
-        }
-        .orders-table th, .orders-table td {
-            padding: 8px;
         }
         .orders-title {
             font-size: 1.8rem;
         }
+        .queue-info {
+            padding: 15px;
+        }
+        .queue-position {
+            font-size: 1.5rem;
+        }
+        .eta {
+            font-size: 1rem;
+        }
+        .orders-table {
+            display: none;
+        }
+        .order-card {
+            display: block;
+        }
+        .order-card-header {
+            font-size: 1rem;
+        }
+        .order-card-body {
+            font-size: 0.9rem;
+        }
+        .item-name, .item-quantity {
+            font-size: 0.85rem;
+        }
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+        }
+        .btn-reorder {
+            font-size: 0.8rem;
+            padding: 6px 12px;
+            width: 100%;
+        }
+    }
+
+    /* Small Mobile */
+    @media (max-width: 576px) {
+        .orders-container {
+            padding: 20px 10px;
+        }
+        .orders-title {
+            font-size: 1.6rem;
+        }
+        .queue-position {
+            font-size: 1.4rem;
+        }
+        .eta {
+            font-size: 0.9rem;
+        }
+        .order-card-header {
+            font-size: 0.9rem;
+        }
+        .order-card-body {
+            font-size: 0.85rem;
+        }
         .item-name, .item-quantity {
             font-size: 0.8rem;
         }
-        .item-quantity {
-            padding: 2px 6px;
+        .status-badge {
+            font-size: 0.75rem;
         }
     }
 </style>
 
-
-
-<div class="container mt-5 orders-container">
-    <h2 class="orders-title">{{ user.username }}, Your Order Details</h2>
+<div class="container orders-container">
+    <h2 class="orders-title">{{ user.username }}'s Order History</h2>
 
     {% if queue_info.queue_position %}
     <div class="queue-info">
@@ -182,20 +305,21 @@
     {% endif %}
 
     {% if orders %}
-    <table class="table table-bordered mt-3 orders-table">
+    <!-- Desktop Table -->
+    <table class="table orders-table">
         <thead>
             <tr>
                 <th>Order ID</th>
-                <th>Name</th>
-                <th>Quantity</th>
+                <th>Items</th>
                 <th>Price</th>
-                <th>Order Status</th>
+                <th>Status</th>
                 <th>Date</th>
-                <th>Pickup Time</th>
-                <th>Dine-in Time</th>
+                <th>Pickup</th>
+                <th>Dine-in</th>
                 <th>Group Code</th>
-                <th>Payment Method</th>
+                <th>Payment</th>
                 <th>Remarks</th>
+                {% comment %} <th>Action</th> {% endcomment %}
             </tr>
         </thead>
         <tbody>
@@ -204,32 +328,79 @@
                 <td>{{ order.id }}</td>
                 <td class="item-list">
                     {% for item in order.order_items.all %}
-                    <div class="item-name">{{ item.food_item.name }}</div>
-                    {% endfor %}
-                </td>
-                <td class="item-list" >
-                    {% for item in order.order_items.all %}
-                    <div class="item-quantity">{{ item.quantity }}</div>
+                    <div class="item-entry">
+                        <span class="item-name">{{ item.food_item.name }}</span>
+                        <span class="item-quantity">x{{ item.quantity }}</span>
+                    </div>
                     {% endfor %}
                 </td>
                 <td>Rs. {{ order.total_price|floatformat:2 }}</td>
-                <td class="{% if order.status == 'Pending' %}status-pending{% elif order.status == 'Completed' %}status-completed{% else %}status-cancelled{% endif %}">
-                    {{ order.status }}
+                <td>
+                    <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span>
                 </td>
                 <td>{{ order.order_date|date:"Y-m-d" }}</td>
                 <td>{{ order.pickup_time|default:'N/A' }}</td>
                 <td>{{ order.dine_in_time|default:'N/A' }}</td>
                 <td>{{ order.group_code|default:'N/A' }}</td>
-                <td>{{ order.payment_method }}</td>
+                <td>{{ order.get_payment_method_display }}</td>
                 <td>{{ order.remarks|default:'None' }}</td>
+                {% comment %} <td>
+                    {% if order.status == 'Completed' %}
+                    <a href="{% url 'orderonline' %}" class="btn-reorder">Reorder</a>
+                    {% endif %}
+                </td> {% endcomment %}
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Mobile Cards -->
+    {% for order in orders %}
+    <div class="order-card">
+        <div class="order-card-header" data-bs-toggle="collapse" data-bs-target="#order-{{ order.id }}">
+            <span>Order #{{ order.id }} - {{ order.status }}</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div id="order-{{ order.id }}" class="order-card-body collapse">
+            <p><strong>Items:</strong></p>
+            <div class="item-list">
+                {% for item in order.order_items.all %}
+                <div class="item-entry">
+                    <span class="item-name">{{ item.food_item.name }}</span>
+                    <span class="item-quantity">x{{ item.quantity }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <p><strong>Price:</strong> Rs. {{ order.total_price|floatformat:2 }}</p>
+            <p><strong>Status:</strong> <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span></p>
+            <p><strong>Date:</strong> {{ order.order_date|date:"Y-m-d" }}</p>
+            <p><strong>Pickup Time:</strong> {{ order.pickup_time|default:'N/A' }}</p>
+            <p><strong>Dine-in Time:</strong> {{ order.dine_in_time|default:'N/A' }}</p>
+            <p><strong>Group Code:</strong> {{ order.group_code|default:'N/A' }}</p>
+            <p><strong>Payment:</strong> {{ order.get_payment_method_display }}</p>
+            <p><strong>Remarks:</strong> {{ order.remarks|default:'None' }}</p>
+            {% if order.status == 'Completed' %}
+            <a href="{% url 'orderonline' %}" class="btn-reorder">Reorder</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
     {% else %}
     <div class="no-orders">
-        You have no orders yet. <a href="{% url 'orderonline' %}">Place an order now!</a>
+        <p>You haven't placed any orders yet.</p>
+        <a href="{% url 'orderonline' %}" class="btn btn-reorder">Place an Order Now!</a>
     </div>
     {% endif %}
 </div>
+
+<script>
+    // Toggle chevron icon on collapse
+    document.querySelectorAll('.order-card-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const icon = header.querySelector('i');
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+        });
+    });
+</script>
 {% endblock %}
