@@ -30,12 +30,12 @@
     display: flex;
     align-items: center;
     padding-left: 10px;
-    border-left: 4px solid #4a90e2;
+    border-left: 4px solid  #99180d;
 }
 
 .manage-menu-wrapper h2 i {
     margin-right: 10px;
-    color: #4a90e2;
+    color:  #99180d;
     font-size: 1.8rem;
 }
 
@@ -66,7 +66,7 @@
 }
 
 .manage-menu-wrapper .search-form input[type="text"]:focus {
-    border-color: #4a90e2;
+    border-color:  #99180d;
     box-shadow: 0 0 8px rgba(74, 144, 226, 0.2);
     outline: none;
 }
@@ -78,7 +78,7 @@
 
 .manage-menu-wrapper .search-form button {
     padding: 10px 20px;
-    background: linear-gradient(135deg, #4a90e2, #3182ce);
+    background-color:  #99180d;
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -96,7 +96,7 @@
 }
 
 .manage-menu-wrapper .search-form button:hover {
-    background: linear-gradient(135deg, #3182ce, #4a90e2);
+    background-color:  #99180d;
     transform: translateY(-2px);
 }
 
@@ -150,7 +150,7 @@
 
 
 .manage-menu-wrapper thead {
-    background: linear-gradient(135deg, #4a90e2, #3182ce);
+    background-color:  #99180d;
     color: #fff;
 }
 

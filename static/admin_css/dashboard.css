@@ -50,14 +50,12 @@ header h1 {
 }
 
 
-
-
 nav {
     position: fixed;
     top: 70px;
     left: 0;
     width: 250px;
-    height: calc(100vh - 70px);
+    height: calc(100vh - 70px) !important;
     background-color: #2c3e50;
     z-index: 5;
 }
@@ -140,7 +138,7 @@ section h2 {
 
 section h2 i {
     margin-right: 10px;
-    color: #4a90e2;
+    color:  #99180d;
 }
 
 
@@ -151,7 +149,7 @@ section h2 i {
 }
 
 .quick-actions .action-item {
-    background: linear-gradient(135deg, #4a90e2, #357abd);
+    background-color:  #99180d;
     color: #fff;
     text-decoration: none;
     padding: 15px;
@@ -170,7 +168,7 @@ section h2 i {
 
 .quick-actions .action-item:hover {
     transform: scale(1.05);
-    background: linear-gradient(135deg, #357abd, #4a90e2);
+    background-color:  #99180d;
 }
 
 
@@ -242,19 +240,3 @@ section h2 i {
 
 
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    nav {
-        width: 200px;
-    }
-    main {
-        margin-left: 200px;
-        width: calc(100% - 200px);
-    }
-    .stats .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    .quick-actions .actions-grid {
-        grid-template-columns: 1fr;
-    }
-}

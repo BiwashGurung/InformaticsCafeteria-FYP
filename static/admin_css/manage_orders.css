@@ -1,19 +1,16 @@
-
 .manage-orders-wrapper * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-
 .manage-orders-wrapper {
-    color: #2d3748;
+    color:  #99180d;
     line-height: 1.6;
     padding: 25px;
     background-color: #f4f6f9;
     overflow-y: auto;
 }
-
 
 .manage-orders-wrapper .header-section {
     display: flex;
@@ -22,23 +19,21 @@
     margin-bottom: 25px;
 }
 
-
 .manage-orders-wrapper h2 {
     font-size: 2rem;
-    color: #1a202c;
+    color:  #99180d;
     font-weight: 700;
     display: flex;
     align-items: center;
     padding-left: 10px;
-    border-left: 4px solid #4a90e2;
+    border-left: 4px solid  #99180d;
 }
 
 .manage-orders-wrapper h2 i {
     margin-right: 10px;
-    color: #4a90e2;
+    color:  #99180d;
     font-size: 1.8rem;
 }
-
 
 .manage-orders-wrapper .search-form {
     display: flex;
@@ -71,7 +66,7 @@
 
 .manage-orders-wrapper .search-form button {
     padding: 10px 20px;
-    background: linear-gradient(135deg, #4a90e2, #3182ce);
+    background-color:  #99180d;
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -89,7 +84,7 @@
 }
 
 .manage-orders-wrapper .search-form button:hover {
-    background: linear-gradient(135deg, #3182ce, #4a90e2);
+    background-color:  #99180d;
     transform: translateY(-2px);
 }
 
@@ -97,11 +92,9 @@
     transform: translateY(0);
 }
 
-
 .manage-orders-wrapper .table-container {
     width: 100%;
 }
-
 
 .manage-orders-wrapper table {
     width: 100%;
@@ -113,9 +106,8 @@
     overflow: hidden;
 }
 
-
 .manage-orders-wrapper thead {
-    background: linear-gradient(135deg, #4a90e2, #3182ce);
+    background-color:  #99180d;
     color: #fff;
 }
 
@@ -127,7 +119,6 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
 
 .manage-orders-wrapper tbody tr {
     border-bottom: 1px solid #edf2f7;
@@ -152,57 +143,10 @@
     line-height: 1.4;
 }
 
-
-.manage-orders-wrapper select {
-    appearance: none;
-    padding: 8px 30px 8px 12px;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    background-color: #fff;
-    color: #4a5568;
-    font-size: 0.95rem;
-    cursor: pointer;
-    width: 100%;
-    max-width: 150px;
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-.manage-orders-wrapper select:hover,
-.manage-orders-wrapper select:focus {
-    border-color: #4a90e2;
-    box-shadow: 0 0 8px rgba(74, 144, 226, 0.2);
-    transform: scale(1.02);
-    outline: none;
-}
-
-.manage-orders-wrapper select option {
-    color: #4a5568;
-}
-
-.manage-orders-wrapper select option[value="Pending"] {
-    color: #e53e3e; 
-}
-
-.manage-orders-wrapper select option[value="Preparing"] {
-    color: #dd6b20;
-}
-
-.manage-orders-wrapper select option[value="Completed"] {
-    color: #38a169; 
-}
-
-.manage-orders-wrapper select option[value="Canceled"] {
-    color: #718096; 
-}
-
 .manage-orders-wrapper td form {
     margin: 0;
     display: inline-block;
 }
-
 
 .manage-orders-wrapper .actions a {
     display: inline-block;
@@ -225,5 +169,3 @@
     color: #fff;
     transform: translateY(-2px);
 }
-
-

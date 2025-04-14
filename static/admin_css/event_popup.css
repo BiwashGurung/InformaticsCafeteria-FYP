@@ -19,7 +19,7 @@
   
   .view-history-btn {
     display: inline-block;
-    background-color: #007bff;
+    background-color:  #99180d;
     color: white;
     padding: 12px 24px;
     font-size: 16px;
@@ -36,7 +36,7 @@
   }
   
   .view-history-btn:hover {
-    background-color: #0056b3;
+    background-color:  #99190dcd;
     transform: translateY(-2px);
   }
   
@@ -68,7 +68,7 @@
   }
   
   .submit-btn {
-    background-color: #4CAF50;
+    background-color:  #99180d;
     color: white;
     border: none;
     padding: 12px 20px;
@@ -80,7 +80,7 @@
   }
   
   .submit-btn:hover {
-    background-color: #45a049;
+    background-color:  #99190dd2;
   }
   
   
