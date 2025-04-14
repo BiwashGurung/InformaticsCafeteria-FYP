@@ -539,3 +539,19 @@ def top_selling_food(request):
         messages.error(request, "An error occurred while loading top-selling items.")
         return render(request, 'cafeteria_admin/top_selling_food.html', {'form': form})
         
+
+
+# Manage Payments
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def manage_payments(request):
+    query = request.GET.get('q', '')
+    if query:
+        orders = Order.objects.filter(
+            Q(id__icontains=query) | Q(user__username__icontains=query)
+        ).select_related('user').order_by('-order_date')
+    else:
+        orders = Order.objects.all().select_related('user').order_by('-order_date')
+    logger.debug(f"manage_payments: query='{query}', orders count={orders.count()}")
+    return render(request, 'cafeteria_admin/manage_payments.html', {'orders': orders, 'query': query})
+
+     
