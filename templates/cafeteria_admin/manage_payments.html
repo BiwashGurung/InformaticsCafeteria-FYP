@@ -10,10 +10,21 @@
 <div class="manage-payments-wrapper">
     <div class="header-section">
         <h2><i class="fas fa-wallet"></i> Manage Payments</h2>
-        <form method="GET" action="{% url 'manage_payments' %}" class="search-form">
-            <input type="text" name="q" placeholder="Search by Order ID or Username" value="{{ query|default:'' }}">
-            <button type="submit"><i class="fas fa-search"></i> Search</button>
-        </form>
+        <div class="filter-actions">
+            <form method="GET" action="{% url 'manage_payments' %}" class="filter-form">
+                <input type="date" name="start_date" value="{{ start_date|default:'' }}" required>
+                <input type="date" name="end_date" value="{{ end_date|default:'' }}" required>
+                <input type="text" name="q" placeholder="Search by Order ID or Username" value="{{ query|default:'' }}">
+                <select name="payment_method">
+                    <option value="" {% if not payment_method %}selected{% endif %}>All Payment Methods</option>
+                    <option value="Cash" {% if payment_method == "Cash" %}selected{% endif %}>Payment on Delivery</option>
+                    <option value="Online" {% if payment_method == "Online" %}selected{% endif %}>Online Payment</option>
+                </select>
+                <button type="submit"><i class="fas fa-filter"></i> Apply</button>
+                <a href="{% url 'manage_payments' %}" class="reset-btn">Reset</a>
+            </form>
+            <a href="{% url 'export_payments' %}?start_date={{ start_date|default:'' }}&end_date={{ end_date|default:'' }}&q={{ query|default:'' }}&payment_method={{ payment_method|default:'' }}" class="export-btn"><i class="fas fa-file-excel"></i> Export to Excel</a>
+        </div>
     </div>
 
     <div class="table-container">
@@ -48,6 +59,7 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <p class="total-amount">Total Amount: Rs. {{ total_amount|floatformat:2 }}</p>
         {% else %}
             <p class="no-items">No payments found.</p>
         {% endif %}

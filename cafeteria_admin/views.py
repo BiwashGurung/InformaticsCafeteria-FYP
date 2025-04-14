@@ -7,6 +7,9 @@ from .models import EventPopup
 from .forms import EventPopupForm, FoodItemForm 
 from datetime import datetime , timedelta
 from django.utils import timezone
+import io
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -545,13 +548,142 @@ def top_selling_food(request):
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def manage_payments(request):
     query = request.GET.get('q', '')
-    if query:
-        orders = Order.objects.filter(
-            Q(id__icontains=query) | Q(user__username__icontains=query)
-        ).select_related('user').order_by('-order_date')
-    else:
-        orders = Order.objects.all().select_related('user').order_by('-order_date')
-    logger.debug(f"manage_payments: query='{query}', orders count={orders.count()}")
-    return render(request, 'cafeteria_admin/manage_payments.html', {'orders': orders, 'query': query})
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    payment_method = request.GET.get('payment_method', '')
 
-     
+    orders = Order.objects.select_related('user')
+
+    # Apply date range filter
+    if start_date and end_date:
+        try:
+            start = timezone.make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
+            end = timezone.make_aware(datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1))
+            orders = orders.filter(order_date__range=[start, end])
+        except ValueError:
+            messages.error(request, "Invalid date format.")
+    else:
+        # Default to last 30 days
+        default_start = timezone.now() - timedelta(days=30)
+        orders = orders.filter(order_date__gte=default_start)
+        start_date = default_start.strftime('%Y-%m-%d')
+        end_date = timezone.now().strftime('%Y-%m-%d')
+
+    # Apply payment method filter
+    if payment_method in ['Cash', 'Online']:
+        orders = orders.filter(payment_method=payment_method)
+
+    # Apply text search
+    if query:
+        orders = orders.filter(Q(id__icontains=query) | Q(user__username__icontains=query))
+
+    orders = orders.order_by('-order_date')
+
+    # Calculate total amount for filtered orders
+    total_amount = orders.aggregate(total=Sum('total_price'))['total'] or 0
+
+    logger.debug(f"manage_payments: query='{query}', payment_method='{payment_method}', "
+                 f"start_date='{start_date}', end_date='{end_date}', "
+                 f"orders count={orders.count()}, total_amount={total_amount}")
+
+    context = {
+        'orders': orders,
+        'query': query,
+        'start_date': start_date,
+        'end_date': end_date,
+        'payment_method': payment_method,
+        'total_amount': float(total_amount),
+    }
+    return render(request, 'cafeteria_admin/manage_payments.html', context)
+
+# Export Payments to Excel
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def export_payments_to_excel(request):
+    query = request.GET.get('q', '')
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    payment_method = request.GET.get('payment_method', '')
+
+    orders = Order.objects.select_related('user')
+
+    # Apply date range filter
+    if start_date and end_date:
+        try:
+            start = timezone.make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
+            end = timezone.make_aware(datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1))
+            orders = orders.filter(order_date__range=[start, end])
+        except ValueError:
+            messages.error(request, "Invalid date format.")
+            return redirect('manage_payments')
+    else:
+        default_start = timezone.now() - timedelta(days=30)
+        orders = orders.filter(order_date__gte=default_start)
+
+    # Apply payment method filter
+    if payment_method in ['Cash', 'Online']:
+        orders = orders.filter(payment_method=payment_method)
+
+    # Apply text search
+    if query:
+        orders = orders.filter(Q(id__icontains=query) | Q(user__username__icontains=query))
+
+    orders = orders.order_by('-order_date')
+
+    # Calculate total amount
+    total_amount = orders.aggregate(total=Sum('total_price'))['total'] or 0
+
+    # Create Excel workbook
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Payments"
+
+    # Define headers
+    headers = ["Order ID", "Username", "Amount (Rs.)", "Payment Method", "Date"]
+    ws.append(headers)
+
+    # Style headers
+    for cell in ws[1]:
+        cell.font = Font(bold=True)
+        cell.alignment = Alignment(horizontal='center')
+
+    # Add data
+    for order in orders:
+        ws.append([
+            order.id,
+            order.user.username,
+            float(order.total_price),
+            order.get_payment_method_display(),
+            order.order_date.strftime('%b %d, %Y')
+        ])
+
+    # Add total amount
+    total_row = ["", "", f"Total Amount: Rs. {float(total_amount):.2f}", "", ""]
+    ws.append(total_row)
+    total_cell = ws.cell(row=ws.max_row, column=3)
+    total_cell.font = Font(bold=True, color="99180D")
+    total_cell.alignment = Alignment(horizontal='left')
+
+    # Adjust column widths
+    for col in ws.columns:
+        max_length = 0
+        column = col[0].column_letter
+        for cell in col:
+            try:
+                if len(str(cell.value)) > max_length:
+                    max_length = len(str(cell.value))
+            except:
+                pass
+        adjusted_width = max_length + 2
+        ws.column_dimensions[column].width = adjusted_width
+
+    # Save to response
+    output = io.BytesIO()
+    wb.save(output)
+    output.seek(0)
+
+    response = HttpResponse(
+        content=output.getvalue(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=payments_export.xlsx'
+    return response
