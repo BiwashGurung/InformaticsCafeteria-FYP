@@ -205,7 +205,6 @@
                 <th>Food Item</th>
                 <th>Quantity</th>
                 <th>Price</th>
-                <th>Added By</th>
             </tr>
         </thead>
         <tbody>
@@ -214,7 +213,6 @@
                 <td>{{ item.food_item.name }}</td>
                 <td>{{ item.quantity }}</td>
                 <td>Rs. {{ item.food_item.price|floatformat:2 }}</td>
-                <td>{{ item.user.username|default:user.username }}</td>
             </tr>
             {% endfor %}
         </tbody>
