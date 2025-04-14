@@ -5,8 +5,41 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'admin_css/manage_lost_found.css' %}" />
     <title>Manage Lost & Found</title>
+    <style>
+        .delete-btn {
+            background-color: #99180d;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+        .delete-btn:hover {
+            background-color: #b32118;
+        }
+        .modal-content {
+            border-radius: 8px;
+        }
+        .modal-header {
+            background-color: #99180d;
+            color: white;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .modal-footer .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+        }
+        .modal-footer .btn-danger {
+            background-color: #99180d;
+            border: none;
+        }
+        .modal-footer .btn-danger:hover {
+            background-color: #b32118;
+        }
+    </style>
 {% endblock %}
-
 
 <div class="manage-lost-found-wrapper">
     <div class="header-section">
@@ -18,6 +51,14 @@
     </div>
 
     <div class="table-container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
         {% if items %}
             <table>
                 <thead>
@@ -66,6 +107,22 @@
                                     <button type="submit" class="resolve-btn">Resolve</button>
                                 </form>
                             {% endif %}
+              
+                            <!-- Delete Modal -->
+                            <div class="modal fade" id="deleteModal-{{ item.id }}" tabindex="-1" aria-labelledby="deleteModalLabel-{{ item.id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+
+                                        <div class="modal-footer">
+                                    
+                                            <form method="POST" action="{% url 'delete_lost_found' item.id %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}

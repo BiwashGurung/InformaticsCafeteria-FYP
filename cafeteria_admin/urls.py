@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from .import views
-from .views import admin_upload_popup, show_popup, manage_users, edit_user, delete_user, update_user_password, manage_menu, add_food_item , edit_food_item, delete_food_item, manage_orders, update_order_status, delete_order , manage_lost_found , approve_lost_found , resolve_lost_found
+from .views import admin_upload_popup, show_popup, manage_users, edit_user, delete_user, update_user_password, manage_menu, add_food_item , edit_food_item, delete_food_item, manage_orders, update_order_status, delete_order , manage_lost_found , approve_lost_found , resolve_lost_found, delete_lost_found
 
 
 
@@ -28,6 +28,7 @@ urlpatterns = [
     path('manage_lost_found/', manage_lost_found, name='manage_lost_found'),
     path('approve_lost_found/<int:item_id>/', approve_lost_found, name='approve_lost_found'),  
     path('resolve_lost_found/<int:item_id>/', resolve_lost_found, name='resolve_lost_found'), 
+    path('delete_lost_found/<int:item_id>/', delete_lost_found, name='delete_lost_found'),
     path('manage_group_orders/', views.manage_group_orders, name='manage_group_orders'),
     path('close_group_order/<int:group_id>/', views.close_group_order, name='close_group_order'),
     path('delete_group_order/<int:group_id>/', views.delete_group_order, name='delete_group_order'), 

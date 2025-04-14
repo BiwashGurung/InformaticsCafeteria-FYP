@@ -317,6 +317,15 @@ def resolve_lost_found(request, item_id):
         messages.success(request, f"Item '{item.item_name}' has been marked as resolved.")
     return redirect('manage_lost_found')
 
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def delete_lost_found(request, item_id):
+    if request.method == 'POST':
+        item = get_object_or_404(LostFound, id=item_id)
+        item_name = item.item_name
+        item.delete()
+        messages.success(request, f"Lost item '{item_name}' deleted successfully.")
+        return redirect('manage_lost_found')
+    return redirect('manage_lost_found')
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def manage_group_orders(request):
