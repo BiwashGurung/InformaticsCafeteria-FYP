@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
-
-
 {% block content %}
 <title>Cart Summary - Informatics Cafeteria</title>
 
@@ -108,15 +105,6 @@
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(153, 24, 13, 0.4);
     }
-    .payment-option img {
-        vertical-align: middle;
-        margin-left: 10px;
-        border-radius: 5px;
-        transition: transform 0.3s ease;
-    }
-    .payment-option img:hover {
-        transform: scale(1.1);
-    }
     .empty-cart {
         text-align: center;
         padding: 30px;
@@ -159,6 +147,38 @@
         color: #155724;
         border: 1px solid #c3e6cb;
     }
+    .modal-content {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+    .modal-header {
+        background-color: #5c2d91;
+        color: #fff;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        padding: 15px 20px;
+    }
+    .modal-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+    .modal-body {
+        padding: 20px;
+        text-align: center;
+    }
+    .modal-footer {
+        border: none;
+        padding: 15px 20px;
+        text-align: center;
+    }
+    .khalti-button-container {
+        display: inline-block;
+    }
+    .khalti-logo {
+        width: 80px;
+        margin-bottom: 15px;
+    }
     @media (max-width: 768px) {
         .cart-title {
             font-size: 2rem;
@@ -177,6 +197,12 @@
             padding: 10px 20px;
             font-size: 1rem;
         }
+        .modal-title {
+            font-size: 1.1rem;
+        }
+        .khalti-logo {
+            width: 60px;
+        }
     }
     @media (max-width: 576px) {
         .cart-container {
@@ -188,11 +214,22 @@
         .form-check-label {
             font-size: 0.9rem;
         }
+        .modal-body {
+            padding: 15px;
+        }
+        .modal-footer {
+            padding: 10px 15px;
+        }
+        .khalti-button-container {
+            width: 100%;
+        }
+        .khalti-button-container button {
+            width: 100%;
+        }
     }
 </style>
+
 <div class="container mt-5 cart-container">
-
-
     <h1 class="cart-title">
         {{ user.username }}, Cart Summary
         {% if group_code %} <span style="font-size: 1.2rem; color: #555;">(Group Order: {{ group_code }})</span> {% endif %}
@@ -219,6 +256,7 @@
     </table>
 
     <div class="form-section">
+
         {% if payment_details and payment_details.status == 'Completed' %}
         <p style="color: #28a745; font-weight: 600; text-align: center; margin-bottom: 20px;">
             Payment of Rs. {{ payment_details.amount|floatformat:2 }} completed successfully!
@@ -226,27 +264,25 @@
         <form method="POST" action="{% url 'place_order' %}" id="orderForm">
             {% csrf_token %}
             <div class="mb-4">
-                <label class="form-label">Select Time Option</label>
-                <div class="form-check mb-2">
-                    <input type="radio" name="time_option" value="pickup" class="form-check-input" id="pickupOption" {% if payment_details.pickup_time %}checked{% endif %}>
-                    <label class="form-check-label" for="pickupOption">Pickup Time</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input type="radio" name="time_option" value="dine_in" class="form-check-input" id="dineInOption" {% if payment_details.dine_in_time %}checked{% endif %}>
-                    <label class="form-check-label" for="dineInOption">Dine-in Time</label>
-                </div>
-                <div id="pickupTime" class="time-option mt-3">
+                <label class="form-label">
+                    {% if payment_details.pickup_time %}Pickup Time{% else %}Dine-in Time{% endif %}
+                </label>
+                {% if payment_details.pickup_time %}
+                <div id="pickupTime" class="mt-3">
                     <input type="time" name="pickup_time" class="form-control" value="{{ payment_details.pickup_time|default:'' }}" placeholder="Select pickup time" title="Choose a pickup time">
                 </div>
-                <div id="dineInTime" class="time-option mt-3">
+                {% else %}
+                <div id="dineInTime" class="mt-3">
                     <input type="time" name="dine_in_time" class="form-control" value="{{ payment_details.dine_in_time|default:'' }}" placeholder="Select dine-in time" title="Choose a dine-in time">
                 </div>
+                {% endif %}
             </div>
             <div class="mb-4">
                 <label for="remarks" class="form-label">Remarks (Optional)</label>
                 <textarea name="remarks" id="remarks" class="form-control" rows="3" placeholder="Add any special requests..." title="Enter special instructions here">{{ payment_details.remarks|default:'' }}</textarea>
             </div>
             <input type="hidden" name="payment_method" value="Online">
+            <input type="hidden" name="time_option" value="{% if payment_details.pickup_time %}pickup{% else %}dine_in{% endif %}">
             {% if payment_details.group_code %}
             <input type="hidden" name="group_code" value="{{ payment_details.group_code }}">
             {% elif group_code %}
@@ -291,35 +327,54 @@
                     <label class="form-check-label" for="cashPayment">Payment on Delivery</label>
                 </div>
                 <div class="form-check payment-option mb-2">
-                    <input type="radio" name="payment_method" value="Online" class="form-check-input" id="onlinePayment">
+                    <input type="radio" name="payment_method" value="Online" class="form-check-input" id="onlinePayment" data-bs-toggle="modal" data-bs-target="#khaltiModal">
                     <label class="form-check-label" for="onlinePayment">Online Payment</label>
-                    <img src="{% static 'Images/Esewa_logo.webp' %}" alt="Online Payment" width="40" height="40">
                 </div>
             </div>
             <div class="grand-total">
                 <strong>Grand Total:</strong> Rs. {{ total_price|floatformat:2 }}
             </div>
             <div class="text-center">
-                <button type="submit" class="btn btn-success">Order Now</button>
+                <button type="submit" class="btn btn-success" id="orderButton">Order Now</button>
             </div>
             {% if group_code %}
             <input type="hidden" name="group_code" value="{{ group_code }}">
             {% endif %}
         </form>
 
-        <!-- Khalti Payment Form -->
-        <form action="{% url 'initiate' %}" method="POST" class="mt-4" id="khaltiForm" style="display: none;">
-            {% csrf_token %}
-            <input type="hidden" name="amount" value="{{ total_price }}">
-            <input type="hidden" name="return_url" value="http://127.0.0.1:8000/khalti-callback/">
-            <input type="hidden" name="remarks" id="khaltiRemarks">
-            <input type="hidden" name="pickup_time" id="khaltiPickupTime">
-            <input type="hidden" name="dine_in_time" id="khaltiDineInTime">
-            {% if group_code %}
-            <input type="hidden" name="group_code" value="{{ group_code }}">
-            {% endif %}
-            <button type="submit" class="btn btn-primary">Pay with Khalti</button>
-        </form>
+        <!-- Khalti Payment Modal -->
+        <div class="modal fade" id="khaltiModal" tabindex="-1" aria-labelledby="khaltiModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="khaltiModalLabel">Pay with Khalti</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="{% static 'Images/khalti.jpg' %}" alt="Khalti Logo" class="khalti-logo">
+                        <p>Proceed to pay <strong>Rs. {{ total_price|floatformat:2 }}</strong> securely with Khalti.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="{% url 'initiate' %}" method="POST" id="khaltiForm">
+                            {% csrf_token %}
+                            <input type="hidden" name="amount" value="{{ total_price }}">
+                            <input type="hidden" name="return_url" value="http://127.0.0.1:8000/khalti-callback/">
+                            <input type="hidden" name="remarks" id="khaltiRemarks">
+                            <input type="hidden" name="pickup_time" id="khaltiPickupTime">
+                            <input type="hidden" name="dine_in_time" id="khaltiDineInTime">
+                            {% if group_code %}
+                            <input type="hidden" name="group_code" value="{{ group_code }}">
+                            {% endif %}
+                            <div class="khalti-button-container">
+                                <button type="submit" style="background-color: #5c2d91; color: white; border: none; padding: 6px 20px; font-size: 1.2rem; border-radius: 25px; box-shadow: 0 2px 8px rgba(92, 45, 145, 0.3); transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='#4a2575'" onmouseout="this.style.backgroundColor='#5c2d91'">
+                                    Pay with Khalti
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         {% endif %}
     </div>
     {% else %}
@@ -329,9 +384,9 @@
     {% endif %}
 </div>
 
-<script>
+{% comment %} <script>
     const orderForm = document.getElementById('orderForm');
-    const khaltiForm = document.getElementById('khaltiForm');
+    const khaltiModal = document.getElementById('khaltiModal');
     const onlinePayment = document.getElementById('onlinePayment');
     const cashPayment = document.getElementById('cashPayment');
     const pickupOption = document.getElementById('pickupOption');
@@ -340,6 +395,7 @@
     const dineInTimeDiv = document.getElementById('dineInTime');
     const pickupTimeInput = pickupTimeDiv.querySelector('input[name="pickup_time"]');
     const dineInTimeInput = dineInTimeDiv.querySelector('input[name="dine_in_time"]');
+    const orderButton = document.getElementById('orderButton');
 
     // Show/hide time inputs based on radio selection
     function toggleTimeInputs() {
@@ -361,20 +417,9 @@
     pickupOption.addEventListener('change', toggleTimeInputs);
     dineInOption.addEventListener('change', toggleTimeInputs);
 
-    // Payment method toggle
-    if (onlinePayment && khaltiForm) {
-        onlinePayment.addEventListener('change', function() {
-            if (this.checked) {
-                khaltiForm.style.display = 'block';
-                orderForm.querySelector('button[type="submit"]').style.display = 'none';
-            }
-        });
-        cashPayment.addEventListener('change', function() {
-            if (this.checked) {
-                khaltiForm.style.display = 'none';
-                orderForm.querySelector('button[type="submit"]').style.display = 'block';
-            }
-        });
+    // Sync Khalti form fields on submit
+    if (khaltiModal) {
+        const khaltiForm = document.getElementById('khaltiForm');
         khaltiForm.addEventListener('submit', function() {
             const remarks = document.getElementById('remarks').value;
             document.getElementById('khaltiRemarks').value = remarks;
@@ -386,6 +431,22 @@
                 document.getElementById('khaltiDineInTime').value = dineInTimeInput.value;
             }
         });
+
+        // Reset to Cash when modal is closed
+        khaltiModal.addEventListener('hidden.bs.modal', function() {
+            cashPayment.checked = true;
+            onlinePayment.checked = false;
+            orderButton.style.display = 'block';
+        });
     }
-</script>
+
+    // Prevent order form submission when Online Payment is selected
+    orderForm.addEventListener('submit', function(e) {
+        if (onlinePayment.checked) {
+            e.preventDefault();
+        }
+    });
+</script> {% endcomment %}
+<script src="{% static 'javascript/cartsummary.js'%} "></script>
+
 {% endblock %}
