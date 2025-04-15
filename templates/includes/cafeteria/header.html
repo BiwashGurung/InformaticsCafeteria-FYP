@@ -51,14 +51,14 @@
           <a class="nav-link {% if request.path == '/aboutus/' %}active{% endif %}" href="{% url 'aboutus' %}">About Us</a>
         </li>
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-          <a class="nav-link {% if request.path == '/order_online/' %}active{% endif %}" href="{% url 'orderonline' %}">Menu</a>
+          <a class="nav-link {% if request.path == '/orderonline/' %}active{% endif %}" href="{% url 'orderonline' %}">Menu</a>
         </li>
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
           <a class="nav-link {% if request.path == '/contactus/' %}active{% endif %}" href="{% url 'contactus' %}">Contact</a>
         </li>
         {% if request.user.is_authenticated %}
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-          <a class="nav-link {% if request.path == '/lost-found/' %}active{% endif %}" href="{% url 'lost_found_page' %}">Lost & Found</a>
+          <a class="nav-link {% if request.path == '/lost_found_page/' %}active{% endif %}" href="{% url 'lost_found_page' %}">Lost & Found</a>
         </li>
         {% endif %}
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4 dropdown">
@@ -69,6 +69,7 @@
           </a>
           <ul class="dropdown-menu">
             {% if request.user.is_authenticated %}
+              <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
               <li><a class="dropdown-item" href="{% url 'order_history' %}">Your Order</a></li>
               <li><a class="dropdown-item" href="{% url 'feedback_page' %}">Feedback</a></li>
               <li><hr class="dropdown-divider" /></li>
@@ -78,15 +79,14 @@
             {% endif %}
           </ul>
         </li>
-        
         <!-- Canteen Load Indicator -->
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-          <span class="nav-link" style="color: {{ load_color }}; font-weight: bold; ">
+          <span class="nav-link" style="color: {{ load_color }}; font-weight: bold;">
             Canteen Load: {{ load_label }}
           </span>
         </li>
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-          <a class="nav-link {% if request.path == '/cart/' %}active{% endif %}" href="{% url 'view_cart' %}">
+          <a class="nav-link {% if request.path == '/view_cart/' %}active{% endif %}" href="{% url 'view_cart' %}">
             <i class="lni lni-cart"></i> Cart
           </a>
         </li>

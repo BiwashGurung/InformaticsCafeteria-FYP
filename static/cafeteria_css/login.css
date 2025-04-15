@@ -1,119 +1,171 @@
 
-/* Body Styling */
 #login {
-  height: 100vh;
-  background: url("../Images/Background.png") no-repeat center center/cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: -5%;
+    height: 100vh;
+    background: url('../images/Background.png') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: -2%;
 }
 
-/* Login Container */
+
 .login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3); 
 }
 
 
-
-/* Login Box */
 .login-box {
-  background-color: white;
-  padding: 20px 40px;
-  width: 350px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-  text-align: center;
+    background: rgba(255, 255, 255, 0.2); 
+    backdrop-filter: blur(10px); 
+    border: 1px solid rgba(255, 255, 255, 0.3); 
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); 
+    width: 100%;
+    max-width: 400px; 
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Login Box Header */
 .login-box h2 {
-  margin-bottom: 20px;
-  color: #333;
+    margin-bottom: 25px;
+    color: #99180d; 
+    font-size: 1.8rem;
+    font-weight: 600;
 }
 
-/* Form Labels */
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+
 .login-box label {
-  font-size: 14px;
-  color: #555;
-  display: block;
-  margin-top: 15px;
-  text-align: left;
+    font-size: 0.95rem;
+    color: #222;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 8px;
 }
 
-/* Form Inputs */
+
 .login-box input[type="text"],
 .login-box input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.7); 
+    font-size: 0.9rem;
+    color: #333;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s ease;
 }
 
-/* Options Section */
+.login-box input:focus {
+    outline: none;
+    border-color: #99180d;
+    box-shadow: 0 0 5px rgba(153, 24, 13, 0.3);
+}
+
+
+.login-box input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+
 .options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+    font-size: 0.85rem;
+    color: #333;
 }
 
-/* Forgot Password Link */
+
 .forgot-password {
-  color: #007bff;
-  font-size: 12px;
-  text-decoration: none;
+    color: #99180d;
+    text-decoration: none;
+    font-size: 0.85rem;
 }
 
 .forgot-password:hover {
-  text-decoration: underline;
+    color: #b32118;
+    text-decoration: underline;
 }
 
-/* Login Button */
+
 .login-button {
-  width: 100%;
-  padding: 10px;
-  background-color: red;
-  color: white;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
+    width: 100%;
+    padding: 12px;
+    background-color: #99180d;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.3s ease;
 }
 
 .login-button:hover {
-  background-color: darkred;
+    background-color: #b32118;
 }
 
-/* Separator */
 hr {
-  margin: 20px 0;
-  border: none;
-  height: 1px;
-  background-color: #ccc;
+    margin: 20px 0;
+    border: none;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Sign Up Text */
+
 .signup-text {
-  font-size: 14px;
-  color: #555;
+    font-size: 0.9rem;
+    color: #333;
+    text-align: center; 
 }
+
 
 .signup-link {
-  color: red;
-  font-weight: bold;
-  text-decoration: none;
+    color: #99180d;
+    font-weight: 500;
+    text-decoration: none;
 }
 
 .signup-link:hover {
-  text-decoration: underline;
+    color: #b32118;
+    text-decoration: underline;
 }
 
+@media (max-width: 576px) {
+    .login-box {
+        padding: 20px 30px;
+        max-width: 90%;
+        backdrop-filter: blur(8px); 
+    }
+
+    .login-box h2 {
+        font-size: 1.5rem;
+    }
+
+    .login-box input[type="text"],
+    .login-box input[type="password"] {
+        padding: 10px;
+    }
+
+    .login-button {
+        padding: 10px;
+    }
+}

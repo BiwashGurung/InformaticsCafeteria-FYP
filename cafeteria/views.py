@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
+from .forms import ProfileForm
 
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -102,6 +102,27 @@ def LogoutPage(request):
     messages.success(request, "You have successfully logged out.")
     return redirect('login')
 
+@login_required
+def profile_page(request):
+    # Ensure Profile exists
+    Profile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=request.user, request=request)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('profile')
+        else:
+            for error in form.non_field_errors():
+                messages.error(request, error)
+            for field in form:
+                for error in field.errors:
+                    messages.error(request, f"{field.label}: {error}")
+    else:
+        form = ProfileForm(instance=request.user, request=request)
+
+    return render(request, 'cafeteria/profile.html', {'form': form})
 
 
 def AboutUsPage(request):

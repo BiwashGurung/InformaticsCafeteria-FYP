@@ -5,7 +5,7 @@ from cafeteria import views
 from cafeteria_admin.views import show_popup
 from django.conf import settings
 from django.conf.urls.static import static
-from cafeteria.views import food_list, view_cart, add_to_cart, update_cart, remove_from_cart, clear_cart,cart_summary, place_order, order_history , initkhalti , khalti_callback , lost_found_page
+from cafeteria.views import food_list, view_cart, add_to_cart, update_cart, remove_from_cart, clear_cart,cart_summary, place_order, order_history , initkhalti , khalti_callback , lost_found_page , profile_page
 
 
 urlpatterns = [
@@ -30,7 +30,7 @@ urlpatterns = [
     path('cartsummary/', cart_summary, name='cartsummary'),
     path('checkout/', place_order, name='place_order'),
     path('orders/', order_history, name='order_history'),
-
+    path('profile/', profile_page, name='profile'),
 
     # Khalti
     path('initiate/', initkhalti, name='initiate'),
