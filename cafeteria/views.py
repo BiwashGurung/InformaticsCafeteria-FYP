@@ -23,6 +23,10 @@ logger = logging.getLogger(__name__)
 def HomePage(request):
     return render(request, 'cafeteria/index.html')
 
+# College Page
+def CollegePage(request):
+    return render(request, 'cafeteria/college.html')
+
 # User Signup
 def SignupPage(request):
     if request.method == 'POST':

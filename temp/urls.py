@@ -15,7 +15,7 @@ urlpatterns = [
     path('login/', views.LoginPage, name='login'),
     # path('', show_popup, name='show_popup'),
     path('', show_popup, name='home'),
-
+    path('college/', views.CollegePage, name='college'),
     path('aboutus/', views.AboutUsPage, name='aboutus'),
     path('contactus/', views.ContactUsPage, name='contactus'),
     path('logout/', views.LogoutPage, name='logout'),
