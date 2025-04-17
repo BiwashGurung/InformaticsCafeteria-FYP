@@ -165,7 +165,7 @@ def add_to_cart(request, food_id):
             try:
                 quantity = int(quantity_input)
                 if quantity <= 0 or quantity > 100:
-                    messages.error(request, "Please choose a valid quantity (between 1 and 100).")
+                    messages.error(request, "Please choose a valid quantity.")
                     return redirect("orderonline")  
             except ValueError:
                 messages.error(request, "Invalid quantity entered. Please enter a number.")
@@ -193,23 +193,39 @@ def add_to_cart(request, food_id):
     
     return redirect("view_cart")
 
-# Update Cart Item Quantity
+# Updating the Cart Item Quantity
 @login_required
 def update_cart(request, cart_item_id):
-    cart_item = get_object_or_404(CartItem, id=cart_item_id, cart__user=request.user)
+    try:
+        cart_item = get_object_or_404(CartItem, id=cart_item_id, cart__user=request.user)
 
-    if request.method == "POST":
-        new_quantity = int(request.POST.get("quantity", 1))
+        if request.method == "POST":
+            # Getting the quantity from the form
+            quantity_input = request.POST.get("quantity", "1").strip()
+            
+            # Validate quantity
+            try:
+                new_quantity = int(quantity_input)
+                if new_quantity > 100:
+                    messages.error(request, "Please choose a valid quantity.")
+                    return redirect("view_cart")
+            except ValueError:
+                messages.error(request, "Invalid quantity entered. Please enter a number.")
+                return redirect("view_cart")
+
+            if new_quantity > 0:
+                cart_item.quantity = new_quantity
+                cart_item.save()
+                messages.success(request, "Cart updated successfully.")
+            else:
+                cart_item.delete()
+                messages.info(request, "Item removed from cart.")
         
-        if new_quantity > 0:
-            cart_item.quantity = new_quantity
-            cart_item.save()
-            messages.success(request, "Cart updated successfully.")
-        else:
-            cart_item.delete()
-            messages.info(request, "Item removed from cart.")
+    except Exception as e:
+        messages.error(request, "An error occurred while updating the cart. Please try again.")
+        return redirect("view_cart")
 
-    return redirect('view_cart')
+    return redirect("view_cart")
 
 # Remove Item from Cart
 @login_required
