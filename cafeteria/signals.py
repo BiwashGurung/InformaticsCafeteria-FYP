@@ -20,7 +20,7 @@ def build_email_content(instance, is_creation=False):
     elif instance.status == "Completed":
         plain_message += "Your order is ready! Please pick it up or enjoy your dine-in soon.\n"
     elif instance.status == "Cancelled":
-        plain_message += "Your order has been cancelled. Contact us at informaticscafetera@gmail.com if this was an error.\n"
+        plain_message += "Your order has been cancelled. If this was an error, please contact us at informaticscafeteria@gmail.com. If you had already paid the amount via online payment, contact us on WhatsApp or visit the cafeteria counter for a refund.\n"
     else:  # "Pending"
         plain_message += "Your order status is Pending. We'll keep you posted!\n"
     plain_message += (

@@ -59,11 +59,11 @@
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
           <a class="nav-link {% if request.path == '/contactus/' %}active{% endif %}" href="{% url 'contactus' %}">Contact</a>
         </li>
-        {% if request.user.is_authenticated %}
+        {% comment %} {% if request.user.is_authenticated %}
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
           <a class="nav-link {% if request.path == '/lost_found_page/' %}active{% endif %}" href="{% url 'lost_found_page' %}">Lost & Found</a>
         </li>
-        {% endif %}
+        {% endif %} {% endcomment %}
         <li class="nav-item px-3 px-lg-0 py-1 py-lg-4 dropdown">
           <a class="nav-link {% if request.user.is_authenticated %}logged-in-user{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa-solid fa-user"></i>
@@ -75,6 +75,7 @@
               <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
               <li><a class="dropdown-item" href="{% url 'order_history' %}">Your Order</a></li>
               <li><a class="dropdown-item" href="{% url 'feedback_page' %}">Feedback</a></li>
+              <li><a class="dropdown-item" href="{% url 'lost_found_page' %}">Lost & Found</a></li>
               <li><hr class="dropdown-divider" /></li>
               <li><a class="dropdown-item" href="{% url 'logout' %}">LogOut</a></li>
             {% else %}

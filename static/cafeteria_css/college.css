@@ -21,11 +21,14 @@
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
+    animation: fadeInText 2s ease-out forwards; 
   }
 
   .text-box h1 {
     font-size: 62px;
     font-family: 'Poppins', sans-serif;
+    animation: slideUpText 1.5s ease-out forwards;
+
 
   }
 
@@ -34,6 +37,8 @@
     font-size: 14px;
     color: #fff;
     font-family: 'Poppins', sans-serif;
+    animation: slideUpText 1.5s ease-out forwards;
+
 
   }
   .hero-btn {
@@ -46,12 +51,38 @@
     background: transparent;
     position: relative;
     cursor: pointer;
+    animation: slideUpText 1.5s ease-out forwards;
+
   }
   .hero-btn:hover {
     border: 1px solid #99180d;
     background: #99180d;
     transition: 1s;
   }
+
+
+   /*  for fading and sliding up text */
+   @keyframes fadeInText {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Slide-up effect */
+  @keyframes slideUpText {
+    from {
+      opacity: 0;
+      transform: translateY(30px); 
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0); 
+    }
+  }
+  
 
   /* Courses */
   .course {

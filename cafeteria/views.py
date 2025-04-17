@@ -156,26 +156,41 @@ def view_cart(request):
 @login_required
 def add_to_cart(request, food_id):
     if request.method == "POST":
-        food_item = get_object_or_404(FoodItem, id=food_id)
-         # Getting the quantity from the form
-        quantity = int(request.POST.get("quantity", 1)) 
-        
-        # Getting the user's cart (Creating one if it doesn't exist)
-        cart, created = Cart.objects.get_or_create(user=request.user)
-        
-        # Checking if item already exists in the cart or not
-        cart_item, created = CartItem.objects.get_or_create(cart=cart, food_item=food_item)
+        try:
+            food_item = get_object_or_404(FoodItem, id=food_id)
+            # Getting the quantity from the form
+            quantity_input = request.POST.get("quantity", "1").strip()
+            
+            # Validate quantity
+            try:
+                quantity = int(quantity_input)
+                if quantity <= 0 or quantity > 100:
+                    messages.error(request, "Please choose a valid quantity (between 1 and 100).")
+                    return redirect("orderonline")  
+            except ValueError:
+                messages.error(request, "Invalid quantity entered. Please enter a number.")
+                return redirect("orderonline")  
 
-        if created:
-            # Setting the quantity if it's a new item
-            cart_item.quantity = quantity  
-        else:
-            # Increasing the quantity if item exists already
-            cart_item.quantity += quantity  
+            # Getting the user's cart (Creating one if it doesn't exist)
+            cart, created = Cart.objects.get_or_create(user=request.user)
+            
+            # Checking if item already exists in the cart or not
+            cart_item, created = CartItem.objects.get_or_create(cart=cart, food_item=food_item)
+
+            if created:
+                # Setting the quantity if it's a new item
+                cart_item.quantity = quantity
+            else:
+                # Increasing the quantity if item exists already
+                cart_item.quantity += quantity
+            
+            cart_item.save()
+            messages.success(request, f"{food_item.name} added to cart successfully!")
         
-        cart_item.save()
-        messages.success(request, f"{food_item.name} added to cart successfully!")
-        
+        except Exception as e:
+            messages.error(request, "An error occurred while adding the item to the cart. Please try again.")
+            return redirect("orderonline")  
+    
     return redirect("view_cart")
 
 # Update Cart Item Quantity
