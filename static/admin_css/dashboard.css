@@ -81,15 +81,16 @@ nav ul li {
 }
 
 nav ul li a {
-    color: #ecf0f1;
-    text-decoration: none;
+    color: #ecf0f1 ;
+    text-decoration: none !important;
     padding: 15px 20px;
     display: flex;
     align-items: center;
     font-size: 1.1rem;
     transition: background-color 0.3s ease, padding-left 0.3s ease;
-    
+  
 }
+
 
 nav ul li a i {
     margin-right: 12px;
@@ -99,6 +100,7 @@ nav ul li a i {
 
 nav ul li a:hover {
     background-color: #34495e;
+    color: #99180d;
     padding-left: 25px;
 }
 
