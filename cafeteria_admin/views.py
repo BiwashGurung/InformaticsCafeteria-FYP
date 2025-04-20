@@ -211,17 +211,23 @@ def manage_menu(request):
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def add_food_item(request):
-    if request.method == 'POST':
-        #Processing the for mdata
-        form = FoodItemForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            #Redirecting after adding the food item
-            return redirect('manage_menu') 
-    else:
-        #Creating  an empty form for GET requests
-        form = FoodItemForm()
-    return render(request, 'cafeteria_admin/add_food.html', {'form': form})
+    try:
+        if request.method == 'POST':
+            # Processing the form data
+            form = FoodItemForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                # Redirecting after adding the food item
+                return redirect('manage_menu')
+        else:
+            # Creating an empty form for GET requests
+            form = FoodItemForm()
+        return render(request, 'cafeteria_admin/add_food.html', {'form': form})
+    except Exception as e:
+        logger.error(f"Error in add_food_item: {str(e)}")
+        messages.error(request, "An error occurred while adding the food item. Please try again.")
+        form = FoodItemForm(request.POST or None, request.FILES or None) if request.method == 'POST' else FoodItemForm()
+        return render(request, 'cafeteria_admin/add_food.html', {'form': form})
 
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def edit_food_item(request, food_id):
@@ -242,6 +248,7 @@ def edit_food_item(request, food_id):
 def delete_food_item(request, food_id):
     food_item = get_object_or_404(FoodItem, id=food_id)
     food_item.delete()
+    messages.success(request, 'Food item deleted successfully!')
     return redirect('manage_menu')
   
 
