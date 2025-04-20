@@ -217,3 +217,38 @@
     border: 1px solid #f5c6cb;
 }
 
+
+.delete-btn {
+    background-color: #99180d !important;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+.delete-btn:hover {
+    background-color: #b32118;
+}
+.modal-content {
+    border-radius: 8px;
+}
+.modal-header {
+    background-color: #99180d;
+    color: white;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+.modal-footer .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+}
+.modal-footer .btn-danger {
+    background-color: #99180d;
+    border: none;
+}
+.modal-footer .btn-danger:hover {
+    background-color: #b32118;
+}
+
+

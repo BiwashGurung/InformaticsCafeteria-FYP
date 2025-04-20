@@ -17,12 +17,6 @@
     </div>
 
     <div class="table-container">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-
         {% if group_orders %}
             <table>
                 <thead>

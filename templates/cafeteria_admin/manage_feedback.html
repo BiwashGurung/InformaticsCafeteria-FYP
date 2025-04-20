@@ -180,29 +180,12 @@
         margin-bottom: 20px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
-    @media (max-width: 768px) {
-        .dashboard-content { margin: 20px 10px; padding: 20px; }
-        h2 { font-size: 1.8rem; }
-        .search-bar form { max-width: 100%; }
-        .table thead th { font-size: 0.9rem; padding: 10px; }
-        .table td { font-size: 0.9rem; padding: 10px; }
-        .table td img { max-width: 80px; }
-        .replies-section { padding: 10px; }
-        .reply-actions { position: static; margin-top: 5px; }
-    }
+ 
 </style>
 
 <div class="dashboard-content">
     <h2><i class="fas fa-comment-alt"></i> Manage Feedback</h2>
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+  
 
     <!-- Search Bar -->
     <div class="search-bar">
