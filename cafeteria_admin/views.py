@@ -554,7 +554,7 @@ def manage_payments(request):
 
     orders = Order.objects.select_related('user')
 
-    # Apply date range filter
+    # Applying the  date range filter
     if start_date and end_date:
         try:
             start = timezone.make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
@@ -563,17 +563,17 @@ def manage_payments(request):
         except ValueError:
             messages.error(request, "Invalid date format.")
     else:
-        # Default to last 30 days
+        # Defaulting it to last 30 days
         default_start = timezone.now() - timedelta(days=30)
         orders = orders.filter(order_date__gte=default_start)
         start_date = default_start.strftime('%Y-%m-%d')
         end_date = timezone.now().strftime('%Y-%m-%d')
 
-    # Apply payment method filter
+    # Applying the payment method filter
     if payment_method in ['Cash', 'Online']:
         orders = orders.filter(payment_method=payment_method)
 
-    # Apply text search
+    # Applying the text search
     if query:
         orders = orders.filter(Q(id__icontains=query) | Q(user__username__icontains=query))
 
@@ -596,7 +596,7 @@ def manage_payments(request):
     }
     return render(request, 'cafeteria_admin/manage_payments.html', context)
 
-# Export Payments to Excel
+# Exporting the Payments to Excel
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def export_payments_to_excel(request):
     query = request.GET.get('q', '')
@@ -606,7 +606,7 @@ def export_payments_to_excel(request):
 
     orders = Order.objects.select_related('user')
 
-    # Apply date range filter
+    # Applying  the  date range filter
     if start_date and end_date:
         try:
             start = timezone.make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
@@ -619,34 +619,33 @@ def export_payments_to_excel(request):
         default_start = timezone.now() - timedelta(days=30)
         orders = orders.filter(order_date__gte=default_start)
 
-    # Apply payment method filter
+    # Applying the payment method filter
     if payment_method in ['Cash', 'Online']:
         orders = orders.filter(payment_method=payment_method)
 
-    # Apply text search
+    # Applying the text search
     if query:
         orders = orders.filter(Q(id__icontains=query) | Q(user__username__icontains=query))
 
     orders = orders.order_by('-order_date')
 
-    # Calculate total amount
+    # Calculating the total amount
     total_amount = orders.aggregate(total=Sum('total_price'))['total'] or 0
 
-    # Create Excel workbook
+    # Creating the Excel workbook
     wb = Workbook()
     ws = wb.active
     ws.title = "Payments"
 
-    # Define headers
+    # Defining the headers
     headers = ["Order ID", "Username", "Amount (Rs.)", "Payment Method", "Date"]
     ws.append(headers)
 
-    # Style headers
+    # Styling the headers
     for cell in ws[1]:
         cell.font = Font(bold=True)
         cell.alignment = Alignment(horizontal='center')
 
-    # Add data
     for order in orders:
         ws.append([
             order.id,
@@ -656,14 +655,14 @@ def export_payments_to_excel(request):
             order.order_date.strftime('%b %d, %Y')
         ])
 
-    # Add total amount
+
     total_row = ["", "", f"Total Amount: Rs. {float(total_amount):.2f}", "", ""]
     ws.append(total_row)
     total_cell = ws.cell(row=ws.max_row, column=3)
     total_cell.font = Font(bold=True, color="99180D")
     total_cell.alignment = Alignment(horizontal='left')
 
-    # Adjust column widths
+
     for col in ws.columns:
         max_length = 0
         column = col[0].column_letter
@@ -676,7 +675,7 @@ def export_payments_to_excel(request):
         adjusted_width = max_length + 2
         ws.column_dimensions[column].width = adjusted_width
 
-    # Save to response
+
     output = io.BytesIO()
     wb.save(output)
     output.seek(0)

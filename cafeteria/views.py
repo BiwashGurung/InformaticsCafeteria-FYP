@@ -545,9 +545,9 @@ def initkhalti(request):
     return_url = request.POST.get('return_url')
     amount = request.POST.get('amount')
     remarks = request.POST.get('remarks', '')
-    pickup_time = request.POST.get('pickup_time', '')  # Add pickup_time
-    dine_in_time = request.POST.get('dine_in_time', '')  # Add dine_in_time
-    group_code = request.POST.get('group_code', '')  # Add group_code
+    pickup_time = request.POST.get('pickup_time', '')  
+    dine_in_time = request.POST.get('dine_in_time', '') 
+    group_code = request.POST.get('group_code', '')  
     logger.info(f"Received POST data: return_url={return_url}, amount={amount}, remarks={remarks}, pickup_time={pickup_time}, dine_in_time={dine_in_time}, group_code={group_code}")
 
     cart = Cart.objects.filter(user=request.user).first()
