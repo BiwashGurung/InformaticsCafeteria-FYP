@@ -30,6 +30,7 @@ urlpatterns = [
     path('cartsummary/', cart_summary, name='cartsummary'),
     path('checkout/', place_order, name='place_order'),
     path('orders/', order_history, name='order_history'),
+    path('order/cancel/<int:order_id>/', views.cancel_order, name='cancel_order'),
     path('profile/', profile_page, name='profile'),
 
     # Khalti

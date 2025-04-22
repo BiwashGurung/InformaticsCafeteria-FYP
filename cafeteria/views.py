@@ -493,6 +493,7 @@ def place_order(request):
 
     return redirect('cartsummary')
 
+
 # cafeteria/views.py
 @login_required
 def order_history(request):
@@ -517,6 +518,23 @@ def order_history(request):
         'queue_info': queue_info,
     }
     return render(request, 'cafeteria/order.html', context)
+
+
+@login_required
+def cancel_order(request, order_id):
+    try:
+        order = get_object_or_404(Order, id=order_id, user=request.user)
+        if order.status != 'Pending':
+            messages.error(request, "Only pending orders can be cancelled.")
+            return redirect('order_history')
+        order.status = 'Cancelled'
+        order.save()
+        messages.success(request, "Order cancelled successfully.")
+        logger.info(f"Order {order_id} cancelled by user {request.user.username}")
+    except Exception as e:
+        logger.error(f"Error cancelling order {order_id}: {str(e)}")
+        messages.error(request, "An error occurred while cancelling the order.")
+    return redirect('order_history')
 
 # cafeteria/context_processors.py
 

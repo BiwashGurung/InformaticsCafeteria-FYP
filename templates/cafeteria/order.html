@@ -11,8 +11,6 @@
         padding: 40px 20px;
         background: linear-gradient(135deg, #f9f9f9, #ffffff);
         min-height: 100vh;
-  
-        
     }
     .orders-title {
         font-size: 2.5rem;
@@ -34,8 +32,7 @@
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         text-align: center;
         position: sticky;
-        top:87px;
-    
+        top: 87px;
         animation: slideIn 0.5s ease-out;
     }
     .queue-position {
@@ -110,7 +107,7 @@
         background: #ff9800;
         color: #fff;
     }
-    .status-preparing{
+    .status-preparing {
         background: #007bff;
         color: #fff;
     }
@@ -142,7 +139,7 @@
     .no-orders a:hover {
         color: #b32118;
     }
-    .btn-reorder {
+    .btn-cancel {
         background: #99180d;
         color: #fff;
         border: none;
@@ -150,11 +147,18 @@
         border-radius: 8px;
         font-size: 0.9rem;
         transition: background 0.3s ease, transform 0.2s ease;
+        margin: 5px;
+        display: inline-block;
+        text-decoration: none;
     }
-    .btn-reorder:hover {
+    .btn-cancel:hover {
         background: #b32118;
         transform: scale(1.05);
     }
+    .btn-cancel {
+        background: #99180D;
+    }
+   
     .order-card {
         background: #fff;
         border-radius: 12px;
@@ -179,16 +183,141 @@
     .order-card-body.show {
         display: block;
     }
+
+    .popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        animation: fadeIn 0.3s ease-in;
+    }
+    .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.8);
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        width: 90%;
+        overflow: hidden;
+        font-family: 'Poppins', sans-serif;
+        animation: popupIn 0.3s ease-out forwards;
+    }
+    .popup-header {
+        background: linear-gradient(to right, #99180d, #b32118);
+        padding: 15px;
+        text-align: center;
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: 600;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+    }
+    .popup-body {
+        padding: 20px;
+        text-align: center;
+    }
+    .popup-body p {
+        font-size: 1.1rem;
+        color: #333;
+        margin: 0 0 20px;
+        line-height: 1.5;
+    }
+    .popup-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        padding: 0 20px 20px;
+    }
+    .popup-buttons a, .popup-buttons button {
+        flex: 1;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+        text-decoration: none;
+        border: none;
+    }
+    .popup-confirm {
+        background: #99180d;
+        color: #fff;
+    }
+    .popup-confirm:hover {
+        background: #b32118;
+        transform: scale(1.05);
+    }
+    .popup-cancel {
+        background: #dc3545;
+        color: #fff;
+    }
+    .popup-cancel:hover {
+        background: #c82333;
+        transform: scale(1.05);
+    }
+    .popup-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #fff;
+        color: #99180d;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s ease, transform 0.2s ease;
+    }
+    .popup-close:hover {
+        color: #b32118;
+        transform: scale(1.1);
+    }
+    .messages {
+        list-style: none;
+        padding: 0;
+        margin: 20px 0;
+        text-align: center;
+    }
+    .messages li {
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        font-size: 1rem;
+    }
+    .messages .success {
+        background: #28a745;
+        color: #fff;
+    }
+    .messages .error {
+        background: #dc3545;
+        color: #fff;
+    }
     @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
     }
     @keyframes slideIn {
         from { transform: translateY(-20px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1;  }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes popupIn {
+        from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+        to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    @keyframes popupOut {
+        from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        to { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
     }
 
-    /* Desktop */
     @media (min-width: 992px) {
         .orders-table {
             display: table;
@@ -198,7 +327,6 @@
         }
     }
 
-    /* Tablet */
     @media (max-width: 991px) {
         .orders-title {
             font-size: 2.2rem;
@@ -216,13 +344,31 @@
         .item-name, .item-quantity {
             font-size: 0.9rem;
         }
-        .btn-reorder {
+        .btn-cancel {
             font-size: 0.85rem;
             padding: 6px 12px;
         }
+        .popup {
+            max-width: 350px;
+        }
+        .popup-header {
+            font-size: 1.4rem;
+            padding: 12px;
+        }
+        .popup-body p {
+            font-size: 1rem;
+        }
+        .popup-buttons a, .popup-buttons button {
+            font-size: 0.9rem;
+            padding: 8px;
+        }
+        .popup-close {
+            width: 28px;
+            height: 28px;
+            font-size: 1.1rem;
+        }
     }
 
-    /* Mobile */
     @media (max-width: 767px) {
         .orders-container {
             padding: 30px 15px;
@@ -258,14 +404,39 @@
             font-size: 0.8rem;
             padding: 5px 10px;
         }
-        .btn-reorder {
+        .btn-cancel {
             font-size: 0.8rem;
             padding: 6px 12px;
             width: 100%;
         }
+        .popup {
+            max-width: 300px;
+        }
+        .popup-header {
+            font-size: 1.3rem;
+            padding: 10px;
+        }
+        .popup-body {
+            padding: 15px;
+        }
+        .popup-body p {
+            font-size: 0.9rem;
+        }
+        .popup-buttons {
+            flex-direction: column;
+            gap: 10px;
+        }
+        .popup-buttons a, .popup-buttons button {
+            font-size: 0.85rem;
+            padding: 8px;
+        }
+        .popup-close {
+            width: 26px;
+            height: 26px;
+            font-size: 1rem;
+        }
     }
-
-    /* Small Mobile */
+  
     @media (max-width: 576px) {
         .orders-container {
             padding: 20px 10px;
@@ -291,11 +462,31 @@
         .status-badge {
             font-size: 0.75rem;
         }
+        .popup {
+            max-width: 280px;
+        }
+        .popup-header {
+            font-size: 1.2rem;
+        }
+        .popup-body p {
+            font-size: 0.85rem;
+        }
+        .popup-buttons a, .popup-buttons button {
+            font-size: 0.8rem;
+        }
     }
 </style>
 
 <div class="container orders-container">
     <h2 class="orders-title">{{ user.username }}'s Order History</h2>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 
     {% if queue_info.queue_position %}
     <div class="queue-info">
@@ -305,7 +496,6 @@
     {% endif %}
 
     {% if orders %}
-    <!-- Desktop Table -->
     <table class="table orders-table">
         <thead>
             <tr>
@@ -319,7 +509,7 @@
                 <th>Group Code</th>
                 <th>Payment</th>
                 <th>Remarks</th>
-                {% comment %} <th>Action</th> {% endcomment %}
+                <th>Cancel Order</th>
             </tr>
         </thead>
         <tbody>
@@ -344,17 +534,17 @@
                 <td>{{ order.group_code|default:'N/A' }}</td>
                 <td>{{ order.get_payment_method_display }}</td>
                 <td>{{ order.remarks|default:'None' }}</td>
-                {% comment %} <td>
-                    {% if order.status == 'Completed' %}
-                    <a href="{% url 'orderonline' %}" class="btn-reorder">Reorder</a>
+                <td>
+                    {% if order.status == 'Pending' %}
+                    <button class="btn-cancel" data-popup="popup-{{ order.id }}">Cancel?</button>
                     {% endif %}
-                </td> {% endcomment %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <!-- Mobile Cards -->
+
     {% for order in orders %}
     <div class="order-card">
         <div class="order-card-header" data-bs-toggle="collapse" data-bs-target="#order-{{ order.id }}">
@@ -379,9 +569,23 @@
             <p><strong>Group Code:</strong> {{ order.group_code|default:'N/A' }}</p>
             <p><strong>Payment:</strong> {{ order.get_payment_method_display }}</p>
             <p><strong>Remarks:</strong> {{ order.remarks|default:'None' }}</p>
-            {% if order.status == 'Completed' %}
-            <a href="{% url 'orderonline' %}" class="btn-reorder">Reorder</a>
+            {% if order.status == 'Pending' %}
+            <button class="btn-cancel" data-popup="popup-{{ order.id }}">Cancel Order</button>
             {% endif %}
+        </div>
+    </div>
+ 
+    <div class="popup-overlay" id="popup-{{ order.id }}">
+        <div class="popup">
+            <div class="popup-header">Confirm Cancellation</div>
+            <button class="popup-close" onclick="closePopup('popup-{{ order.id }}')">×</button>
+            <div class="popup-body">
+                <p>Are you sure you want to cancel this order?</p>
+            </div>
+            <div class="popup-buttons">
+                <a href="{% url 'cancel_order' order.id %}" class="popup-confirm">Confirm</a>
+            
+            </div>
         </div>
     </div>
     {% endfor %}
@@ -394,12 +598,38 @@
 </div>
 
 <script>
-    // Toggle chevron icon on collapse
+ 
     document.querySelectorAll('.order-card-header').forEach(header => {
         header.addEventListener('click', () => {
             const icon = header.querySelector('i');
             icon.classList.toggle('fa-chevron-down');
             icon.classList.toggle('fa-chevron-up');
+        });
+    });
+
+    document.querySelectorAll('.btn-cancel').forEach(button => {
+        button.addEventListener('click', () => {
+            const popupId = button.getAttribute('data-popup');
+            const popup = document.getElementById(popupId);
+            popup.style.display = 'flex';
+        });
+    });
+
+    function closePopup(popupId) {
+        const popup = document.getElementById(popupId);
+        popup.classList.add('hide');
+        setTimeout(() => {
+            popup.style.display = 'none';
+            popup.classList.remove('hide');
+        }, 300);
+    }
+
+    
+    document.querySelectorAll('.popup-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                closePopup(overlay.id);
+            }
         });
     });
 </script>

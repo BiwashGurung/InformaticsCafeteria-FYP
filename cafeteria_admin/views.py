@@ -267,7 +267,7 @@ def manage_orders(request):
 
     return render(request, 'cafeteria_admin/manage_orders.html', {'orders': orders, 'query': query})
 
-# Admin View: Update Order Status
+# Updating  Order Status
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def update_order_status(request, order_id):
     if not request.user.is_staff:
@@ -284,7 +284,7 @@ def update_order_status(request, order_id):
     
     return redirect('manage_orders')
 
-# Admin View: Delete Order
+# Deleting the Order
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def delete_order(request, order_id):
     if not request.user.is_staff:
@@ -298,7 +298,7 @@ def delete_order(request, order_id):
     return redirect('manage_orders')
 
 
-# Admin View: View Order Details
+# View Order Details
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def manage_lost_found(request):
     query = request.GET.get('q', '')
