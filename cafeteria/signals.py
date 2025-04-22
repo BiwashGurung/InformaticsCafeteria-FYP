@@ -52,7 +52,18 @@ def build_email_content(instance, is_creation=False):
     elif instance.status == "Completed":
         html_message += "<p style='color: #27ae60;'>Your order is ready! Please pick it up or enjoy your dine-in soon.</p>"
     elif instance.status == "Cancelled":
-        html_message += "<p style='color: #c0392b;'>Your order has been cancelled. Contact us at <a href='mailto:informaticscafetera@gmail.com' style='color: #2980b9;'>informaticscafetera@gmail.com</a> if this was an error.</p>"
+        html_message += """
+<p style='color: #c0392b;'>
+    Your order has been cancelled. Contact us at 
+    <a href='mailto:informaticscafetera@gmail.com' style='color: #2980b9;'>informaticscafetera@gmail.com</a> 
+    if this was an error.
+</p>
+<p style='color: #c0392b; font-weight: bold;'>
+    NOTE: Only for online payment users!<br>
+    To receive a refund for your cancelled order, kindly visit the cafeteria counter and present your order receipt or any proof of purchase.
+</p>
+"""
+
     else:  # "Pending"
         html_message += "<p style='color: #f1c40f;'>Your order status is Pending. We'll keep you posted!</p>"
 

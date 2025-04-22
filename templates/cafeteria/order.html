@@ -205,10 +205,12 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         max-width: 400px;
         width: 90%;
-        overflow: hidden;
+        max-height: 300px; 
+        overflow-y: auto;   
         font-family: 'Poppins', sans-serif;
         animation: popupIn 0.3s ease-out forwards;
     }
+    
     .popup-header {
         background: linear-gradient(to right, #99180d, #b32118);
         padding: 15px;
@@ -479,14 +481,6 @@
 
 <div class="container orders-container">
     <h2 class="orders-title">{{ user.username }}'s Order History</h2>
-
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
 
     {% if queue_info.queue_position %}
     <div class="queue-info">
