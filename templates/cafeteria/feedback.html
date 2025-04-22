@@ -3,9 +3,7 @@
 {% load static tz %}
 
 <head>
-
   <title>Informatics Cafeteria - Feedback</title>
-  
 </head>
 
 <style>
@@ -120,7 +118,7 @@
         position: relative;
     }
     .tag-option input[type="checkbox"] {
-        display: none; 
+        display: none;
     }
     .tag-option label {
         display: inline-block;
@@ -245,7 +243,7 @@
         margin: 10px 0;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         transition: transform 0.3s ease;
-        cursor: pointer; /* Indicate clickability */
+        cursor: pointer;
     }
     .feedback-item img:hover {
         transform: scale(1.05);
@@ -302,6 +300,7 @@
     .reply-item.level-2 {
         margin-left: 20px;
         border-left: 2px dashed #ccc;
+        padding: 14px;
     }
     .reply-actions {
         position: absolute;
@@ -374,7 +373,7 @@
         color: #b32118;
     }
     .show-less-comments, .show-less-subreplies {
-        display: none; 
+        display: none;
     }
     .reply-form textarea, .subreply-form textarea {
         width: 100%;
@@ -438,7 +437,6 @@
         margin-left: 12px;
         font-weight: 600;
     }
-    /* Delete Popup Styles */
     .delete-popup {
         display: none;
         position: fixed;
@@ -503,7 +501,6 @@
     .delete-popup .confirm-delete-btn:hover {
         background: #b02a37;
     }
-    /* Image Popup Styles */
     .image-popup {
         display: none;
         position: fixed;
@@ -539,29 +536,157 @@
     .image-popup-close:hover {
         color: #99180d;
     }
+
+    @media (max-width: 767px) {
+        .feedback-wrapper {
+            margin: 20px auto;
+            padding: 15px;
+        }
+        .intro-section {
+            padding: 20px 15px;
+        }
+        .intro-section h1 {
+            font-size: 2rem;
+        }
+        .intro-section p {
+            font-size: 1.1rem;
+        }
+        .add-feedback-btn {
+            padding: 10px 25px;
+            font-size: 1rem;
+        }
+        .form-section {
+            padding: 20px 15px;
+        }
+        .form-section h2 {
+            font-size: 1.8rem;
+        }
+        .feedback-form {
+            padding: 15px;
+        }
+        .feedback-form textarea {
+            height: 120px;
+            font-size: 0.95rem;
+        }
+        .search-section {
+            padding: 15px;
+        }
+        .search-section input {
+            padding: 10px;
+            font-size: 0.95rem;
+        }
+        .search-section .btn-secondary {
+            padding: 10px 20px;
+        }
+        .reviews-section {
+            padding: 20px 15px;
+        }
+        .reviews-section h2 {
+            font-size: 1.8rem;
+        }
+        .feedback-item {
+            padding: 15px;
+        }
+        .feedback-header strong {
+            font-size: 1rem;
+        }
+        .feedback-header span {
+            font-size: 0.85rem;
+        }
+        .feedback-content {
+            font-size: 0.95rem;
+        }
+        .feedback-item img {
+            width: 180px;
+        }
+        .reaction-btn {
+            font-size: 1.1rem;
+        }
+        .replies {
+            padding-left: 15px;
+        }
+        .reply-item {
+            padding: 10px;
+        }
+        .reply-item.level-2 {
+            padding: 12px;
+            min-height: 70px;
+        }
+        .reply-item strong {
+            font-size: 0.9rem;
+        }
+        .reply-actions {
+            position: relative;
+            top: auto;
+            right: auto;
+            justify-content: flex-end;
+            margin-top: 8px;
+            gap: 8px;
+        }
+        .reply-actions .edit-btn, .reply-actions .delete-btn {
+            font-size: 0.8rem;
+            padding: 4px;
+        }
+        .edit-form textarea {
+            font-size: 0.85rem;
+            height: 50px;
+        }
+        .edit-form .btn {
+            font-size: 0.85rem;
+            padding: 6px 12px;
+        }
+        .reply-form textarea, .subreply-form textarea {
+            font-size: 0.85rem;
+            height: 60px;
+        }
+        .reply-form .btn, .subreply-form .btn {
+            font-size: 0.9rem;
+            padding: 8px 15px;
+        }
+    }
+    @media (max-width: 576px) {
+        .intro-section h1 {
+            font-size: 1.8rem;
+        }
+        .intro-section p {
+            font-size: 1rem;
+        }
+        .form-section h2, .reviews-section h2 {
+            font-size: 1.6rem;
+        }
+        .feedback-item img {
+            width: 150px;
+        }
+        .feedback-header span {
+            font-size: 0.8rem;
+        }
+        .reply-item.level-2 {
+            padding: 10px;
+            min-height: 60px;
+        }
+      
+        .reply-actions {
+            margin-top: -50px;
+            gap: 6px;
+        }
+        .reply-actions .edit-btn, .reply-actions .delete-btn {
+            font-size: 0.75rem;
+            padding: 3px;
+        }
+    }
 </style>
 
 <div class="feedback-wrapper">
-    <!-- Intro Section -->
     <div class="intro-section">
         <h1><i class="fas fa-utensils me-2"></i>Join the Cafeteria Conversation</h1>
         <p>Love our food? Got a suggestion? Share your thoughts, react to others, and help shape our menu!</p>
         <a href="#feedbackForm" class="add-feedback-btn" data-bs-toggle="collapse"><i class="fas fa-comment-dots me-2"></i>Share Feedback</a>
     </div>
 
-    <!-- Form Section -->
     <div class="form-section">
         <h2><i class="fas fa-bullhorn me-2"></i>Your Voice Matters</h2>
         <div id="feedbackForm" class="collapse feedback-form">
-            {% if messages %}
-                <div class="messages">
-                    {% for message in messages %}
-                        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-warning{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
+       
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <textarea name="content" placeholder="What’s on your mind?" required></textarea>
@@ -594,7 +719,6 @@
         </div>
     </div>
 
-    <!-- Search Section -->
     <div class="search-section">
         <form method="GET">
             <input type="text" name="q" value="{{ query }}" placeholder="Search posts or tags (e.g., #snacks)">
@@ -602,7 +726,6 @@
         </form>
     </div>
 
-    <!-- Reviews Section -->
     <div class="reviews-section">
         <h2><i class="fas fa-users me-2"></i>Community Buzz</h2>
         {% for feedback in feedbacks %}
@@ -710,7 +833,6 @@
     </div>
 </div>
 
-<!-- Delete Popup -->
 <div class="popup-overlay" id="popupOverlay"></div>
 <div class="delete-popup" id="deletePopup">
     <button class="popup-close" onclick="hideDeletePopup()"><i class="fas fa-times"></i></button>
@@ -721,12 +843,10 @@
     </form>
 </div>
 
-<!-- Image Popup -->
 <div class="image-popup" id="imagePopup">
     <button class="image-popup-close" onclick="hideImagePopup()"><i class="fas fa-times"></i></button>
     <img id="popupImage" src="" alt="Full-screen Feedback Image">
 </div>
-
 
 <script>
     function showImagePopup(imageUrl) {
