@@ -488,7 +488,7 @@ def place_order(request):
         if 'payment_details' in request.session:
             del request.session['payment_details']
 
-        messages.success(request, f"Order #{order.id} placed successfully!")
+        messages.success(request, f"Order #{order.id} placed successfully! Please check your email for the receipt and order status.")
         return redirect('order_history')
 
     return redirect('cartsummary')
@@ -529,7 +529,7 @@ def cancel_order(request, order_id):
             return redirect('order_history')
         order.status = 'Cancelled'
         order.save()
-        messages.success(request, "Order cancelled successfully.")
+        messages.success(request, "Order cancelled successfully. Please check your email")
         logger.info(f"Order {order_id} cancelled by user {request.user.username}")
     except Exception as e:
         logger.error(f"Error cancelling order {order_id}: {str(e)}")
