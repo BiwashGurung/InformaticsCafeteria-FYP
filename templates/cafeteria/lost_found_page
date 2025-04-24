@@ -18,8 +18,6 @@
   </section>
 <div class="container mt-5 px-0">
     
-
-    <!-- Introductory Card -->
     <section class="mb-5 text-center">
         <div class="card shadow border-0 animate__animated animate__zoomIn" style="max-width: 700px; margin: 0 auto; background: linear-gradient(135deg, #fff, #f8e1e1); border-radius: 20px;">
             <div class="card-body p-5">
@@ -36,7 +34,7 @@
         </div>
     </section>
 
-    <!-- Modal for Reporting Form -->
+  
     <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content" style="border-radius: 15px; overflow: hidden;">
@@ -81,7 +79,7 @@
         </div>
     </div>
 
-    <!-- Found Items Card Grid -->
+  
     <section>
         <h2 id="founditems" class="mb-5 text-center animate__animated animate__fadeIn" style="color: #99180d; font-size: 2.5rem;">Found Items</h2>
         {% if approved_items %}
@@ -101,14 +99,10 @@
                                 <p class="card-text text-muted mb-3">{{ item.description|truncatewords:12 }}</p>
                                 <ul class="list-unstyled text-dark">
                                     <li><i class="fas fa-map-marker-alt me-2" style="color: #99180d;"></i><strong>Location:</strong> {{ item.location }}</li>
-                                    <li><i class="fas fa-user me-2" style="color: #99180d;"></i><strong>Reported By:</strong> {{ item.user.username }}</li>
                                     <li><i class="fas fa-calendar-alt me-2" style="color: #99180d;"></i><strong>Date:</strong> {{ item.submitted_at|date:"M d, Y" }}</li>
                                 </ul>
                             </div>
-                            <div class="card-footer bg-transparent border-0 p-4 pt-0">
-                                <span class="badge w-100 d-block py-2 mb-3" style="background-color: #99180d; color: white; border-radius: 10px;">Found: {{ item.item_name }}</span>
-                                <a href="{% url 'contactus' %}" class="btn btn-sm w-100" style="background-color: #99180d; color: white; border: none; border-radius: 20px;">Contact to Claim</a>
-                            </div>
+                         
                         </div>
                     </div>
                 {% endfor %}
@@ -123,7 +117,7 @@
         {% endif %}
     </section>
 
-    <!--Recently Resolved Items -->
+    
     <section id="resolved-items" class="mt-5">
         <h2 class="mb-5 text-center animate__animated animate__fadeIn" style="color: #28a745; font-size: 2.5rem;">Recently Resolved Items</h2>
         {% if resolved_items %}
@@ -147,9 +141,7 @@
                                     <li><i class="fas fa-calendar-alt me-2" style="color: #28a745;"></i><strong>Resolved On:</strong> {{ item.submitted_at|date:"M d, Y" }}</li>
                                 </ul>
                             </div>
-                            <div class="card-footer bg-transparent border-0 p-4 pt-0">
-                                <span class="badge badge-resolved w-100 d-block py-2 mb-3" style="color: white; border-radius: 10px;">Resolved: {{ item.item_name }}</span>
-                            </div>
+                          
                         </div>
                     </div>
                 {% endfor %}
