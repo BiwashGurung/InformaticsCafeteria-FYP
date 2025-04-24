@@ -7,8 +7,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'cafeteria_css/profile.css' %}" />
 </head>
 
-
-
 <div class="login-container">
     <div class="login-box">
         <h2>Update Your Profile</h2>
@@ -17,23 +15,29 @@
             <div class="form-group">
                 <label for="{{ form.username.id_for_label }}">Username</label>
                 {{ form.username }}
+               
             </div>
             <div class="form-group">
                 <label for="{{ form.email.id_for_label }}">Email</label>
                 {{ form.email }}
+               
             </div>
             <div class="form-group">
-                <label for="{{ form.phone.id_for_label }}">Phone Number</label>
+                <label for="{{ form.phone.id_for_label }}">Phone Number </label>
                 {{ form.phone }}
+               
             </div>
             <div class="form-group">
                 <label for="{{ form.new_password.id_for_label }}">New Password</label>
                 {{ form.new_password }}
+              
             </div>
             <div class="form-group">
                 <label for="{{ form.confirm_password.id_for_label }}">Confirm Password</label>
                 {{ form.confirm_password }}
+             
             </div>
+         
             <button type="submit" class="login-button">Update Profile</button>
         </form>
         <p class="signup-text">
