@@ -101,3 +101,21 @@
   animation-timeline:view() ;
   animation-range: entry 0%  cover 40%;
 }    
+
+
+@media (max-width: 768px) {
+  body {
+      overflow-x: hidden;
+    
+  }
+  .hero-section {
+      width: 100vw;
+      overflow-x: hidden;
+  }
+  .container {
+      padding-left: 15px;
+      padding-right: 15px;
+      margin: 0 auto;
+      max-width: 100%;
+  }
+}
