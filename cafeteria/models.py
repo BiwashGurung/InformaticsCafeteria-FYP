@@ -49,13 +49,6 @@ class FoodItem(models.Model):
 
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    username = models.CharField(max_length=50, blank=True, null=True) 
-
-    def save(self, *args, **kwargs):
-         #Setting  automatically username if not provided
-        if not self.username: 
-            self.username = self.user.username
-        super().save(*args, **kwargs)
 
     def total_price(self):
         return sum(item.total_price() for item in self.cart_items.all())
@@ -68,13 +61,8 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name="cart_items", on_delete=models.CASCADE)
     food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-    username = models.CharField(max_length=50, blank=True, null=True)
     group_code = models.CharField(max_length=6, null=True, blank=True)  
 
-    def save(self, *args, **kwargs):
-        if not self.username and self.cart.user:
-            self.username = self.cart.user.username
-        super().save(*args, **kwargs)
 
     def total_price(self):
         return self.food_item.price * self.quantity
@@ -87,13 +75,6 @@ class OrderItem(models.Model):
     food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    username = models.CharField(max_length=50, blank=True, null=True) 
-
-    def save(self, *args, **kwargs):
-        # Automatically setting the username based on the associated order's user
-        if not self.username and self.order.user:
-            self.username = self.order.user.username
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.quantity}x {self.food_item.name}"
@@ -122,16 +103,10 @@ class Order(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Pending")
     pickup_time = models.TimeField(null=True, blank=True)
     dine_in_time = models.TimeField(null=True, blank=True)
-    username = models.CharField(max_length=50, blank=True, null=True)  
     remarks = models.TextField(blank=True, null=True) 
     group_code = models.CharField(max_length=6, null=True, blank=True)
 
-    def save(self, *args, **kwargs):
-        # Automatically setting the username based on the order's user
-        if not self.username and self.user:
-            self.username = self.user.username
-        super().save(*args, **kwargs)
-
+ 
     def __str__(self):
         return f"Order {self.id} - {self.user.username}"
 
