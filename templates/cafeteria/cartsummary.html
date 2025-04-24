@@ -239,17 +239,26 @@
     <table class="table table-bordered mt-3 cart-table">
         <thead>
             <tr>
+                <th>Food Image</th>
                 <th>Food Item</th>
                 <th>Quantity</th>
-                <th>Price</th>
+                <th>Unit Price</th>
+             
             </tr>
         </thead>
         <tbody>
             {% for item in cart_items %}
             <tr>
+                <td>
+                    {% if item.food_item.image %}
+                    <img src="{{ item.food_item.image.url }}" alt="{{ item.food_item.name }}" class="img-fluid" style="width: 80px; height: 80px; object-fit: cover;">
+                    {% else %}
+                    <img src="{% static 'Images/default_food.jpg' %}" alt="Default Food Image" class="img-fluid" style="width: 80px; height: 80px; object-fit: cover;">
+                    {% endif %}
                 <td>{{ item.food_item.name }}</td>
                 <td>{{ item.quantity }}</td>
                 <td>Rs. {{ item.food_item.price|floatformat:2 }}</td>
+                
             </tr>
             {% endfor %}
         </tbody>

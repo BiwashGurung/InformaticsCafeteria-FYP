@@ -145,7 +145,7 @@
       margin: 40px 0;
     }
 
-    /* Responsive: Stack into cards on mobile */
+  
     @media (max-width: 576px) {
       .cart-table {
         display: none;
@@ -161,6 +161,8 @@
 
       .cart-item-card h5 {
         font-size: 1.1rem;
+        font-weight: bold;
+        margin-top: 10px;
         margin-bottom: 10px;
         color: #99180d;
       }
@@ -197,13 +199,14 @@
   <h2 class="cart-title">Hello {{ user.username }}, 🛒 Your Cart</h2>
 
   {% if cart_items %}
-    <!-- Desktop Table -->
+
     <div class="table-responsive d-none d-sm-block">
       <table class="cart-table">
         <thead>
           <tr>
+            <th> Food Item</th>
             <th>Item</th>
-            <th>Price</th>
+            <th>Unit Price</th>
             <th>Quantity</th>
             <th>Total</th>
             <th>Action</th>
@@ -212,6 +215,9 @@
         <tbody>
           {% for item in cart_items %}
           <tr>
+            <td>
+              <img src="{{ item.food_item.image.url }}" alt="{{ item.food_item.name }}" width="80" height="80">
+            </td>
             <td>{{ item.food_item.name }}</td>
             <td>Rs. {{ item.food_item.price }}</td>
             <td>
@@ -231,10 +237,11 @@
       </table>
     </div>
 
-    <!-- Mobile Card View -->
+    
     <div class="d-block d-sm-none">
       {% for item in cart_items %}
       <div class="cart-item-card">
+        <img src="{{ item.food_item.image.url }}" alt="{{ item.food_item.name }}" width="350" height="200" >
         <h5>{{ item.food_item.name }}</h5>
         <p>Price: Rs. {{ item.food_item.price }}</p>
         <p>Total: Rs. {{ item.total_price }}</p>

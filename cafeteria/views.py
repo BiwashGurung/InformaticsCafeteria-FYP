@@ -108,7 +108,7 @@ def LogoutPage(request):
 
 @login_required
 def profile_page(request):
-    # Ensure Profile exists
+    # Ensuring the Profile exists
     Profile.objects.get_or_create(user=request.user)
     
     if request.method == 'POST':
@@ -161,7 +161,7 @@ def add_to_cart(request, food_id):
             # Getting the quantity from the form
             quantity_input = request.POST.get("quantity", "1").strip()
             
-            # Validate quantity
+            # Validating the quantity
             try:
                 quantity = int(quantity_input)
                 if quantity <= 0 or quantity > 100:
