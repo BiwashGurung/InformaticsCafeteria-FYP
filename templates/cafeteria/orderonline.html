@@ -22,20 +22,55 @@
 
 <div class="slider">
   <div class="slider-track">
-    <img src="{% static 'Images/slider-chickenroll.jpg' %}" alt="Chicken Roll" />
-    <img src="{% static 'Images/slider-chowmein.jpg' %}" alt="Chowmein" />
-    <img src="{% static 'Images/slider-colddrinks.webp' %}" alt="Cold Drinks" />
-    <img src="{% static 'Images/slider-icecream.jpeg' %}" alt="Icecream" />
-    <img src="{% static 'Images/slider-keemanoodle.webp' %}" alt="keemanoodle" />
-    <img src="{% static 'Images/slider-momo.jpg' %}" alt="Momo" />
-
-    <!-- Duplicating the  set for smooth infinite loop -->
-    <img src="{% static 'Images/slider-chickenroll.jpg' %}" alt="Chicken Roll" />
-    <img src="{% static 'Images/slider-chowmein.jpg' %}" alt="Chowmein" />
-    <img src="{% static 'Images/slider-colddrinks.webp' %}" alt="Cold Drinks" />
-    <img src="{% static 'Images/slider-icecream.jpeg' %}" alt="Icecream" />
-    <img src="{% static 'Images/slider-keemanoodle.webp' %}" alt="keemanoodle" />
-    <img src="{% static 'Images/slider-momo.jpg' %}" alt="Momo" />
+    <div class="slider-item">
+      <img src="{% static 'Images/slider-chickenroll.jpg' %}" alt="Chicken Roll" />
+      <a href="{% url 'food_list' category='Snacks' %}" class="category-overlay">Snacks</a>
+    </div>
+    <div class="slider-item">
+      <img src="{% static 'Images/slider-chowmein.jpg' %}" alt="Chowmein" />
+      <a href="{% url 'food_list' category='MainCourse' %}" class="category-overlay">Main Course</a>
+    </div>
+    <div class="slider-item">
+      <img src="{% static 'Images/slider-colddrinks.webp' %}" alt="Cold Drinks" />
+      <a href="{% url 'food_list' category='Beverage' %}" class="category-overlay">Beverage</a>
+    </div>
+    <div class="slider-item">
+      <img src="{% static 'Images/slider-icecream.jpeg' %}" alt="Icecream" />
+      <a href="{% url 'food_list' category='Desserts' %}" class="category-overlay">Desserts</a>
+    </div>
+    <div class="slider-item">
+      <img src="{% static 'Images/slider-keemanoodle.webp' %}" alt="Keema Noodle" />
+      <a href="{% url 'food_list' category='MainCourse' %}" class="category-overlay">Main Course</a>
+    </div>
+    <div class="slider-item">
+      <img src="{% static 'Images/slider-momo.jpg' %}" alt="Momo" />
+      <a href="{% url 'food_list' category='Appetizer' %}" class="category-overlay">Appetizer</a>
+    </div>
+    <!-- Duplicated set for infinite loop -->
+    <div class="slider-item">
+      <img src="{% static 'Images/slider-chickenroll.jpg' %}" alt="Chicken Roll" />
+      <a href="{% url 'food_list' category='Snacks' %}" class="category-overlay">Snacks</a>
+    </div>
+    <div class="slider-item">
+      <img src="{% static 'Images/slider-chowmein.jpg' %}" alt="Chowmein" />
+      <a href="{% url 'food_list' category='MainCourse' %}" class="category-overlay">Main Course</a>
+    </div>
+    <div class="slider-item">
+      <img src="{% static 'Images/slider-colddrinks.webp' %}" alt="Cold Drinks" />
+      <a href="{% url 'food_list' category='Beverage' %}" class="category-overlay">Beverage</a>
+    </div>
+    <div class="slider-item">
+      <img src="{% static 'Images/slider-icecream.jpeg' %}" alt="Icecream" />
+      <a href="{% url 'food_list' category='Desserts' %}" class="category-overlay">Desserts</a>
+    </div>
+    <div class="slider-item">
+      <img src="{% static 'Images/slider-keemanoodle.webp' %}" alt="Keema Noodle" />
+      <a href="{% url 'food_list' category='MainCourse' %}" class="category-overlay">Main Course</a>
+    </div>
+    <div class="slider-item">
+      <img src="{% static 'Images/slider-momo.jpg' %}" alt="Momo" />
+      <a href="{% url 'food_list' category='Appetizer' %}" class="category-overlay">Appetizer</a>
+    </div>
   </div>
 </div>
 
