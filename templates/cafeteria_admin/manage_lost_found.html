@@ -25,10 +25,10 @@
                         <th>Description</th>
                         <th>Location</th>
                         <th>Image</th>
-                        <th>Reported By</th>
+                        {% comment %} <th>Reported By</th> {% endcomment %}
                         <th>Status</th>
                         <th>Submitted</th>
-                        <th>Approved By</th>
+                        {% comment %} <th>Approved By</th> {% endcomment %}
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -45,10 +45,10 @@
                                 No Image
                             {% endif %}
                         </td>
-                        <td>{{ item.user.username }}</td>
+                        {% comment %} <td>{{ item.user.username }}</td> {% endcomment %}
                         <td>{{ item.status }}</td>
                         <td>{{ item.submitted_at|date:"M d, Y" }}</td>
-                        <td>{{ item.approved_by.username|default:"Not Approved" }}</td>
+                        {% comment %} <td>{{ item.approved_by.username|default:"Not Approved" }}</td> {% endcomment %}
                         <td class="actions">
                             {% if item.status == 'pending' %}
                                 <form method="POST" action="{% url 'approve_lost_found' item.id %}" style="display:inline;">
@@ -66,7 +66,7 @@
                                 </form>
                             {% endif %}
 
-                            <!-- Direct Delete Form -->
+                      
                             <form method="POST" action="{% url 'delete_lost_found' item.id %}" style="display:inline;">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger delete-btn">Delete</button>

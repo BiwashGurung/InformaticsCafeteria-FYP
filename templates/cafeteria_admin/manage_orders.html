@@ -29,7 +29,7 @@
                     <th>Order Status</th>
                     <th>Remarks</th>
                     {% comment %} <th>Payment Method</th> {% endcomment %}
-                    <th>Actions</th>
+                    {% comment %} <th>Actions</th> {% endcomment %}
                 </tr>
             </thead>
             <tbody>
@@ -61,9 +61,9 @@
                     </td>
                     <td>{{ order.remarks }}</td>
                     {% comment %} <td>{{ order.get_payment_status_display }}</td> {% endcomment %}
-                    <td class="actions">
+                    {% comment %} <td class="actions">
                         <a href="{% url 'delete_order' order.id %}" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</a>
-                    </td>
+                    </td> {% endcomment %}
                 </tr>
                 {% endfor %}
             </tbody>

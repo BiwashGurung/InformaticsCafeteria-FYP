@@ -19,7 +19,7 @@
     <div class="table-container">
         {% if group_orders %}
             <table>
-                <thead>
+                <thead >
                     <tr>
                         <th>Code</th>
                         <th>Leader</th>
@@ -28,7 +28,7 @@
                         <th>Created At</th>
                         <th>Status</th>
                         <th>Items</th>
-                        <th>Actions</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,10 +56,10 @@
                                     <button type="submit" class="edit-btn">Close</button>
                                 </form>
                             {% endif %}
-                            <form method="POST" action="{% url 'delete_group_order' group.id %}" style="display:inline;">
+                            {% comment %} <form method="POST" action="{% url 'delete_group_order' group.id %}" style="display:inline;">
                                 {% csrf_token %}
                                 <button type="submit" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</button>
-                            </form>
+                            </form> {% endcomment %}
                         </td>
                     </tr>
                     {% endfor %}
