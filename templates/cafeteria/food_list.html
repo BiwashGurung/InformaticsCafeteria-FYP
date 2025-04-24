@@ -13,7 +13,7 @@
  {% for food in food_items %}
   <div class="food-item">
      {% if not food.is_in_stock %}
-    <p class="out-of-stock">Out of Stock</p>  
+    <p class="out-of-stock">Sold Out</p>  
     {% endif %}
     <img src="{{ food.image.url }}" alt="{{ food.name }}" />
     <div class="food-details">

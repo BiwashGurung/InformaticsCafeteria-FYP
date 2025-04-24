@@ -24,11 +24,11 @@
         {{ form.image }}
 
         <div class="out-of-stock-section">
-            <label for="id_is_in_stock" class="out-of-stock-label">Out of Stock:</label>
+            <label for="id_is_in_stock" class="out-of-stock-label">Sold Out:</label>
             <!-- Checkbox for Out of Stock -->
             <input type="checkbox" id="id_is_in_stock" name="is_in_stock" value="true" 
                 {% if food_item.is_in_stock %}checked{% endif %}>
-            <span>Uncheck this box to mark this item as<strong> Out of Stock.</strong></span>
+            <span>Uncheck this box to mark this item as<strong> Sold Out</strong></span>
         </div>
         
 
