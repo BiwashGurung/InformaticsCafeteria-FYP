@@ -39,7 +39,7 @@
                     <td>Rs. {{ item.price }}</td>
                     <td class="actions">
                         <a href="{% url 'edit_food_item' item.id %}" class="edit-btn">Edit</a>
-                        <a href="{% url 'delete_food_item' item.id %}" class="delete-btn" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                        {% comment %} <a href="{% url 'delete_food_item' item.id %}" class="delete-btn" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a> {% endcomment %}
                     </td>
                 </tr>
                 {% endfor %}
