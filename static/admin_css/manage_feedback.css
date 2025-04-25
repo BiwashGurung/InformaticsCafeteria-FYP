@@ -1,0 +1,472 @@
+:root {
+    --primary: #99180d;
+    --hover: #7a130a;
+    --approve: #38a169;
+    --delete: #e53e3e;
+    --replies: #d69e2e;
+    --background: #f7fafc;
+    --card-bg: #ffffff;
+    --text: #2d3748;
+    --text-light: #718096;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    --border: 1px solid #e2e8f0;
+    --glow: 0 0 10px rgba(153, 24, 13, 0.2);
+    --ripple: rgba(255, 255, 255, 0.5);
+}
+
+.dashboard-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 16px;
+    background: var(--background);
+    min-height: 100vh;
+    font-family: 'Roboto', sans-serif;
+}
+
+h2 {
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    color: var(--primary) !important;
+    margin: 0 0 32px !important;
+    position: relative;
+    animation: fadeIn 0.6s ease-in;
+    text-shadow: none !important;
+    text-align: center !important;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 1.5px;
+    animation: underlineGrow 0.8s ease-in-out;
+}
+
+h2 i {
+    margin-right: 8px !important;
+    color: var(--primary) !important;
+}
+
+.search-bar {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.search-bar form {
+    display: flex !important;
+    width: 100%;
+    max-width: 600px;
+    background: var(--card-bg);
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: visible !important;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 12px 16px !important;
+    border: 1px solid #cbd5e0 !important;
+    border-radius: 8px 0 0 8px !important;
+    font-size: 1rem !important;
+    color: var(--text) !important;
+    background: #f7fafc !important;
+    outline: none;
+    font-family: 'Roboto', sans-serif !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.search-bar input:focus {
+    border-color: var(--primary) !important;
+    box-shadow: var(--glow) !important;
+    transform: scale(1.01);
+}
+
+.search-bar .btn {
+    position: relative;
+    padding: 12px 24px !important;
+    border: none !important;
+    border-radius: 0 8px 8px 0 !important;
+    background: var(--primary) !important;
+    color: #ffffff !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif !important;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease !important;
+}
+
+.search-bar .btn:hover {
+    background: var(--hover) !important;
+    box-shadow: var(--glow) !important;
+    transform: scale(1.05) !important;
+}
+
+.search-bar .btn:focus {
+    outline: 2px solid var(--primary) !important;
+    outline-offset: 2px !important;
+}
+
+.search-bar .btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: var(--ripple);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+}
+
+.search-bar .btn:active::after {
+    width: 200px;
+    height: 200px;
+    opacity: 0.5;
+}
+
+.table {
+    width: 100%;
+    max-width: 1200px;
+    border-collapse: separate !important;
+    border-spacing: 0 8px !important;
+    background: transparent;
+}
+
+.table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.table thead th {
+    padding: 30px 26px !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    color: var(--text) !important;
+    background: #edf2f7 !important;
+    text-align: left !important;
+    border: none !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+}
+
+.table tbody tr {
+    background: var(--card-bg) !important;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.table tbody tr:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.table td {
+    padding: 26px !important;
+    font-size: 1rem !important;
+    color: var(--text) !important;
+    background: var(--card-bg);
+    border: none !important;
+    vertical-align: middle;
+}
+
+.table td img {
+    max-width: 80px !important;
+    max-height: 80px !important;
+    object-fit: cover;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    transition: transform 0.2s ease !important;
+}
+
+.table td img:hover {
+    transform: scale(1.05) !important;
+}
+
+.table td:not(:has(img)) {
+    color: var(--text-light) !important;
+    font-style: italic;
+}
+
+.table td .btn {
+    padding: 8px 16px !important;
+    border: none;
+    border-radius: 8px !important;
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    text-align: center;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease !important;
+}
+
+.table td .btn-success {
+    background: var(--approve) !important;
+}
+
+.table td .btn-success:hover {
+    background: #2f855a !important;
+    transform: scale(1.05) !important;
+    box-shadow: var(--glow) !important;
+}
+
+.table td .btn-danger {
+    background: var(--delete) !important;
+}
+
+.table td .btn-danger:hover {
+    background: #c53030 !important;
+    transform: scale(1.05) !important;
+    box-shadow: var(--glow) !important;
+}
+
+.table td .btn-warning {
+    background: var(--replies) !important;
+    color: #ffffff !important;
+}
+
+.table td .btn-warning:hover {
+    background: #b7791f !important;
+    transform: scale(1.05) !important;
+    box-shadow: var(--glow) !important;
+}
+
+.table td .btn:focus {
+    outline: 2px solid var(--primary) !important;
+    outline-offset: 2px !important;
+}
+
+.table td .btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: var(--ripple);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+}
+
+.table td .btn:active::after {
+    width: 200px;
+    height: 200px;
+    opacity: 0.5;
+}
+
+.replies-section {
+    padding: 15px !important;
+    background: var(--card-bg) !important;
+    border-radius: 8px !important;
+    margin-top: 0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.replies-section .reply-item {
+    padding: 12px !important;
+    background: #f7fafc !important;
+    border-radius: 8px !important;
+    margin-bottom: 12px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    position: relative;
+}
+
+.replies-section .reply-item strong {
+    color: var(--primary) !important;
+    font-weight: 600 !important;
+}
+
+.replies-section .reply-item span {
+    color: var(--text-light) !important;
+    font-size: 0.9rem !important;
+}
+
+.replies-section .reply-item p.reply-content {
+    margin: 8px 0 0 !important;
+    color: var(--text) !important;
+}
+
+.replies-section .reply-actions {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 8px;
+}
+
+.replies-section .reply-actions .btn-sm {
+    padding: 6px 12px !important;
+    font-size: 0.85rem !important;
+}
+
+.edit-form {
+    display: none !important;
+    margin-top: 12px !important;
+}
+
+.edit-form textarea {
+    width: 100% !important;
+    padding: 8px !important;
+    border: 1px solid #cbd5e0 !important;
+    border-radius: 8px !important;
+    font-size: 0.9rem !important;
+    height: 60px !important;
+    resize: none;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.edit-form .btn {
+    margin-top: 8px !important;
+}
+
+.no-data {
+    font-size: 1.5rem !important;
+    font-weight: 500 !important;
+    color: var(--text) !important;
+    text-align: center !important;
+    padding: 48px !important;
+    background: var(--card-bg) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--shadow) !important;
+    animation: fadeIn 0.6s ease-in;
+}
+
+.alert {
+    border-radius: 12px !important;
+    margin-bottom: 20px !important;
+    box-shadow: var(--shadow) !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes underlineGrow {
+    from { width: 0; }
+    to { width: 80px; }
+}
+
+@media (max-width: 767px) {
+    .dashboard-content {
+        padding: 24px 12px;
+    }
+
+    h2 {
+        font-size: 2rem !important;
+    }
+
+    .search-bar form {
+        max-width: none;
+        flex-direction: column;
+        padding: 8px;
+    }
+
+    .search-bar input,
+    .search-bar .btn {
+        width: 100% !important;
+        border-radius: 8px !important;
+    }
+
+    .table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .table thead {
+        display: none;
+    }
+
+    .table tbody tr {
+        display: block;
+        margin-bottom: 16px;
+        border: var(--border);
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 16px !important;
+        border-bottom: none;
+        position: relative;
+        font-size: 0.9rem !important;
+    }
+
+    .table td:before {
+        content: attr(data-th);
+        font-weight: 500;
+        color: var(--text-light);
+        width: 40%;
+        flex-shrink: 0;
+    }
+
+    .table td img {
+        max-width: 60px !important;
+        max-height: 60px !important;
+    }
+
+    .table td form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+
+    .table td .btn {
+        width: 100% !important;
+    }
+
+    .replies-section .reply-actions {
+        position: static;
+        margin-top: 8px;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-content {
+        padding: 16px 8px;
+    }
+
+    h2 {
+        font-size: 1.75rem !important;
+    }
+
+    .search-bar input,
+    .search-bar .btn {
+        font-size: 0.9rem !important;
+    }
+
+    .table td {
+        font-size: 0.85rem !important;
+    }
+
+    .table td .btn,
+    .replies-section .reply-actions .btn-sm {
+        font-size: 0.85rem !important;
+        padding: 6px 10px !important;
+    }
+
+    .table td img {
+        max-width: 50px !important;
+        max-height: 50px !important;
+    }
+
+    .no-data {
+        font-size: 1.25rem !important;
+    }
+}
