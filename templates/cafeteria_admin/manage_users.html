@@ -38,8 +38,8 @@
                     <td>{{ user.expired_date }}</td>
                     <td class="actions">
                         <a href="{% url 'edit_user' user.id %}" class="edit-btn">Edit</a>
-                        <a href="{% url 'delete_user' user.id %}" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</a>
-                        <a href="{% url 'update_user_password' user.id %}" class="password-btn">Change Password</a>
+                        {% comment %} <a href="{% url 'delete_user' user.id %}" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</a>
+                        <a href="{% url 'update_user_password' user.id %}" class="password-btn">Change Password</a> {% endcomment %}
                     </td>
                 </tr>
                 {% endfor %}
