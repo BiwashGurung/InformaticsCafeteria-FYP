@@ -72,6 +72,7 @@ h2 i {
     border-radius: 12px;
     box-shadow: var(--shadow);
     overflow: visible !important;
+    gap: 16px !important;
 }
 
 .search-bar input {
@@ -97,7 +98,7 @@ h2 i {
     position: relative;
     padding: 12px 24px !important;
     border: none !important;
-    border-radius: 0 8px 8px 0 !important;
+    border-radius:12px !important;
     background: var(--primary) !important;
     color: #ffffff !important;
     font-size: 1rem !important;
