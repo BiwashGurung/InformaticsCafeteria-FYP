@@ -517,7 +517,7 @@ class TopSellingForm(forms.Form):
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def top_selling_food(request):
     try:
-        # Default: last 30 days
+        
         default_end = timezone.now().date()
         default_start = default_end - timedelta(days=30)
         initial_data = {'period': 'month', 'start_date': default_start, 'end_date': default_end}
@@ -546,11 +546,11 @@ def top_selling_food(request):
                 start_date = default_end - timedelta(days=365)
                 end_date = default_end
 
-            # Convert to timezone-aware datetimes
+            # Converting to timezone-aware datetimes
             start_datetime = timezone.make_aware(datetime.combine(start_date, datetime.min.time()))
             end_datetime = timezone.make_aware(datetime.combine(end_date, datetime.max.time()))
 
-            # Build query
+            # Building tje query
             query = OrderItem.objects.filter(
                 order__order_date__range=[start_datetime, end_datetime]
             )
