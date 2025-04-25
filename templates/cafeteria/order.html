@@ -4,311 +4,548 @@
 {% block content %}
 <title>Order History - Informatics Cafeteria</title>
 
+<link rel="stylesheet" href="https://cdn.lineicons.com/4.0/lineicons.min.css">
+
 <style>
-    .orders-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 40px 20px;
-        background: linear-gradient(135deg, #f9f9f9, #ffffff);
-        min-height: 100vh;
+    :root {
+        --primary: #99180d;
+        --success: #28a745;
+        --danger: #dc3545;
+        --pending: #ff9800;
+        --background: #ffffff;
+        --card-bg: #f8f8f8;
+        --text: #333333;
+        --shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        --border: 2px solid #99180d;
+        --glow: 0 0 8px rgba(153, 24, 13, 0.3);
     }
-    .orders-title {
-        font-size: 2.5rem;
-        color: #99180d;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 40px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        animation: fadeIn 0.5s ease-in;
+
+  
+    .btn-primary, .bg-primary, .table-primary {
+        background-color: var(--primary) !important;
+        border-color: var(--primary) !important;
+        color: #ffffff !important;
+    }
+
+    .orders-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 60px 20px;
+        background: var(--background);
+        min-height: 100vh;
         font-family: 'Poppins', sans-serif;
     }
+
+    .orders-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color:  #99180d;
+        text-align: center;
+        margin-bottom: 70px;
+        letter-spacing: 0.6px;
+        animation: fadeIn 0.8s ease-in;
+    }
+
     .queue-info {
-        background: #fff;
+        background: var(--background);
+        {% comment %} border: var(--border); {% endcomment %}
         border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 10px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        padding: 24px;
+        margin-bottom: 50px;
+        box-shadow: var(--shadow);
         text-align: center;
         position: sticky;
         top: 87px;
-        animation: slideIn 0.5s ease-out;
+        z-index: 100;
+        animation: slideIn 0.8s ease-out;
     }
     .queue-position {
+        font-size: 2.4rem;
+        font-weight: 800;
+        color:  #99180d;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .queue-position i {
         font-size: 2rem;
-        font-weight: 700;
-        color: #99180d;
+        color:  #99180d;
     }
     .eta {
-        font-size: 1.25rem;
-        color: #555;
-        margin-top: 10px;
+        font-size: 1.4rem;
+        font-weight: 400;
+        color:  #99180d;
+        margin-top: 12px;
     }
-    .orders-table {
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-        overflow: hidden;
-        margin-bottom: 40px;
-    }
-    .orders-table th {
-        background: linear-gradient(to right, #99180d, #b32118);
-        color: #fff;
-        font-weight: 600;
-        padding: 15px;
-        text-align: center;
-        text-transform: uppercase;
-        font-size: 1rem;
-    }
-    .orders-table td {
-        padding: 15px;
-        text-align: center;
-        vertical-align: middle;
-        font-size: 1rem;
-        border-bottom: 1px solid #f1f3f5;
-        transition: background 0.3s ease;
-    }
-    .orders-table tr:hover {
-        background: #f9fafb;
-    }
-    .item-list {
+
+    .orders-grid {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 35px;
+        margin-bottom: 60px;
     }
-    .item-entry {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-    }
-    .item-name {
-        color: #333;
-        font-size: 0.95rem;
-        font-weight: 600;
-    }
-    .item-quantity {
-        background: #99180d;
-        color: #fff;
-        padding: 4px 10px;
-        border-radius: 12px;
-        font-size: 0.9rem;
-        font-weight: 500;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-    }
-    .status-badge {
-        padding: 6px 12px;
-        border-radius: 12px;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
-    .status-pending {
-        background: #ff9800;
-        color: #fff;
-    }
-    .status-preparing {
-        background: #007bff;
-        color: #fff;
-    }
-    .status-completed {
-        background: #28a745;
-        color: #fff;
-    }
-    .status-cancelled {
-        background: #dc3545;
-        color: #fff;
-    }
-    .no-orders {
-        text-align: center;
-        padding: 40px;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-        color: #6c757d;
-        font-size: 1.25rem;
-        margin-bottom: 40px;
-        animation: fadeIn 0.5s ease-in;
-    }
-    .no-orders a {
-        color: #99180d;
-        font-weight: 600;
-        text-decoration: none;
-        transition: color 0.3s ease;
-    }
-    .no-orders a:hover {
-        color: #b32118;
-    }
-    .btn-cancel {
-        background: #99180d;
-        color: #fff;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        transition: background 0.3s ease, transform 0.2s ease;
-        margin: 5px;
-        display: inline-block;
-        text-decoration: none;
-    }
-    .btn-cancel:hover {
-        background: #b32118;
-        transform: scale(1.05);
-    }
-    .btn-cancel {
-        background: #99180D;
-    }
-   
+
     .order-card {
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-        margin-bottom: 20px;
-        padding: 15px;
-        animation: fadeIn 0.5s ease-in;
+        background:  #99180d;
+        border-radius: 14px;
+        border: var(--border);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        animation: cardReveal 0.8s ease-out;
+    }
+    .order-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--glow), 0 14px 28px rgba(0, 0, 0, 0.2);
     }
     .order-card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding: 20px 28px;
+        background:  #99180d;
+        color: #ffffff;
+        font-size: 1.4rem;
+        font-weight: 700;
         cursor: pointer;
-        padding: 10px;
-        background: #f9fafb;
-        border-radius: 8px;
+    }
+    .order-card-header i {
+        transition: transform 0.4s ease;
+    }
+    .order-card-header.active i {
+        transform: rotate(180deg);
+    }
+    .order-card-header:focus {
+        outline: 3px solid  #99180d;
+        outline-offset: 2px;
     }
     .order-card-body {
-        padding: 15px;
+        padding: 28px;
         display: none;
+        background: var(--card-bg);
     }
     .order-card-body.show {
         display: block;
     }
 
-    .popup-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
+    .order-details-table {
         width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        z-index: 1000;
-        animation: fadeIn 0.3s ease-in;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 16px 0;
+        border: var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
-    .popup {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.8);
-        background: #fff;
-        border-radius: 16px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
-        width: 90%;
-        max-height: 300px; 
-        overflow-y: auto;   
-        font-family: 'Poppins', sans-serif;
-        animation: popupIn 0.3s ease-out forwards;
+    .order-details-table th,
+    .order-details-table td {
+        padding: 12px 16px;
+        font-size: 1.05rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(153, 24, 13, 0.2);
     }
-    
-    .popup-header {
-        background: linear-gradient(to right, #99180d, #b32118);
-        padding: 15px;
-        text-align: center;
-        color: #fff;
-        font-size: 1.5rem;
-        font-weight: 600;
-        border-top-left-radius: 16px;
-        border-top-right-radius: 16px;
+    .order-details-table th {
+        background:  #99180d;
+        color: #ffffff;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.95rem;
     }
-    .popup-body {
-        padding: 20px;
-        text-align: center;
+    .order-details-table td {
+        background: var(--background);
+        color: var(--text);
     }
-    .popup-body p {
-        font-size: 1.1rem;
-        color: #333;
-        margin: 0 0 20px;
-        line-height: 1.5;
+    .order-details-table tr:nth-child(even) td {
+        background: rgba(153, 24, 13, 0.05);
     }
-    .popup-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        padding: 0 20px 20px;
+    .order-details-table tr:hover td {
+        background: rgba(153, 24, 13, 0.1);
+        transition: background 0.3s ease;
     }
-    .popup-buttons a, .popup-buttons button {
-        flex: 1;
-        padding: 10px;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.3s ease, transform 0.2s ease;
-        text-decoration: none;
-        border: none;
-    }
-    .popup-confirm {
-        background: #99180d;
-        color: #fff;
-    }
-    .popup-confirm:hover {
-        background: #b32118;
-        transform: scale(1.05);
-    }
-    .popup-cancel {
-        background: #dc3545;
-        color: #fff;
-    }
-    .popup-cancel:hover {
-        background: #c82333;
-        transform: scale(1.05);
-    }
-    .popup-close {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: #fff;
-        color: #99180d;
-        border: none;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        font-size: 1.2rem;
-        line-height: 1;
-        cursor: pointer;
-        transition: color 0.3s ease, transform 0.2s ease;
-    }
-    .popup-close:hover {
-        color: #b32118;
-        transform: scale(1.1);
-    }
-    .messages {
+    .order-details-table .items-cell ul {
         list-style: none;
         padding: 0;
-        margin: 20px 0;
-        text-align: center;
+        margin: 0;
     }
-    .messages li {
-        padding: 10px;
-        border-radius: 8px;
-        margin-bottom: 10px;
+    .order-details-table .items-cell li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 0;
+    }
+    .order-details-table .items-cell .item-name {
+        color: var(--text);
+        font-weight: 500;
+    }
+    .order-details-table .items-cell .item-quantity {
+        background:  #99180d;
+        color: #ffffff;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    .order-details-table .status-cell .status-badge {
+        font-size: 0.95rem;
+        padding: 8px 14px;
+    }
+
+    .item-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin: 16px 0;
+    }
+    .item-entry {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         font-size: 1rem;
     }
-    .messages .success {
-        background: #28a745;
-        color: #fff;
+    .item-name {
+        color: var(--text);
+        font-weight: 500;
     }
-    .messages .error {
-        background: #dc3545;
-        color: #fff;
+    .item-quantity {
+        background: var(--primary);
+        color: #ffffff;
+        padding: 6px 14px;
+        border-radius: 14px;
+        font-size: 0.95rem;
+        font-weight: 500;
     }
+    .status-badge {
+        padding: 10px 16px;
+        border-radius: 14px;
+        font-size: 1rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .status-pending {
+        background: var(--pending);
+        color: #ffffff;
+    }
+    .status-preparing {
+        background: rgba(153, 24, 13, 0.7) !important;
+        color: #ffffff;
+    }
+    .status-completed {
+        background: var(--success);
+        color: #ffffff;
+    }
+    .status-cancelled {
+        background: var(--danger);
+        color: #ffffff;
+    }
+    .order-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 24px;
+    }
+    .btn-cancel {
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        background: var(--danger);
+        color: #ffffff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .btn-cancel:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        background: #c82333;
+    }
+    .btn-cancel:focus {
+        outline: 3px solid var(--primary);
+        outline-offset: 2px;
+    }
+
+    .no-orders {
+        background: var(--background);
+        border-radius: 14px;
+        padding: 60px;
+        text-align: center;
+        box-shadow: var(--shadow);
+        animation: fadeIn 0.8s ease-in;
+    }
+    .no-orders p {
+        font-size: 1.6rem;
+        font-weight: 500;
+        color: var(--text);
+        margin-bottom: 28px;
+    }
+    .no-orders a {
+        background: var(--primary);
+        color: #ffffff;
+        padding: 16px 32px;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .no-orders a:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+    }
+    .no-orders a:focus {
+        outline: 3px solid var(--primary);
+        outline-offset: 2px;
+    }
+
+   .popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    animation: fadeIn 0.5s ease-in;
+}
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    background: var(--background);
+    border-radius: 16px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+    max-width: 400px;
+    width: 85%;
+    backdrop-filter: blur(5px);
+    animation: popupIn 0.5s ease-out;
+    overflow: hidden;
+}
+.popup.hide {
+    animation: popupOut 0.5s ease-in forwards;
+}
+.popup-header {
+    background: var(--primary);
+    padding: 10px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+.popup-body {
+    padding: 15px;
+    text-align: center;
+}
+.popup-body p {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text);
+    margin: 0 0 15px;
+}
+.popup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 15px 15px;
+}
+.popup-buttons a, .popup-buttons button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+.popup-confirm {
+    background: var(--primary);
+    color: #ffffff;
+}
+.popup-confirm:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+.popup-confirm:focus {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
+.popup-cancel {
+    background: var(--danger);
+    color: #ffffff;
+}
+.popup-cancel:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+    background: #c82333;
+}
+.popup-cancel:focus {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    color: #ffffff;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+.popup-close:hover {
+    color: #f0f0f0;
+    transform: scale(1.15);
+}
+.popup-close:focus {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
+
+    .status-progress {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        margin: 24px 0;
+        padding: 12px 0;
+    }
+    .status-progress::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 50px;
+        right: 50px;
+        height: 6px;
+        background: #e0e0e0;
+        z-index: 1;
+    }
+    .status-progress::after {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 50px;
+        height: 6px;
+        background: var(--pending);
+        transition: width 0.6s ease, background 0.6s ease;
+        z-index: 2;
+    }
+    .status-progress.pending::after {
+        width: 0;
+        background: var(--pending);
+    }
+    .status-progress.preparing::after {
+        width: 50%;
+        background: rgba(153, 24, 13, 0.7);
+    }
+    .status-progress.completed::after {
+        width: 100%;
+        background: var(--success);
+    }
+    .checkpoint {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100px;
+        text-align: center;
+        z-index: 3;
+    }
+    .checkpoint-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        color: #ffffff;
+        transition: background 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .checkpoint.active .checkpoint-circle {
+        background: var(--pending);
+        transform: scale(1.15);
+        box-shadow: var(--glow);
+        animation: pulse 1.5s infinite;
+    }
+    .status-progress.preparing .checkpoint.preparing .checkpoint-circle,
+    .status-progress.preparing .checkpoint.pending .checkpoint-circle {
+        background: rgba(153, 24, 13, 0.7);
+        box-shadow: var(--glow);
+    }
+    .status-progress.completed .checkpoint .checkpoint-circle {
+        background: var(--success);
+        box-shadow: var(--glow);
+    }
+    .checkpoint-label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text);
+        margin-top: 10px;
+    }
+    .completed-message {
+        display: none;
+        margin: 24px 0;
+        padding: 12px;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--success);
+        background: rgba(40, 167, 69, 0.1);
+        border: 2px solid  #99180d;
+        border-radius: 10px;
+        text-align: center;
+        animation: slideInMessage 0.8s ease-out;
+    }
+    .completed-message i {
+        margin-right: 10px;
+        font-size: 1.5rem;
+        animation: iconBounce 0.8s ease-in-out;
+    }
+    .status-progress.completed + .completed-message {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+  
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .order-details-table th, .order-details-table td {
+        min-width: 120px;
+    }
+
     @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
     }
     @keyframes slideIn {
-        from { transform: translateY(-20px); opacity: 0; }
+        from { transform: translateY(-40px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes cardReveal {
+        from { transform: translateY(20px); opacity: 0; }
         to { transform: translateY(0); opacity: 1; }
     }
     @keyframes popupIn {
@@ -319,286 +556,336 @@
         from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         to { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
     }
-
-    @media (min-width: 992px) {
-        .orders-table {
-            display: table;
-        }
-        .order-card {
-            display: none;
-        }
+    @keyframes pulse {
+        0% { transform: scale(1.15); }
+        50% { transform: scale(1.25); }
+        100% { transform: scale(1.15); }
     }
-
-    @media (max-width: 991px) {
-        .orders-title {
-            font-size: 2.2rem;
-        }
-        .queue-position {
-            font-size: 1.8rem;
-        }
-        .eta {
-            font-size: 1.2rem;
-        }
-        .orders-table th, .orders-table td {
-            font-size: 0.95rem;
-            padding: 12px;
-        }
-        .item-name, .item-quantity {
-            font-size: 0.9rem;
-        }
-        .btn-cancel {
-            font-size: 0.85rem;
-            padding: 6px 12px;
-        }
-        .popup {
-            max-width: 350px;
-        }
-        .popup-header {
-            font-size: 1.4rem;
-            padding: 12px;
-        }
-        .popup-body p {
-            font-size: 1rem;
-        }
-        .popup-buttons a, .popup-buttons button {
-            font-size: 0.9rem;
-            padding: 8px;
-        }
-        .popup-close {
-            width: 28px;
-            height: 28px;
-            font-size: 1.1rem;
-        }
+    @keyframes slideInMessage {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes iconBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-4px); }
     }
 
     @media (max-width: 767px) {
         .orders-container {
-            padding: 30px 15px;
+            padding: 40px 15px;
         }
         .orders-title {
-            font-size: 1.8rem;
+            font-size: 2.8rem;
         }
         .queue-info {
-            padding: 15px;
+            padding: 18px;
+            border-radius: 10px;
         }
         .queue-position {
-            font-size: 1.5rem;
+            font-size: 2rem;
+        }
+        .queue-position i {
+            font-size: 1.6rem;
         }
         .eta {
-            font-size: 1rem;
+            font-size: 1.2rem;
         }
-        .orders-table {
-            display: none;
-        }
-        .order-card {
-            display: block;
+        .orders-grid {
+            gap: 28px;
         }
         .order-card-header {
-            font-size: 1rem;
+            font-size: 1.3rem;
+            padding: 16px 22px;
         }
         .order-card-body {
-            font-size: 0.9rem;
+            padding: 22px;
         }
-        .item-name, .item-quantity {
+        .order-details-table th,
+        .order-details-table td {
+            font-size: 0.95rem;
+            padding: 10px 12px;
+        }
+        .order-details-table .items-cell .item-quantity {
             font-size: 0.85rem;
+            padding: 3px 8px;
         }
-        .status-badge {
-            font-size: 0.8rem;
-            padding: 5px 10px;
+        .order-details-table .status-cell .status-badge {
+            font-size: 0.9rem;
+            padding: 6px 12px;
+        }
+        .order-actions {
+            flex-direction: column;
+            align-items: stretch;
         }
         .btn-cancel {
-            font-size: 0.8rem;
-            padding: 6px 12px;
-            width: 100%;
+            font-size: 0.95rem;
+            padding: 10px 20px;
         }
         .popup {
-            max-width: 300px;
+            max-width: 400px;
         }
         .popup-header {
-            font-size: 1.3rem;
-            padding: 10px;
-        }
-        .popup-body {
-            padding: 15px;
+            font-size: 1.5rem;
+            padding: 16px;
         }
         .popup-body p {
-            font-size: 0.9rem;
+            font-size: 1.2rem;
         }
         .popup-buttons {
             flex-direction: column;
-            gap: 10px;
+            gap: 16px;
         }
         .popup-buttons a, .popup-buttons button {
-            font-size: 0.85rem;
-            padding: 8px;
+            font-size: 1rem;
+            padding: 12px;
         }
         .popup-close {
-            width: 26px;
-            height: 26px;
-            font-size: 1rem;
+            font-size: 1.3rem;
         }
-    }
-  
-    @media (max-width: 576px) {
-        .orders-container {
-            padding: 20px 10px;
+        .status-progress {
+            margin: 20px 0;
         }
-        .orders-title {
-            font-size: 1.6rem;
+        .checkpoint {
+            width: 80px;
         }
-        .queue-position {
-            font-size: 1.4rem;
-        }
-        .eta {
-            font-size: 0.9rem;
-        }
-        .order-card-header {
-            font-size: 0.9rem;
-        }
-        .order-card-body {
-            font-size: 0.85rem;
-        }
-        .item-name, .item-quantity {
-            font-size: 0.8rem;
-        }
-        .status-badge {
-            font-size: 0.75rem;
-        }
-        .popup {
-            max-width: 280px;
-        }
-        .popup-header {
+        .checkpoint-circle {
+            width: 34px;
+            height: 34px;
             font-size: 1.2rem;
         }
-        .popup-body p {
+        .checkpoint-label {
             font-size: 0.85rem;
         }
+        .completed-message {
+            font-size: 1.2rem;
+            padding: 10px;
+        }
+        .completed-message i {
+            font-size: 1.3rem;
+        }
+    }
+    @media (max-width: 576px) {
+        .orders-container {
+            padding: 30px 10px;
+        }
+        .orders-title {
+            font-size: 2.4rem;
+        }
+        .queue-position {
+            font-size: 1.8rem;
+        }
+        .eta {
+            font-size: 1.1rem;
+        }
+        .order-card-header {
+            font-size: 1.2rem;
+        }
+        .order-details-table th,
+        .order-details-table td {
+            font-size: 0.9rem;
+            padding: 8px 10px;
+        }
+        .order-details-table .items-cell .item-name,
+        .order-details-table .items-cell .item-quantity {
+            font-size: 0.85rem;
+        }
+        .order-details-table .status-cell .status-badge {
+            font-size: 0.85rem;
+        }
+        .btn-cancel {
+            font-size: 0.9rem;
+        }
+        .popup {
+            max-width: 340px;
+        }
+        .popup-header {
+            font-size: 1.4rem;
+        }
+        .popup-body p {
+            font-size: 1.1rem;
+        }
         .popup-buttons a, .popup-buttons button {
+            font-size: 0.95rem;
+        }
+        .status-progress::before, .status-progress::after {
+            left: 40px;
+            right: 40px;
+        }
+        .checkpoint {
+            width: 60px;
+        }
+        .checkpoint-circle {
+            width: 30px;
+            height: 30px;
+            font-size: 1rem;
+        }
+        .checkpoint-label {
             font-size: 0.8rem;
+        }
+        .completed-message {
+            font-size: 1.1rem;
+        }
+        .completed-message i {
+            font-size: 1.2rem;
         }
     }
 </style>
 
-<div class="container orders-container" style="max-width:1420px;">
-
+<div class="orders-container">
     <h2 class="orders-title">{{ user.username }}'s Order History</h2>
 
     {% if queue_info.queue_position %}
     <div class="queue-info">
-        <p>You are at <span class="queue-position">Position {{ queue_info.queue_position }}</span> in the queue.</p>
-        <p class="eta">Estimated Wait Time: {{ queue_info.eta_minutes }} minutes</p>
+        <p><span class="queue-position"><i class="fas fa-users"></i> Position {{ queue_info.queue_position }}</span></p>
+        <p class="eta"><i class="fas fa-clock"></i> Estimated Wait Time: {{ queue_info.eta_lower }}–{{ queue_info.eta_upper }} min</p>
     </div>
-    {% endif %}
+   {% endif %}
 
     {% if orders %}
-    <table class="table orders-table">
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>Items</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th>Pickup</th>
-                <th>Dine-in</th>
-                <th>Group Code</th>
-                <th>Payment</th>
-                <th>Remarks</th>
-                <th>Cancel Order</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for order in orders %}
-            <tr>
-                <td>{{ order.id }}</td>
-                <td class="item-list">
-                    {% for item in order.order_items.all %}
-                    <div class="item-entry">
-                        <span class="item-name">{{ item.food_item.name }}</span>
-                        <span class="item-quantity">x{{ item.quantity }}</span>
+    <div class="orders-grid">
+        {% for order in orders %}
+        <div class="order-card">
+            <div class="order-card-header" data-bs-toggle="collapse" data-bs-target="#order-{{ order.id }}">
+                <span>Order #{{ order.id }} - {{ order.status }}</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div id="order-{{ order.id }}" class="order-card-body collapse">
+                <div class="status-progress {{ order.status|lower }}">
+                    <div class="checkpoint pending {% if order.status == 'Pending' or order.status == 'Preparing' or order.status == 'Completed' %}active{% endif %}">
+                        <div class="checkpoint-circle"><i class="lni lni-burger"></i></div>
+                        <span class="checkpoint-label">Pending</span>
                     </div>
-                    {% endfor %}
-                </td>
-                <td>Rs. {{ order.total_price|floatformat:2 }}</td>
-                <td>
-                    <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span>
-                </td>
-                <td>{{ order.order_date|date:"Y-m-d" }}</td>
-                <td>{{ order.pickup_time|default:'N/A' }}</td>
-                <td>{{ order.dine_in_time|default:'N/A' }}</td>
-                <td>{{ order.group_code|default:'N/A' }}</td>
-                <td>{{ order.get_payment_method_display }}</td>
-                <td>{{ order.remarks|default:'None' }}</td>
-                <td>
+                    <div class="checkpoint preparing {% if order.status == 'Preparing' or order.status == 'Completed' %}active{% endif %}">
+                        <div class="checkpoint-circle"><i class="lni lni-pizza"></i></div>
+                        <span class="checkpoint-label">Preparing</span>
+                    </div>
+                    <div class="checkpoint completed {% if order.status == 'Completed' %}active{% endif %}">
+                        <div class="checkpoint-circle"><i class="lni lni-dinner"></i></div>
+                        <span class="checkpoint-label">Completed</span>
+                    </div>
+                </div>
+                {% if order.status == 'Completed' %}
+                <div class="completed-message">
+                    <i class="fas fa-utensils"></i>Your food is ready. Enjoy your meal!
+                </div>
+                {% endif %}
+                <div class="table-responsive">
+                    <table class="order-details-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Field</th>
+                                <th scope="col">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Items</th>
+                                <td class="items-cell">
+                                    <ul>
+                                        {% for item in order.order_items.all %}
+                                        <li>
+                                            <span class="item-name">{{ item.food_item.name }}</span>
+                                            <span class="item-quantity">x{{ item.quantity }}</span>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Price</th>
+                                <td>Rs. {{ order.total_price|floatformat:2 }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Status</th>
+                                <td class="status-cell">
+                                    <span class="status-badge status-{{ order.status|lower }}"><i class="fas fa-circle"></i> {{ order.status }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Date</th>
+                                <td>{{ order.order_date|date:"Y-m-d" }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Pickup</th>
+                                <td>{{ order.pickup_time|default:'N/A' }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Dine-in</th>
+                                <td>{{ order.dine_in_time|default:'N/A' }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Group Code</th>
+                                <td>{{ order.group_code|default:'N/A' }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Payment</th>
+                                <td>{{ order.get_payment_method_display }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Remarks</th>
+                                <td>{{ order.remarks|default:'None' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="order-actions">
                     {% if order.status == 'Pending' %}
-                    <button class="btn-cancel" data-popup="popup-{{ order.id }}">Cancel?</button>
+                    <button class="btn-cancel" data-popup="popup-{{ order.id }}"><i class="fas fa-times"></i> Cancel Order</button>
                     {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 
     {% for order in orders %}
-    <div class="order-card">
-        <div class="order-card-header" data-bs-toggle="collapse" data-bs-target="#order-{{ order.id }}">
-            <span>Order #{{ order.id }} - {{ order.status }}</span>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-        <div id="order-{{ order.id }}" class="order-card-body collapse">
-            <p><strong>Items:</strong></p>
-            <div class="item-list">
-                {% for item in order.order_items.all %}
-                <div class="item-entry">
-                    <span class="item-name">{{ item.food_item.name }}</span>
-                    <span class="item-quantity">x{{ item.quantity }}</span>
-                </div>
-                {% endfor %}
-            </div>
-            <p><strong>Price:</strong> Rs. {{ order.total_price|floatformat:2 }}</p>
-            <p><strong>Status:</strong> <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span></p>
-            <p><strong>Date:</strong> {{ order.order_date|date:"Y-m-d" }}</p>
-            <p><strong>Pickup Time:</strong> {{ order.pickup_time|default:'N/A' }}</p>
-            <p><strong>Dine-in Time:</strong> {{ order.dine_in_time|default:'N/A' }}</p>
-            <p><strong>Group Code:</strong> {{ order.group_code|default:'N/A' }}</p>
-            <p><strong>Payment:</strong> {{ order.get_payment_method_display }}</p>
-            <p><strong>Remarks:</strong> {{ order.remarks|default:'None' }}</p>
-            {% if order.status == 'Pending' %}
-            <button class="btn-cancel" data-popup="popup-{{ order.id }}">Cancel Order</button>
-            {% endif %}
-        </div>
-    </div>
- 
     <div class="popup-overlay" id="popup-{{ order.id }}">
         <div class="popup">
             <div class="popup-header">Confirm Cancellation</div>
-            <button class="popup-close" onclick="closePopup('popup-{{ order.id }}')">×</button>
+            <button class="popup-close" onclick="closePopup('popup-{{ order.id }}')"><i class="fas fa-times"></i></button>
             <div class="popup-body">
-                <p>Are you sure you want to cancel this order?</p>
+                <p>Are you sure you want to cancel Order #{{ order.id }}?</p>
             </div>
             <div class="popup-buttons">
-                <a href="{% url 'cancel_order' order.id %}" class="popup-confirm">Confirm</a>
-            
+                <a href="{% url 'cancel_order' order.id %}" class="popup-confirm"><i class="fas fa-check"></i> Confirm</a>
+                <button class="popup-cancel" onclick="closePopup('popup-{{ order.id }}')"><i class="fas fa-times"></i> Cancel</button>
             </div>
         </div>
     </div>
     {% endfor %}
     {% else %}
     <div class="no-orders">
-        <p>You haven't placed any orders yet.</p>
-        <a href="{% url 'orderonline' %}" class="btn btn-reorder">Place an Order Now!</a>
+        <p>No orders yet? Explore our delicious menu!</p>
+        <a href="{% url 'orderonline' %}" class="btn"><i class="fas fa-cart-plus"></i> Place an Order</a>
     </div>
     {% endif %}
 </div>
 
 <script>
- 
     document.querySelectorAll('.order-card-header').forEach(header => {
         header.addEventListener('click', () => {
+            // Get the target collapse element
+            const targetId = header.getAttribute('data-bs-target');
+            const targetCollapse = document.querySelector(targetId);
+            const isOpening = !targetCollapse.classList.contains('show');
+
+            // Close all other open cards
+            document.querySelectorAll('.order-card-body.show').forEach(body => {
+                if (body !== targetCollapse) {
+                    body.classList.remove('show');
+                    const otherHeader = body.parentElement.querySelector('.order-card-header');
+                    const otherIcon = otherHeader.querySelector('i');
+                    otherIcon.classList.remove('active');
+                }
+            });
+
+            // Toggle the chevron icon for the clicked header
             const icon = header.querySelector('i');
-            icon.classList.toggle('fa-chevron-down');
-            icon.classList.toggle('fa-chevron-up');
+            if (isOpening) {
+                icon.classList.add('active');
+            } else {
+                icon.classList.remove('active');
+            }
         });
     });
 
@@ -616,10 +903,9 @@
         setTimeout(() => {
             popup.style.display = 'none';
             popup.classList.remove('hide');
-        }, 300);
+        }, 500);
     }
 
-    
     document.querySelectorAll('.popup-overlay').forEach(overlay => {
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
