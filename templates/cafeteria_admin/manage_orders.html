@@ -1,35 +1,34 @@
 {% extends 'admin_base.html' %}
 {% load static %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'admin_css/manage_orders.css' %}" />
-    <title>Manage Orders</title>
-{% endblock %}
-
 {% block content %}
-<div class="manage-orders-wrapper">
-    <div class="header-section">
-        <h2><i class="fas fa-shopping-cart"></i> Manage Orders</h2>
-        <form method="GET" action="{% url 'manage_orders' %}" class="search-form">
-            <input type="text" name="q" placeholder="Search by Order ID" value="{{ query|default:'' }}">
-            <button type="submit"><i class="fas fa-search"></i> Search</button>
+<title>Manage Orders - Informatics Cafeteria Admin</title>
+
+<link rel="stylesheet" href="{% static 'admin_css/manage_orders.css' %}">
+<link rel="stylesheet" href="https://cdn.lineicons.com/4.0/lineicons.min.css">
+
+<div class="admin-container">
+    <h2 class="admin-title">Manage Orders</h2>
+
+    <div class="search-container">
+        <form method="get" class="search-form">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search by order ID, username, or status..." class="search-input">
+            <button type="submit" class="search-button"><i class="lni lni-search-alt"></i> Search</button>
         </form>
     </div>
 
-    <div class="table-container">
-        <table>
+    {% if orders %}
+    <div class="table-responsive">
+        <table class="orders-table">
             <thead>
                 <tr>
                     <th>Order ID</th>
-                    <th>User</th>
-                    <th>Food Items</th>
+                    <th>Username</th>
                     <th>Total Price</th>
-                    <th>Pick Up Time </th>
-                    <th>Dine In  Time</th>
-                    <th>Order Status</th>
-                    <th>Remarks</th>
-                    {% comment %} <th>Payment Method</th> {% endcomment %}
-                    {% comment %} <th>Actions</th> {% endcomment %}
+                    <th>Order Date</th>
+                    <th>Payment Method</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,37 +36,113 @@
                 <tr>
                     <td>{{ order.id }}</td>
                     <td>{{ order.user.username }}</td>
+                    <td>Rs. {{ order.total_price }}</td>
+                    <td>{{ order.order_date|date:"Y-m-d H:i" }}</td>
+                    <td>{{ order.get_payment_method_display }}</td>
                     <td>
-                        {% for item in order.order_items.all %}
-                            {{ item.food_item.name }} (x{{ item.quantity }})<br>
-                        {% empty %}
-                            No food items
-                        {% endfor %}
-                    </td>
-                    <td>{{ order.total_price }}</td>
-                    <td>{{ order.pickup_time }}</td>
-                    <td>{{ order.dine_in_time }}</td>
-                    {% comment %} <td>{{ order.get_payment_method_display }}</td> {% endcomment %}
-                    <td>
-                        <form method="POST" action="{% url 'update_order_status' order.id %}">
+                        <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span>
+                        {% if order.status == 'Pre-Pending' %}
+                        <form action="{% url 'confirm_pre_pending_order' order.id %}" method="post" style="display: inline;">
                             {% csrf_token %}
-                            <select name="status" onchange="this.form.submit()">
-                                <option value="Pending" {% if order.status == "Pending" %}selected{% endif %}>Pending</option>
-                                <option value="Preparing" {% if order.status == "Preparing" %}selected{% endif %}>Preparing</option>
-                                <option value="Completed" {% if order.status == "Completed" %}selected{% endif %}>Completed</option>
-                                <option value="Cancelled" {% if order.status == "Cancelled" %}selected{% endif %}>Cancelled</option>
-                            </select>
+                            <button type="submit" class="btn-confirm"><i class="lni lni-checkmark"></i> Confirm</button>
                         </form>
+                        {% endif %}
                     </td>
-                    <td>{{ order.remarks }}</td>
-                    {% comment %} <td>{{ order.get_payment_status_display }}</td> {% endcomment %}
-                    {% comment %} <td class="actions">
-                        <a href="{% url 'delete_order' order.id %}" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</a>
-                    </td> {% endcomment %}
+                    <td>
+                        <select class="status-select" data-order-id="{{ order.id }}">
+                            {% for status_value, status_label in order.STATUS_CHOICES %}
+                            <option value="{{ status_value }}" {% if order.status == status_value %}selected{% endif %}>{{ status_label }}</option>
+                            {% endfor %}
+                        </select>
+                        <button class="btn-details" onclick="showOrderDetails('{{ order.id }}')"><i class="lni lni-eye"></i> Details</button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+    {% else %}
+    <div class="no-orders">
+        <p>No orders found.</p>
+        <a href="{% url 'cafeteria_admin:admin_dashboard' %}"><i class="lni lni-arrow-left"></i> Back to Dashboard</a>
+    </div>
+    {% endif %}
+
+    {% for order in orders %}
+    <div class="popup-overlay" id="details-popup-{{ order.id }}">
+        <div class="popup">
+            <div class="popup-header">
+                Order #{{ order.id }} Details
+                <button class="popup-close" onclick="closePopup('details-popup-{{ order.id }}')"><i class="lni lni-close"></i></button>
+            </div>
+            <div class="popup-body">
+                <p><strong>Username:</strong> {{ order.user.username }}</p>
+                <p><strong>Total Price:</strong> Rs. {{ order.total_price }}</p>
+                <p><strong>Order Date:</strong> {{ order.order_date|date:"Y-m-d H:i" }}</p>
+                <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+                <p><strong>Pickup Time:</strong> {{ order.pickup_time|default:"N/A" }}</p>
+                <p><strong>Dine-in Time:</strong> {{ order.dine_in_time|default:"N/A" }}</p>
+                <p><strong>Remarks:</strong> {{ order.remarks|default:"None" }}</p>
+                <p><strong>Group Code:</strong> {{ order.group_code|default:"N/A" }}</p>
+                <p><strong>Items:</strong></p>
+                <ul class="item-list">
+                    {% for item in order.order_items.all %}
+                    <li>{{ item.quantity }}x {{ item.food_item.name }} (Rs. {{ item.price }})</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="popup-buttons">
+                <button class="popup-cancel" onclick="closePopup('details-popup-{{ order.id }}')"><i class="lni lni-close"></i> Close</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.status-select').forEach(select => {
+        select.addEventListener('change', function () {
+            const orderId = this.getAttribute('data-order-id');
+            const newStatus = this.value;
+            fetch(`/admin/update-order-status/${orderId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: `status=${newStatus}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const badge = this.closest('tr').querySelector('.status-badge');
+                    badge.textContent = newStatus;
+                    badge.className = `status-badge status-${newStatus.toLowerCase()}`;
+                    alert(`Order #${orderId} status updated to ${newStatus}.`);
+                } else {
+                    alert(`Error: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                alert(`Error: ${error}`);
+            });
+        });
+    });
+});
+
+function showOrderDetails(orderId) {
+    const popup = document.getElementById(`details-popup-${orderId}`);
+    popup.style.display = 'block';
+}
+
+function closePopup(popupId) {
+    const popup = document.getElementById(popupId);
+    popup.classList.add('hide');
+    setTimeout(() => {
+        popup.style.display = 'none';
+        popup.classList.remove('hide');
+    }, 500);
+}
+</script>
 {% endblock %}

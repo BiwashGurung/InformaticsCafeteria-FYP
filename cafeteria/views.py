@@ -164,7 +164,7 @@ def add_to_cart(request, food_id):
             # Validating the quantity
             try:
                 quantity = int(quantity_input)
-                if quantity <= 0 or quantity > 100:
+                if quantity <= 0 or quantity > 1000:
                     messages.error(request, "Please choose a valid quantity.")
                     return redirect("orderonline")  
             except ValueError:
@@ -401,21 +401,18 @@ def place_order(request):
         remarks = request.POST.get("remarks", "")
         pickup_time = request.POST.get("pickup_time", None)
         dine_in_time = request.POST.get("dine_in_time", None)
-        time_option = request.POST.get("time_option")  # Pickup or Dine-in
+        time_option = request.POST.get("time_option")
         group_code = request.POST.get("group_code", request.session.get('group_code', None))
         logger.info(f"POST data: {request.POST}, Session group_code: {request.session.get('group_code')}")
 
-        # Validate time option selection
         if not time_option:
             messages.error(request, "Please select either Pickup Time or Dine-in Time.")
             return redirect('cartsummary')
 
-        # Ensure mutual exclusivity
         if pickup_time and dine_in_time:
             messages.error(request, "Please select only one option: Pickup Time or Dine-in Time.")
             return redirect('cartsummary')
 
-        # Determine selected time based on time_option
         selected_time = None
         if time_option == "pickup" and pickup_time:
             selected_time = pickup_time
@@ -425,10 +422,9 @@ def place_order(request):
             messages.error(request, f"Please provide a time for the selected option ({time_option.capitalize()}).")
             return redirect('cartsummary')
 
-        # Validate time against current time
         if selected_time:
             try:
-                nepal_tz = pytz.timezone('Asia/Kathmandu')  # Adjust timezone as needed
+                nepal_tz = pytz.timezone('Asia/Kathmandu')
                 now = datetime.now(nepal_tz)
                 time_obj = datetime.strptime(selected_time, "%H:%M").time()
                 selected_datetime = datetime.combine(now.date(), time_obj)
@@ -454,7 +450,6 @@ def place_order(request):
             total_price = payment_details['amount']
             remarks = payment_details.get('remarks', remarks)
             group_code = payment_details.get('group_code', group_code)
-            # Use payment_details time if available, otherwise use form input
             pickup_time = payment_details.get('pickup_time', pickup_time) if time_option == "pickup" else None
             dine_in_time = payment_details.get('dine_in_time', dine_in_time) if time_option == "dine_in" else None
         else:
@@ -463,6 +458,10 @@ def place_order(request):
         if group_code and len(group_code) > 6:
             group_code = group_code[:6]
 
+        # Calculate total quantity of items
+        total_quantity = sum(item.quantity for item in cart.cart_items.all())
+        status = "Pre-Pending" if total_quantity >= 20 else "Pending"
+
         order = Order.objects.create(
             user=request.user,
             total_price=total_price,
@@ -470,9 +469,10 @@ def place_order(request):
             remarks=remarks,
             pickup_time=pickup_time if time_option == "pickup" else None,
             dine_in_time=dine_in_time if time_option == "dine_in" else None,
-            group_code=group_code
+            group_code=group_code,
+            status=status
         )
-        logger.info(f"Order created: ID={order.id}, Payment Method={payment_method}, Group Code={group_code}, Pickup Time={pickup_time}, Dine-in Time={dine_in_time}")
+        logger.info(f"Order created: ID={order.id}, Payment Method={payment_method}, Group Code={group_code}, Pickup Time={pickup_time}, Dine-in Time={dine_in_time}, Status={status}")
 
         for item in cart.cart_items.all():
             OrderItem.objects.create(
@@ -488,46 +488,41 @@ def place_order(request):
         if 'payment_details' in request.session:
             del request.session['payment_details']
 
-        messages.success(request, f"Order #{order.id} placed successfully! Please check your email for the receipt and order status.")
+        messages.success(request, f"Order #{order.id} placed successfully! {'Awaiting admin confirmation due to large order size.' if status == 'Pre-Pending' else 'Please check your email for the receipt and order status.'}")
         return redirect('order_history')
 
     return redirect('cartsummary')
 
-
-
 @login_required
 def order_history(request):
     orders = Order.objects.filter(user=request.user).prefetch_related('order_items__food_item').order_by('-order_date')
-    # Queuing the logic for the most recent pending order
-    pending_order = orders.filter(status="Pending").first()
+    pending_order = orders.filter(status__in=["Pre-Pending", "Pending"]).first()
     queue_info = {}
     if pending_order:
-        # Calculating the queue position (orders before this one with "Pending" or "Preparing" status)
         queue_position = Order.objects.filter(
-            status__in=["Pending", "Preparing"],
+            status__in=["Pre-Pending", "Pending", "Preparing"],
             order_date__lt=pending_order.order_date
         ).count() + 1
-        # Estimating wait time range (2 min lower, 5 min upper per order, min 2–5 min)
-        eta_lower = max(1, queue_position * 2)
-        eta_upper = max(2, queue_position * 3)
+        eta_lower = max(1, queue_position * 1)
+        eta_upper = max(2, queue_position * 2)
         queue_info = {
             "queue_position": queue_position,
             "eta_lower": eta_lower,
             "eta_upper": eta_upper,
         }
+    print("queue_info:", queue_info)
     context = {
         'orders': orders,
         'queue_info': queue_info,
     }
     return render(request, 'cafeteria/order.html', context)
 
-
 @login_required
 def cancel_order(request, order_id):
     try:
         order = get_object_or_404(Order, id=order_id, user=request.user)
-        if order.status != 'Pending':
-            messages.error(request, "Only pending orders can be cancelled.")
+        if order.status not in ['Pre-Pending', 'Pending']:
+            messages.error(request, "Only Pre-Pending or Pending orders can be cancelled.")
             return redirect('order_history')
         order.status = 'Cancelled'
         order.save()
@@ -538,21 +533,17 @@ def cancel_order(request, order_id):
         messages.error(request, "An error occurred while cancelling the order.")
     return redirect('order_history')
 
-# cafeteria/context_processors.py
-
-
 def canteen_load(request):
-    pending_orders = Order.objects.filter(status__in=["Pending", "Preparing"]).count()
+    pending_orders = Order.objects.filter(status__in=["Pre-Pending", "Pending", "Preparing"]).count()
     if pending_orders < 10:
-        return {"load_label": "Low", "load_color": "#28a745"}
+        return JsonResponse({"load_label": "Low", "load_color": "#28a745"})
     elif pending_orders < 20:
-        return {"load_label": "Moderate", "load_color": "#ff9800"}
+        return JsonResponse({"load_label": "Moderate", "load_color": "#ff9800"})
     else:
-        return {"load_label": "High", "load_color": "#dc3545"}
+        return JsonResponse({"load_label": "High", "load_color": "#dc3545"})
+
 
 # Khalti Payment Gateway Integration
-
-
 logger = logging.getLogger(__name__)
 @login_required
 def initkhalti(request):

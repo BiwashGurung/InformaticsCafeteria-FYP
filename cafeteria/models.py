@@ -90,6 +90,7 @@ class Order(models.Model):
     ]
 
     STATUS_CHOICES = [
+        ("Pre-Pending", "Pre-Pending"),
         ("Pending", "Pending"),
         ("Preparing", "Preparing"),
         ("Completed", "Completed"),

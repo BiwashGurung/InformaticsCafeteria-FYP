@@ -12,6 +12,7 @@
         --success: #28a745;
         --danger: #dc3545;
         --pending: #ff9800;
+        --pre-pending: #007bff;
         --background: #ffffff;
         --card-bg: #f8f8f8;
         --text: #333333;
@@ -20,7 +21,6 @@
         --glow: 0 0 8px rgba(153, 24, 13, 0.3);
     }
 
-  
     .btn-primary, .bg-primary, .table-primary {
         background-color: var(--primary) !important;
         border-color: var(--primary) !important;
@@ -39,7 +39,7 @@
     .orders-title {
         font-size: 3.5rem;
         font-weight: 800;
-        color:  #99180d;
+        color: #99180d;
         text-align: center;
         margin-bottom: 70px;
         letter-spacing: 0.6px;
@@ -48,7 +48,6 @@
 
     .queue-info {
         background: var(--background);
-        {% comment %} border: var(--border); {% endcomment %}
         border-radius: 12px;
         padding: 24px;
         margin-bottom: 50px;
@@ -62,19 +61,19 @@
     .queue-position {
         font-size: 2.4rem;
         font-weight: 800;
-        color:  #99180d;
+        color: #99180d;
         display: inline-flex;
         align-items: center;
         gap: 12px;
     }
     .queue-position i {
         font-size: 2rem;
-        color:  #99180d;
+        color: #99180d;
     }
     .eta {
         font-size: 1.4rem;
         font-weight: 400;
-        color:  #99180d;
+        color: #99180d;
         margin-top: 12px;
     }
 
@@ -86,7 +85,7 @@
     }
 
     .order-card {
-        background:  #99180d;
+        background: #99180d;
         border-radius: 14px;
         border: var(--border);
         box-shadow: var(--shadow);
@@ -103,7 +102,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 20px 28px;
-        background:  #99180d;
+        background: #99180d;
         color: #ffffff;
         font-size: 1.4rem;
         font-weight: 700;
@@ -116,7 +115,7 @@
         transform: rotate(180deg);
     }
     .order-card-header:focus {
-        outline: 3px solid  #99180d;
+        outline: 3px solid #99180d;
         outline-offset: 2px;
     }
     .order-card-body {
@@ -146,7 +145,7 @@
         border-bottom: 1px solid rgba(153, 24, 13, 0.2);
     }
     .order-details-table th {
-        background:  #99180d;
+        background: #99180d;
         color: #ffffff;
         font-weight: 700;
         text-transform: uppercase;
@@ -179,7 +178,7 @@
         font-weight: 500;
     }
     .order-details-table .items-cell .item-quantity {
-        background:  #99180d;
+        background: #99180d;
         color: #ffffff;
         padding: 4px 10px;
         border-radius: 12px;
@@ -224,12 +223,16 @@
         align-items: center;
         gap: 10px;
     }
+    .status-pre-pending {
+        background: var(--pre-pending);
+        color: #ffffff;
+    }
     .status-pending {
         background: var(--pending);
         color: #ffffff;
     }
     .status-preparing {
-        background: rgba(153, 24, 13, 0.7) !important;
+        background: rgba(153, 24, 13, 0.7);
         color: #ffffff;
     }
     .status-completed {
@@ -307,120 +310,120 @@
         outline-offset: 2px;
     }
 
-   .popup-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-    animation: fadeIn 0.5s ease-in;
-}
-.popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1);
-    background: var(--background);
-    border-radius: 16px;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
-    max-width: 400px;
-    width: 85%;
-    backdrop-filter: blur(5px);
-    animation: popupIn 0.5s ease-out;
-    overflow: hidden;
-}
-.popup.hide {
-    animation: popupOut 0.5s ease-in forwards;
-}
-.popup-header {
-    background: var(--primary);
-    padding: 10px;
-    text-align: center;
-    color: #ffffff;
-    font-size: 1.2rem;
-    font-weight: 700;
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
-}
-.popup-body {
-    padding: 15px;
-    text-align: center;
-}
-.popup-body p {
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--text);
-    margin: 0 0 15px;
-}
-.popup-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    padding: 0 15px 15px;
-}
-.popup-buttons a, .popup-buttons button {
-    flex: 1;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    border: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-.popup-confirm {
-    background: var(--primary);
-    color: #ffffff;
-}
-.popup-confirm:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
-}
-.popup-confirm:focus {
-    outline: 3px solid var(--primary);
-    outline-offset: 2px;
-}
-.popup-cancel {
-    background: var(--danger);
-    color: #ffffff;
-}
-.popup-cancel:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
-    background: #c82333;
-}
-.popup-cancel:focus {
-    outline: 3px solid var(--primary);
-    outline-offset: 2px;
-}
-.popup-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: transparent;
-    color: #ffffff;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: color 0.3s ease, transform 0.3s ease;
-}
-.popup-close:hover {
-    color: #f0f0f0;
-    transform: scale(1.15);
-}
-.popup-close:focus {
-    outline: 3px solid var(--primary);
-    outline-offset: 2px;
-}
+    .popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        animation: fadeIn 0.5s ease-in;
+    }
+    .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1);
+        background: var(--background);
+        border-radius: 16px;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+        max-width: 400px;
+        width: 85%;
+        backdrop-filter: blur(5px);
+        animation: popupIn 0.5s ease-out;
+        overflow: hidden;
+    }
+    .popup.hide {
+        animation: popupOut 0.5s ease-in forwards;
+    }
+    .popup-header {
+        background: var(--primary);
+        padding: 10px;
+        text-align: center;
+        color: #ffffff;
+        font-size: 1.2rem;
+        font-weight: 700;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+    }
+    .popup-body {
+        padding: 15px;
+        text-align: center;
+    }
+    .popup-body p {
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--text);
+        margin: 0 0 15px;
+    }
+    .popup-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        padding: 0 15px 15px;
+    }
+    .popup-buttons a, .popup-buttons button {
+        flex: 1;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        border: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+    .popup-confirm {
+        background: var(--primary);
+        color: #ffffff;
+    }
+    .popup-confirm:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+    }
+    .popup-confirm:focus {
+        outline: 3px solid var(--primary);
+        outline-offset: 2px;
+    }
+    .popup-cancel {
+        background: var(--danger);
+        color: #ffffff;
+    }
+    .popup-cancel:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        background: #c82333;
+    }
+    .popup-cancel:focus {
+        outline: 3px solid var(--primary);
+        outline-offset: 2px;
+    }
+    .popup-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: transparent;
+        color: #ffffff;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .popup-close:hover {
+        color: #f0f0f0;
+        transform: scale(1.15);
+    }
+    .popup-close:focus {
+        outline: 3px solid var(--primary);
+        outline-offset: 2px;
+    }
 
     .status-progress {
         display: flex;
@@ -434,8 +437,8 @@
         content: '';
         position: absolute;
         top: 20px;
-        left: 50px;
-        right: 50px;
+        left: 40px;
+        right: 40px;
         height: 6px;
         background: #e0e0e0;
         z-index: 1;
@@ -444,18 +447,22 @@
         content: '';
         position: absolute;
         top: 20px;
-        left: 50px;
+        left: 40px;
         height: 6px;
-        background: var(--pending);
+        background: var(--pre-pending);
         transition: width 0.6s ease, background 0.6s ease;
         z-index: 2;
     }
-    .status-progress.pending::after {
+    .status-progress.pre-pending::after {
         width: 0;
+        background: var(--pre-pending);
+    }
+    .status-progress.pending::after {
+        width: 33%;
         background: var(--pending);
     }
     .status-progress.preparing::after {
-        width: 50%;
+        width: 66%;
         background: rgba(153, 24, 13, 0.7);
     }
     .status-progress.completed::after {
@@ -466,7 +473,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 100px;
+        width: 80px;
         text-align: center;
         z-index: 3;
     }
@@ -483,13 +490,19 @@
         transition: background 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
     }
     .checkpoint.active .checkpoint-circle {
-        background: var(--pending);
+        background: var(--pre-pending);
         transform: scale(1.15);
         box-shadow: var(--glow);
         animation: pulse 1.5s infinite;
     }
-    .status-progress.preparing .checkpoint.preparing .checkpoint-circle,
-    .status-progress.preparing .checkpoint.pending .checkpoint-circle {
+    .status-progress.pending .checkpoint.pre-pending .checkpoint-circle,
+    .status-progress.pending .checkpoint.pending .checkpoint-circle {
+        background: var(--pending);
+        box-shadow: var(--glow);
+    }
+    .status-progress.preparing .checkpoint.pre-pending .checkpoint-circle,
+    .status-progress.preparing .checkpoint.pending .checkpoint-circle,
+    .status-progress.preparing .checkpoint.preparing .checkpoint-circle {
         background: rgba(153, 24, 13, 0.7);
         box-shadow: var(--glow);
     }
@@ -511,7 +524,7 @@
         font-weight: 700;
         color: var(--success);
         background: rgba(40, 167, 69, 0.1);
-        border: 2px solid  #99180d;
+        border: 2px solid #99180d;
         border-radius: 10px;
         text-align: center;
         animation: slideInMessage 0.8s ease-out;
@@ -526,8 +539,30 @@
         align-items: center;
         justify-content: center;
     }
+    .pre-pending-message {
+        display: none;
+        margin: 24px 0;
+        padding: 12px;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--pre-pending);
+        background: rgba(0, 123, 255, 0.1);
+        border: 2px solid #99180d;
+        border-radius: 10px;
+        text-align: center;
+        animation: slideInMessage 0.8s ease-out;
+    }
+    .pre-pending-message i {
+        margin-right: 10px;
+        font-size: 1.5rem;
+        animation: iconBounce 0.8s ease-in-out;
+    }
+    .status-progress.pre-pending + .pre-pending-message {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-  
     .table-responsive {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -646,7 +681,7 @@
             margin: 20px 0;
         }
         .checkpoint {
-            width: 80px;
+            width: 70px;
         }
         .checkpoint-circle {
             width: 34px;
@@ -656,11 +691,11 @@
         .checkpoint-label {
             font-size: 0.85rem;
         }
-        .completed-message {
+        .completed-message, .pre-pending-message {
             font-size: 1.2rem;
             padding: 10px;
         }
-        .completed-message i {
+        .completed-message i, .pre-pending-message i {
             font-size: 1.3rem;
         }
     }
@@ -708,8 +743,8 @@
             font-size: 0.95rem;
         }
         .status-progress::before, .status-progress::after {
-            left: 40px;
-            right: 40px;
+            left: 30px;
+            right: 30px;
         }
         .checkpoint {
             width: 60px;
@@ -722,14 +757,44 @@
         .checkpoint-label {
             font-size: 0.8rem;
         }
-        .completed-message {
+        .completed-message, .pre-pending-message {
             font-size: 1.1rem;
         }
-        .completed-message i {
+        .completed-message i, .pre-pending-message i {
             font-size: 1.2rem;
         }
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.order-card-header').forEach(header => {
+            header.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-bs-target');
+                const target = document.querySelector(targetId);
+                target.classList.toggle('show');
+                this.classList.toggle('active');
+            });
+        });
+
+        document.querySelectorAll('.btn-cancel').forEach(button => {
+            button.addEventListener('click', function () {
+                const popupId = this.getAttribute('data-popup');
+                const popupOverlay = document.getElementById(popupId);
+                popupOverlay.style.display = 'block';
+            });
+        });
+    });
+
+    function closePopup(popupId) {
+        const popupOverlay = document.getElementById(popupId);
+        popupOverlay.classList.add('hide');
+        setTimeout(() => {
+            popupOverlay.style.display = 'none';
+            popupOverlay.classList.remove('hide');
+        }, 500);
+    }
+</script>
 
 <div class="orders-container">
     <h2 class="orders-title">{{ user.username }}'s Order History</h2>
@@ -739,7 +804,7 @@
         <p><span class="queue-position"><i class="fas fa-users"></i> Position {{ queue_info.queue_position }}</span></p>
         <p class="eta"><i class="fas fa-clock"></i> Estimated Wait Time: {{ queue_info.eta_lower }}–{{ queue_info.eta_upper }} min</p>
     </div>
-   {% endif %}
+    {% endif %}
 
     {% if orders %}
     <div class="orders-grid">
@@ -751,6 +816,10 @@
             </div>
             <div id="order-{{ order.id }}" class="order-card-body collapse">
                 <div class="status-progress {{ order.status|lower }}">
+                    <div class="checkpoint pre-pending {% if order.status == 'Pre-Pending' or order.status == 'Pending' or order.status == 'Preparing' or order.status == 'Completed' %}active{% endif %}">
+                        <div class="checkpoint-circle"><i class="lni lni-burger"></i></div>
+                        <span class="checkpoint-label">Pre-Pending</span>
+                    </div>
                     <div class="checkpoint pending {% if order.status == 'Pending' or order.status == 'Preparing' or order.status == 'Completed' %}active{% endif %}">
                         <div class="checkpoint-circle"><i class="lni lni-burger"></i></div>
                         <span class="checkpoint-label">Pending</span>
@@ -760,158 +829,78 @@
                         <span class="checkpoint-label">Preparing</span>
                     </div>
                     <div class="checkpoint completed {% if order.status == 'Completed' %}active{% endif %}">
-                        <div class="checkpoint-circle"><i class="lni lni-dinner"></i></div>
+                        <div class="checkpoint-circle"><i class="lni lni-checkmark-circle"></i></div>
                         <span class="checkpoint-label">Completed</span>
                     </div>
                 </div>
-                {% if order.status == 'Completed' %}
-                <div class="completed-message">
-                    <i class="fas fa-utensils"></i>Your food is ready. Enjoy your meal!
+                <div class="pre-pending-message">
+                    <i class="lni lni-information"></i> Awaiting admin confirmation due to large order size.
                 </div>
-                {% endif %}
+                <div class="completed-message">
+                    <i class="lni lni-checkmark-circle"></i> Order Completed! Thank you for your purchase.
+                </div>
                 <div class="table-responsive">
                     <table class="order-details-table">
                         <thead>
                             <tr>
-                                <th scope="col">Field</th>
-                                <th scope="col">Details</th>
+                                <th>Items</th>
+                                <th>Total Price</th>
+                                <th>Order Date</th>
+                                <th>Payment Method</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row">Items</th>
                                 <td class="items-cell">
                                     <ul>
                                         {% for item in order.order_items.all %}
                                         <li>
                                             <span class="item-name">{{ item.food_item.name }}</span>
-                                            <span class="item-quantity">x{{ item.quantity }}</span>
+                                            <span class="item-quantity">{{ item.quantity }}x</span>
                                         </li>
                                         {% endfor %}
                                     </ul>
                                 </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Price</th>
-                                <td>Rs. {{ order.total_price|floatformat:2 }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Status</th>
-                                <td class="status-cell">
-                                    <span class="status-badge status-{{ order.status|lower }}"><i class="fas fa-circle"></i> {{ order.status }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Date</th>
-                                <td>{{ order.order_date|date:"Y-m-d" }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Pickup</th>
-                                <td>{{ order.pickup_time|default:'N/A' }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Dine-in</th>
-                                <td>{{ order.dine_in_time|default:'N/A' }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Group Code</th>
-                                <td>{{ order.group_code|default:'N/A' }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Payment</th>
+                                <td>Rs. {{ order.total_price }}</td>
+                                <td>{{ order.order_date|date:"Y-m-d H:i" }}</td>
                                 <td>{{ order.get_payment_method_display }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Remarks</th>
-                                <td>{{ order.remarks|default:'None' }}</td>
+                                <td class="status-cell">
+                                    <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                {% if order.status == 'Pre-Pending' or order.status == 'Pending' %}
                 <div class="order-actions">
-                    {% if order.status == 'Pending' %}
-                    <button class="btn-cancel" data-popup="popup-{{ order.id }}"><i class="fas fa-times"></i> Cancel Order</button>
-                    {% endif %}
+                    <button class="btn-cancel" data-popup="cancel-popup-{{ order.id }}"><i class="lni lni-close"></i> Cancel Order</button>
+                </div>
+                {% endif %}
+                <div class="popup-overlay" id="cancel-popup-{{ order.id }}">
+                    <div class="popup">
+                        <div class="popup-header">
+                            Cancel Order #{{ order.id }}
+                            <button class="popup-close" onclick="closePopup('cancel-popup-{{ order.id }}')"><i class="lni lni-close"></i></button>
+                        </div>
+                        <div class="popup-body">
+                            <p>Are you sure you want to cancel this order?</p>
+                        </div>
+                        <div class="popup-buttons">
+                            <a href="{% url 'cancel_order' order.id %}" class="popup-confirm"><i class="lni lni-checkmark"></i> Yes, Cancel</a>
+                            <button class="popup-cancel" onclick="closePopup('cancel-popup-{{ order.id }}')"><i class="lni lni-close"></i> No, Keep</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-
-    {% for order in orders %}
-    <div class="popup-overlay" id="popup-{{ order.id }}">
-        <div class="popup">
-            <div class="popup-header">Confirm Cancellation</div>
-            <button class="popup-close" onclick="closePopup('popup-{{ order.id }}')"><i class="fas fa-times"></i></button>
-            <div class="popup-body">
-                <p>Are you sure you want to cancel Order #{{ order.id }}?</p>
-            </div>
-            <div class="popup-buttons">
-                <a href="{% url 'cancel_order' order.id %}" class="popup-confirm"><i class="fas fa-check"></i> Confirm</a>
-                <button class="popup-cancel" onclick="closePopup('popup-{{ order.id }}')"><i class="fas fa-times"></i> Cancel</button>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
     {% else %}
     <div class="no-orders">
-        <p>No orders yet? Explore our delicious menu!</p>
-        <a href="{% url 'orderonline' %}" class="btn"><i class="fas fa-cart-plus"></i> Place an Order</a>
+        <p>No orders found.</p>
+        <a href="{% url 'cafeteria:orderonline' %}"><i class="lni lni-burger"></i> Order Now</a>
     </div>
     {% endif %}
 </div>
-
-<script>
-    document.querySelectorAll('.order-card-header').forEach(header => {
-        header.addEventListener('click', () => {
-            // Get the target collapse element
-            const targetId = header.getAttribute('data-bs-target');
-            const targetCollapse = document.querySelector(targetId);
-            const isOpening = !targetCollapse.classList.contains('show');
-
-            // Close all other open cards
-            document.querySelectorAll('.order-card-body.show').forEach(body => {
-                if (body !== targetCollapse) {
-                    body.classList.remove('show');
-                    const otherHeader = body.parentElement.querySelector('.order-card-header');
-                    const otherIcon = otherHeader.querySelector('i');
-                    otherIcon.classList.remove('active');
-                }
-            });
-
-            // Toggle the chevron icon for the clicked header
-            const icon = header.querySelector('i');
-            if (isOpening) {
-                icon.classList.add('active');
-            } else {
-                icon.classList.remove('active');
-            }
-        });
-    });
-
-    document.querySelectorAll('.btn-cancel').forEach(button => {
-        button.addEventListener('click', () => {
-            const popupId = button.getAttribute('data-popup');
-            const popup = document.getElementById(popupId);
-            popup.style.display = 'flex';
-        });
-    });
-
-    function closePopup(popupId) {
-        const popup = document.getElementById(popupId);
-        popup.classList.add('hide');
-        setTimeout(() => {
-            popup.style.display = 'none';
-            popup.classList.remove('hide');
-        }, 500);
-    }
-
-    document.querySelectorAll('.popup-overlay').forEach(overlay => {
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) {
-                closePopup(overlay.id);
-            }
-        });
-    });
-</script>
 {% endblock %}

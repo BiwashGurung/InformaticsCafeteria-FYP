@@ -18,6 +18,7 @@ from cafeteria.models import Profile  , FoodItem , OrderItem, Order , LostFound 
 from django.db.models import Q
 from django.db.models import Sum
 import logging
+from django.http import JsonResponse
 
 
 logger = logging.getLogger(__name__)
@@ -253,35 +254,67 @@ def delete_food_item(request, food_id):
   
 
 
-#  Manage Orders
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def manage_orders(request):
-    #Getting search query from GET parameters
-    query = request.GET.get('q')  
+    if not request.user.is_staff:
+        messages.error(request, "You do not have permission to manage orders.")
+        return redirect('home')
 
+    query = request.GET.get('q', '').strip()
     if query:
-        #Searching with the help of order id 
-        orders = Order.objects.filter(id=query)  
+        orders = Order.objects.filter(
+            Q(id__icontains=query) |
+            Q(user__username__icontains=query) |
+            Q(status__icontains=query)
+        ).prefetch_related('order_items__food_item').order_by('-order_date')
     else:
-        # Showing all the orders if no query is provided
-        orders = Order.objects.all().order_by('-order_date')  
+        orders = Order.objects.all().prefetch_related('order_items__food_item').order_by('-order_date')
 
     return render(request, 'cafeteria_admin/manage_orders.html', {'orders': orders, 'query': query})
 
-# Updating  Order Status
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def update_order_status(request, order_id):
     if not request.user.is_staff:
-        messages.error(request, "Access denied.")
+        messages.error(request, "You do not have permission to update orders.")
+        return JsonResponse({'success': False, 'error': 'Permission denied'})
+
+    if request.method == 'POST':
+        try:
+            order = get_object_or_404(Order, id=order_id)
+            new_status = request.POST.get('status')
+            if new_status in dict(Order.STATUS_CHOICES):
+                order.status = new_status
+                order.save()
+                messages.success(request, f"Order #{order.id} status updated to {new_status}.")
+                return JsonResponse({'success': True, 'new_status': new_status})
+            else:
+                return JsonResponse({'success': False, 'error': 'Invalid status'})
+        except Exception as e:
+            logger.error(f"Error updating order {order_id}: {str(e)}")
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+@user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
+def confirm_pre_pending_order(request, order_id):
+    if not request.user.is_staff:
+        messages.error(request, "You do not have permission to confirm orders.")
         return redirect('manage_orders')
 
-    order = get_object_or_404(Order, id=order_id)
+    if request.method == 'POST':
+        try:
+            order = get_object_or_404(Order, id=order_id)
+            if order.status != 'Pre-Pending':
+                messages.error(request, "Only Pre-Pending orders can be confirmed.")
+                return redirect('manage_orders')
+            order.status = 'Pending'
+            order.save()
+            messages.success(request, f"Order #{order.id} has been confirmed and moved to Pending.")
+        except Exception as e:
+            logger.error(f"Error confirming order {order_id}: {str(e)}")
+            messages.error(request, f"Error confirming order: {str(e)}")
+        return redirect('manage_orders')
 
-    if request.method == "POST":
-        new_status = request.POST.get("status")
-        order.status = new_status
-        order.save()
-        messages.success(request, f"Order #{order_id} updated successfully!")
-    
     return redirect('manage_orders')
 
 # Deleting the Order
