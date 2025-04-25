@@ -458,7 +458,7 @@ def place_order(request):
         if group_code and len(group_code) > 6:
             group_code = group_code[:6]
 
-        # Calculate total quantity of items
+        # Calculating the total quantity of items
         total_quantity = sum(item.quantity for item in cart.cart_items.all())
         status = "Pre-Pending" if total_quantity >= 20 else "Pending"
 
@@ -488,7 +488,8 @@ def place_order(request):
         if 'payment_details' in request.session:
             del request.session['payment_details']
 
-        messages.success(request, f"Order #{order.id} placed successfully! {'Awaiting admin confirmation due to large order size.' if status == 'Pre-Pending' else 'Please check your email for the receipt and order status.'}")
+        messages.success(request, f"Order #{order.id} placed successfully! {'Your order is awaiting confirmation. A cafeteria staff member will contact you shortly.' if status == 'Pre-Pending' else 'Please check your email for the receipt and order status.'}")
+
         return redirect('order_history')
 
     return redirect('cartsummary')

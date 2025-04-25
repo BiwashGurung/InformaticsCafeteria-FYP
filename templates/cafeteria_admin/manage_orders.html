@@ -6,55 +6,63 @@
 
 <link rel="stylesheet" href="{% static 'admin_css/manage_orders.css' %}">
 <link rel="stylesheet" href="https://cdn.lineicons.com/4.0/lineicons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
 <div class="admin-container">
+    <!-- Hidden CSRF token form -->
+    <form id="csrf-form" style="display: none;">
+        {% csrf_token %}
+    </form>
+
     <h2 class="admin-title">Manage Orders</h2>
 
-    <div class="search-container">
+    <div class="controls-container">
         <form method="get" class="search-form">
-            <input type="text" name="q" value="{{ query }}" placeholder="Search by order ID, username, or status..." class="search-input">
-            <button type="submit" class="search-button"><i class="lni lni-search-alt"></i> Search</button>
+            <input type="text" name="q" value="{{ query }}" placeholder="Search by order ID, username, or status..." class="search-input" aria-label="Search orders">
+            <button type="submit" class="search-button" aria-label="Search"><i class="lni lni-search-alt"></i> Search</button>
         </form>
     </div>
 
     {% if orders %}
     <div class="table-responsive">
-        <table class="orders-table">
+        <table class="orders-table" role="grid">
             <thead>
                 <tr>
-                    <th>Order ID</th>
-                    <th>Username</th>
-                    <th>Total Price</th>
-                    <th>Order Date</th>
-                    <th>Payment Method</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Order Date</th>
+                    <th scope="col">Payment Method</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for order in orders %}
-                <tr>
-                    <td>{{ order.id }}</td>
-                    <td>{{ order.user.username }}</td>
-                    <td>Rs. {{ order.total_price }}</td>
-                    <td>{{ order.order_date|date:"Y-m-d H:i" }}</td>
-                    <td>{{ order.get_payment_method_display }}</td>
-                    <td>
-                        <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span>
+                <tr class="order-row">
+                    <td data-label="Order ID">{{ order.id }}</td>
+                    <td data-label="Username">{{ order.user.username }}</td>
+                    <td data-label="Total Price">Rs. {{ order.total_price }}</td>
+                    <td data-label="Order Date">{{ order.order_date|date:"Y-m-d H:i" }}</td>
+                    <td data-label="Payment Method">{{ order.get_payment_method_display }}</td>
+                    <td data-label="Status">
+                        <span class="status-badge status-{{ order.status|lower }}" role="status">{{ order.status }}</span>
                         {% if order.status == 'Pre-Pending' %}
                         <form action="{% url 'confirm_pre_pending_order' order.id %}" method="post" style="display: inline;">
                             {% csrf_token %}
-                            <button type="submit" class="btn-confirm"><i class="lni lni-checkmark"></i> Confirm</button>
+                            <button type="submit" class="btn-confirm" title="Confirm Pre-Pending Order" aria-label="Confirm order"><i class="lni lni-checkmark"></i></button>
                         </form>
                         {% endif %}
                     </td>
-                    <td>
-                        <select class="status-select" data-order-id="{{ order.id }}">
-                            {% for status_value, status_label in order.STATUS_CHOICES %}
-                            <option value="{{ status_value }}" {% if order.status == status_value %}selected{% endif %}>{{ status_label }}</option>
-                            {% endfor %}
-                        </select>
-                        <button class="btn-details" onclick="showOrderDetails('{{ order.id }}')"><i class="lni lni-eye"></i> Details</button>
+                    <td data-label="Actions" class="actions-cell">
+                        <div class="action-buttons">
+                            <select class="status-select" data-order-id="{{ order.id }}" data-update-url="{% url 'update_order_status' order.id %}" aria-label="Update order status">
+                                {% for status_value, status_label in order.STATUS_CHOICES %}
+                                <option value="{{ status_value }}" {% if order.status == status_value %}selected{% endif %}>{{ status_label }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="btn-details" onclick="showOrderDetails('{{ order.id }}')" title="View Order Details" aria-label="View details"><i class="lni lni-eye"></i></button>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}
@@ -64,35 +72,65 @@
     {% else %}
     <div class="no-orders">
         <p>No orders found.</p>
-        <a href="{% url 'cafeteria_admin:admin_dashboard' %}"><i class="lni lni-arrow-left"></i> Back to Dashboard</a>
+        <a href="{% url 'admin_dashboard' %}" class="btn-back" aria-label="Back to dashboard"><i class="lni lni-arrow-left"></i> Back to Dashboard</a>
     </div>
     {% endif %}
 
     {% for order in orders %}
-    <div class="popup-overlay" id="details-popup-{{ order.id }}">
+    <div class="popup-overlay" id="details-popup-{{ order.id }}" role="dialog" aria-labelledby="popup-title-{{ order.id }}">
         <div class="popup">
             <div class="popup-header">
-                Order #{{ order.id }} Details
-                <button class="popup-close" onclick="closePopup('details-popup-{{ order.id }}')"><i class="lni lni-close"></i></button>
+                <h3 id="popup-title-{{ order.id }}">Order #{{ order.id }} Details</h3>
+                <button class="popup-close" onclick="closePopup('details-popup-{{ order.id }}')" aria-label="Close dialog"><i class="lni lni-close"></i></button>
             </div>
             <div class="popup-body">
-                <p><strong>Username:</strong> {{ order.user.username }}</p>
-                <p><strong>Total Price:</strong> Rs. {{ order.total_price }}</p>
-                <p><strong>Order Date:</strong> {{ order.order_date|date:"Y-m-d H:i" }}</p>
-                <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
-                <p><strong>Pickup Time:</strong> {{ order.pickup_time|default:"N/A" }}</p>
-                <p><strong>Dine-in Time:</strong> {{ order.dine_in_time|default:"N/A" }}</p>
-                <p><strong>Remarks:</strong> {{ order.remarks|default:"None" }}</p>
-                <p><strong>Group Code:</strong> {{ order.group_code|default:"N/A" }}</p>
-                <p><strong>Items:</strong></p>
-                <ul class="item-list">
-                    {% for item in order.order_items.all %}
-                    <li>{{ item.quantity }}x {{ item.food_item.name }} (Rs. {{ item.price }})</li>
-                    {% endfor %}
-                </ul>
+                <table class="details-table">
+                    <tr>
+                        <th>Username</th>
+                        <td>{{ order.user.username }}</td>
+                    </tr>
+                    <tr>
+                        <th>Total Price</th>
+                        <td>Rs. {{ order.total_price }}</td>
+                    </tr>
+                    <tr>
+                        <th>Order Date</th>
+                        <td>{{ order.order_date|date:"Y-m-d H:i" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Payment Method</th>
+                        <td>{{ order.get_payment_method_display }}</td>
+                    </tr>
+                    <tr>
+                        <th>Pickup Time</th>
+                        <td>{{ order.pickup_time|default:"N/A" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Dine-in Time</th>
+                        <td>{{ order.dine_in_time|default:"N/A" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Remarks</th>
+                        <td>{{ order.remarks|default:"None" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Group Code</th>
+                        <td>{{ order.group_code|default:"N/A" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Items</th>
+                        <td>
+                            <ul class="item-list">
+                                {% for item in order.order_items.all %}
+                                <li>{{ item.quantity }}x {{ item.food_item.name }} (Rs. {{ item.price }})</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <div class="popup-buttons">
-                <button class="popup-cancel" onclick="closePopup('details-popup-{{ order.id }}')"><i class="lni lni-close"></i> Close</button>
+                <button class="popup-cancel" onclick="closePopup('details-popup-{{ order.id }}')" aria-label="Close"><i class="lni lni-close"></i> Close</button>
             </div>
         </div>
     </div>
@@ -104,16 +142,37 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.status-select').forEach(select => {
         select.addEventListener('change', function () {
             const orderId = this.getAttribute('data-order-id');
+            const updateUrl = this.getAttribute('data-update-url');
             const newStatus = this.value;
-            fetch(`/admin/update-order-status/${orderId}/`, {
+            const csrfTokenInput = document.querySelector('#csrf-form input[name="csrfmiddlewaretoken"]');
+            if (!csrfTokenInput) {
+                alert('CSRF token not found. Please refresh the page.');
+                return;
+            }
+            const csrfToken = csrfTokenInput.value;
+
+            console.log('Attempting to fetch:', updateUrl); // Debug URL
+
+            fetch(updateUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': '{{ csrf_token }}'
+                    'X-CSRFToken': csrfToken
                 },
-                body: `status=${newStatus}`
+                body: `status=${encodeURIComponent(newStatus)}`
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        throw new Error('You are not authorized. Please log in.');
+                    }
+                    if (response.status === 404) {
+                        throw new Error('Update endpoint not found. Check URL configuration.');
+                    }
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     const badge = this.closest('tr').querySelector('.status-badge');
@@ -125,7 +184,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
             .catch(error => {
-                alert(`Error: ${error}`);
+                console.error('Error:', error);
+                alert(`Failed to update status: ${error.message}`);
             });
         });
     });
@@ -133,7 +193,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function showOrderDetails(orderId) {
     const popup = document.getElementById(`details-popup-${orderId}`);
-    popup.style.display = 'block';
+    popup.style.display = 'flex';
+    popup.focus();
 }
 
 function closePopup(popupId) {
