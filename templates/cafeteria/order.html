@@ -1124,8 +1124,12 @@
                                 <th>Items</th>
                                 <th>Total Price</th>
                                 <th>Order Date</th>
+                                <th>Pickup Time</th>
+                                <th>Dine In Time</th>
+                                <th>Group Code</th>
                                 <th>Payment Method</th>
                                 <th>Status</th>
+                                <th>Remarks</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1142,10 +1146,15 @@
                                 </td>
                                 <td>Rs. {{ order.total_price }}</td>
                                 <td>{{ order.order_date|date:"Y-m-d H:i" }}</td>
+                                <td>{{ order.pickup_time|default:'N/A' }}</td>
+                                <td>{{ order.dine_in_time|default:'N/A' }}</td>
+                                <td>{{ order.group_code|default:'N/A' }}</td>
+                             
                                 <td>{{ order.get_payment_method_display }}</td>
                                 <td class="status-cell">
                                     <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span>
                                 </td>
+                                <td>{{ order.remarks|default:'None' }}</td>
                             </tr>
                         </tbody>
                     </table>
