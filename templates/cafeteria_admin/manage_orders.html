@@ -50,7 +50,7 @@
                         {% if order.status == 'Pre-Pending' %}
                         <form action="{% url 'confirm_pre_pending_order' order.id %}" method="post" style="display: inline;">
                             {% csrf_token %}
-                            <button type="submit" class="btn-confirm" title="Confirm Pre-Pending Order" aria-label="Confirm order"><i class="lni lni-checkmark"></i></button>
+                            <button type="submit" class="btn-confirm" title="Confirm Pre-Pending Order" aria-label="Confirm order"><i class="lni lni-checkmark"></i>Confirm </button>
                         </form>
                         {% endif %}
                     </td>
@@ -61,7 +61,7 @@
                                 <option value="{{ status_value }}" {% if order.status == status_value %}selected{% endif %}>{{ status_label }}</option>
                                 {% endfor %}
                             </select>
-                            <button class="btn-details" onclick="showOrderDetails('{{ order.id }}')" title="View Order Details" aria-label="View details"><i class="lni lni-eye"></i></button>
+                            <button class="btn-details" onclick="showOrderDetails('{{ order.id }}')" title="View Order Details" aria-label="View details"><i class="lni lni-eye"></i> View</button>
                         </div>
                     </td>
                 </tr>
