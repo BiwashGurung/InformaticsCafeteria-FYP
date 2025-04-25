@@ -43,7 +43,7 @@
     .orders-title {
         font-size: 3rem;
         font-weight: 700;
-        color: var(--primary);
+        color: #99180d;
         text-align: center;
         margin-bottom: 60px;
         letter-spacing: 0.5px;
@@ -80,7 +80,7 @@
     .queue-position {
         font-size: 1.6rem;
         font-weight: 600;
-        color: var(--text);
+        color: #99180d;
         display: inline-flex;
         align-items: center;
         gap: 10px;
@@ -88,7 +88,7 @@
 
     .queue-position i {
         font-size: 1.4rem;
-        color: var(--primary);
+        color: #99180d;
     }
 
     .eta {
@@ -226,7 +226,7 @@
     }
 
     .order-details-table .items-cell .item-quantity {
-        background: var(--primary);
+        background: #99180d;
         color: #ffffff;
         padding: 4px 10px;
         border-radius: 12px;
@@ -601,6 +601,7 @@
         position: relative;
         margin: 20px 0;
         padding: 10px 0;
+       
     }
 
     .status-progress::before {
@@ -611,6 +612,7 @@
         right: 36px;
         height: 5px;
         background: #e2e8f0;
+    
         z-index: 1;
     }
 
@@ -641,7 +643,7 @@
     }
 
     .status-progress.completed::after {
-        width: 100%;
+        width: 90%;
         background: var(--success);
     }
 
@@ -699,7 +701,7 @@
 
     .checkpoint-label {
         font-size: 0.85rem;
-        font-weight: 500;
+        font-weight: 900;
         color: var(--text-light);
         margin-top: 8px;
     }
@@ -1027,53 +1029,6 @@
     }
 </style>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.order-card-header').forEach(header => {
-            header.addEventListener('click', function () {
-                const targetId = this.getAttribute('data-bs-target');
-                const target = document.querySelector(targetId);
-                const isActive = target.classList.contains('show');
-
-                // Close all other order cards
-                document.querySelectorAll('.order-card-body.show').forEach(body => {
-                    if (body !== target) {
-                        body.classList.remove('show');
-                        const parentHeader = body.closest('.order-card').querySelector('.order-card-header');
-                        parentHeader.classList.remove('active');
-                    }
-                });
-
-                // Toggle the clicked order card
-                if (!isActive) {
-                    target.classList.add('show');
-                    this.classList.add('active');
-                } else {
-                    target.classList.remove('show');
-                    this.classList.remove('active');
-                }
-            });
-        });
-
-        document.querySelectorAll('.btn-cancel').forEach(button => {
-            button.addEventListener('click', function () {
-                const popupId = this.getAttribute('data-popup');
-                const popupOverlay = document.getElementById(popupId);
-                popupOverlay.style.display = 'block';
-            });
-        });
-    });
-
-    function closePopup(popupId) {
-        const popupOverlay = document.getElementById(popupId);
-        popupOverlay.classList.add('hide');
-        setTimeout(() => {
-            popupOverlay.style.display = 'none';
-            popupOverlay.classList.remove('hide');
-        }, 500);
-    }
-</script>
-
 <div class="orders-container">
     <h2 class="orders-title">{{ user.username }}'s Order History</h2>
 
@@ -1190,4 +1145,52 @@
     </div>
     {% endif %}
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.order-card-header').forEach(header => {
+            header.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-bs-target');
+                const target = document.querySelector(targetId);
+                const isActive = target.classList.contains('show');
+
+                // Close all other order cards
+                document.querySelectorAll('.order-card-body.show').forEach(body => {
+                    if (body !== target) {
+                        body.classList.remove('show');
+                        const parentHeader = body.closest('.order-card').querySelector('.order-card-header');
+                        parentHeader.classList.remove('active');
+                    }
+                });
+
+                // Toggle the clicked order card
+                if (!isActive) {
+                    target.classList.add('show');
+                    this.classList.add('active');
+                } else {
+                    target.classList.remove('show');
+                    this.classList.remove('active');
+                }
+            });
+        });
+
+        document.querySelectorAll('.btn-cancel').forEach(button => {
+            button.addEventListener('click', function () {
+                const popupId = this.getAttribute('data-popup');
+                const popupOverlay = document.getElementById(popupId);
+                popupOverlay.style.display = 'block';
+            });
+        });
+    });
+
+    function closePopup(popupId) {
+        const popupOverlay = document.getElementById(popupId);
+        popupOverlay.classList.add('hide');
+        setTimeout(() => {
+            popupOverlay.style.display = 'none';
+            popupOverlay.classList.remove('hide');
+        }, 500);
+    }
+</script>
+
 {% endblock %}
