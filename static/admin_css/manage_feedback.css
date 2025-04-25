@@ -55,6 +55,12 @@ h2 i {
 .search-bar {
     margin: 30px 0;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px !important;
+    padding: 16px !important;
+  
 }
 
 .search-bar form {
