@@ -9,20 +9,24 @@
 <style>
     :root {
         --primary: #99180d;
+        --hover: #7a130a;
         --success: #28a745;
         --danger: #dc3545;
         --pending: #ff9800;
         --pre-pending: #007bff;
-        --background: #ffffff;
-        --card-bg: #f8f8f8;
-        --text: #333333;
-        --shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        --background: #f7fafc;
+        --card-bg: #ffffff;
+        --text: #2d3748;
+        --text-light: #718096;
+        --shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         --border: 2px solid #99180d;
-        --glow: 0 0 8px rgba(153, 24, 13, 0.3);
+        --glow: 0 0 10px rgba(153, 24, 13, 0.3);
+        --ripple: rgba(255, 255, 255, 0.6);
+        --gradient: linear-gradient(135deg, #99180d, #7a130a);
     }
 
     .btn-primary, .bg-primary, .table-primary {
-        background-color: var(--primary) !important;
+        background: var(--gradient) !important;
         border-color: var(--primary) !important;
         color: #ffffff !important;
     }
@@ -33,24 +37,38 @@
         padding: 60px 20px;
         background: var(--background);
         min-height: 100vh;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Roboto', sans-serif;
     }
 
     .orders-title {
-        font-size: 3.5rem;
-        font-weight: 800;
-        color: #99180d;
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--primary);
         text-align: center;
-        margin-bottom: 70px;
-        letter-spacing: 0.6px;
+        margin-bottom: 60px;
+        letter-spacing: 0.5px;
+        position: relative;
         animation: fadeIn 0.8s ease-in;
     }
 
+    .orders-title::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: var(--gradient);
+        border-radius: 1.5px;
+        animation: underlineGrow 0.8s ease-in-out;
+    }
+
     .queue-info {
-        background: var(--background);
+        background: var(--card-bg);
         border-radius: 12px;
-        padding: 24px;
-        margin-bottom: 50px;
+        padding: 20px;
+        margin-bottom: 40px;
         box-shadow: var(--shadow);
         text-align: center;
         position: sticky;
@@ -58,256 +76,349 @@
         z-index: 100;
         animation: slideIn 0.8s ease-out;
     }
+
     .queue-position {
-        font-size: 2.4rem;
-        font-weight: 800;
-        color: #99180d;
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: var(--text);
         display: inline-flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
     }
+
     .queue-position i {
-        font-size: 2rem;
-        color: #99180d;
-    }
-    .eta {
         font-size: 1.4rem;
+        color: var(--primary);
+    }
+
+    .eta {
+        font-size: 1.2rem;
         font-weight: 400;
-        color: #99180d;
-        margin-top: 12px;
+        color: var(--text-light);
+        margin-top: 10px;
     }
 
     .orders-grid {
         display: flex;
         flex-direction: column;
-        gap: 35px;
-        margin-bottom: 60px;
+        gap: 28px;
+        margin-bottom: 50px;
     }
 
     .order-card {
-        background: #99180d;
-        border-radius: 14px;
+        background: var(--card-bg);
+        border-radius: 12px;
         border: var(--border);
         box-shadow: var(--shadow);
         overflow: hidden;
         transition: transform 0.4s ease, box-shadow 0.4s ease;
-        animation: cardReveal 0.8s ease-out;
+        animation: scaleIn 0.6s ease-out forwards;
+        animation-delay: calc(var(--order) * 0.1s);
     }
+
+    .order-card:nth-child(1) { --order: 1; }
+    .order-card:nth-child(2) { --order: 2; }
+    .order-card:nth-child(3) { --order: 3; }
+
     .order-card:hover {
-        transform: translateY(-8px);
-        box-shadow: var(--glow), 0 14px 28px rgba(0, 0, 0, 0.2);
+        transform: translateY(-6px);
+        box-shadow: var(--glow), 0 12px 28px rgba(0, 0, 0, 0.15);
     }
+
     .order-card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 20px 28px;
-        background: #99180d;
+        padding: 18px 24px;
+        background: var(--gradient);
         color: #ffffff;
-        font-size: 1.4rem;
-        font-weight: 700;
+        font-size: 1.3rem;
+        font-weight: 600;
         cursor: pointer;
+        transition: background 0.3s ease;
     }
+
+    .order-card-header:hover {
+        background: linear-gradient(135deg, #7a130a, #99180d);
+    }
+
     .order-card-header i {
         transition: transform 0.4s ease;
     }
+
     .order-card-header.active i {
         transform: rotate(180deg);
     }
+
     .order-card-header:focus {
-        outline: 3px solid #99180d;
+        outline: 2px solid #ffffff;
         outline-offset: 2px;
     }
+
     .order-card-body {
-        padding: 28px;
+        padding: 24px;
         display: none;
         background: var(--card-bg);
     }
+
     .order-card-body.show {
         display: block;
+        animation: fadeIn 0.4s ease-in;
     }
 
     .order-details-table {
         width: 100%;
         border-collapse: separate;
         border-spacing: 0;
-        margin: 16px 0;
+        margin: 14px 0;
         border: var(--border);
         border-radius: 10px;
         overflow: hidden;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
+
     .order-details-table th,
     .order-details-table td {
-        padding: 12px 16px;
-        font-size: 1.05rem;
+        padding: 10px 14px;
+        font-size: 1rem;
         text-align: left;
-        border-bottom: 1px solid rgba(153, 24, 13, 0.2);
+        border-bottom: 1px solid rgba(153, 24, 13, 0.15);
     }
+
     .order-details-table th {
-        background: #99180d;
+        background: var(--gradient);
         color: #ffffff;
-        font-weight: 700;
+        font-weight: 600;
         text-transform: uppercase;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
     }
+
     .order-details-table td {
-        background: var(--background);
+        background: var(--card-bg);
         color: var(--text);
     }
+
     .order-details-table tr:nth-child(even) td {
-        background: rgba(153, 24, 13, 0.05);
+        background: rgba(153, 24, 13, 0.03);
     }
+
     .order-details-table tr:hover td {
-        background: rgba(153, 24, 13, 0.1);
+        background: rgba(153, 24, 13, 0.08);
         transition: background 0.3s ease;
     }
+
     .order-details-table .items-cell ul {
         list-style: none;
         padding: 0;
         margin: 0;
     }
+
     .order-details-table .items-cell li {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 4px 0;
     }
+
     .order-details-table .items-cell .item-name {
         color: var(--text);
         font-weight: 500;
     }
+
     .order-details-table .items-cell .item-quantity {
-        background: #99180d;
+        background: var(--primary);
         color: #ffffff;
         padding: 4px 10px;
         border-radius: 12px;
         font-size: 0.9rem;
         font-weight: 500;
     }
+
     .order-details-table .status-cell .status-badge {
-        font-size: 0.95rem;
-        padding: 8px 14px;
+        font-size: 0.9rem;
+        padding: 6px 12px;
+        border-radius: 12px;
     }
 
     .item-list {
         display: flex;
         flex-direction: column;
-        gap: 14px;
-        margin: 16px 0;
+        gap: 12px;
+        margin: 14px 0;
     }
+
     .item-entry {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
+
     .item-name {
         color: var(--text);
         font-weight: 500;
     }
+
     .item-quantity {
-        background: var(--primary);
+        background: var(--gradient);
         color: #ffffff;
-        padding: 6px 14px;
-        border-radius: 14px;
-        font-size: 0.95rem;
+        padding: 5px 12px;
+        border-radius: 12px;
+        font-size: 0.9rem;
         font-weight: 500;
     }
+
     .status-badge {
-        padding: 10px 16px;
-        border-radius: 14px;
-        font-size: 1rem;
+        padding: 8px 14px;
+        border-radius: 12px;
+        font-size: 0.95rem;
         font-weight: 500;
         display: inline-flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
     }
+
     .status-pre-pending {
         background: var(--pre-pending);
         color: #ffffff;
     }
+
     .status-pending {
         background: var(--pending);
         color: #ffffff;
     }
+
     .status-preparing {
-        background: rgba(153, 24, 13, 0.7);
+        background: var(--gradient);
         color: #ffffff;
     }
+
     .status-completed {
         background: var(--success);
         color: #ffffff;
     }
+
     .status-cancelled {
         background: var(--danger);
         color: #ffffff;
     }
+
     .order-actions {
         display: flex;
         justify-content: flex-end;
-        margin-top: 24px;
+        margin-top: 20px;
     }
+
     .btn-cancel {
-        padding: 12px 24px;
-        border-radius: 10px;
-        font-size: 1rem;
+        position: relative;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 0.95rem;
         font-weight: 600;
         cursor: pointer;
         border: none;
         background: var(--danger);
         color: #ffffff;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         display: inline-flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
+        overflow: hidden;
     }
+
     .btn-cancel:hover {
         transform: scale(1.05);
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
         background: #c82333;
     }
+
     .btn-cancel:focus {
-        outline: 3px solid var(--primary);
+        outline: 2px solid var(--primary);
         outline-offset: 2px;
     }
 
+    .btn-cancel::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: var(--ripple);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+    }
+
+    .btn-cancel:active::after {
+        width: 200px;
+        height: 200px;
+        opacity: 0.5;
+    }
+
     .no-orders {
-        background: var(--background);
-        border-radius: 14px;
-        padding: 60px;
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 50px;
         text-align: center;
         box-shadow: var(--shadow);
         animation: fadeIn 0.8s ease-in;
     }
+
     .no-orders p {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
         font-weight: 500;
         color: var(--text);
-        margin-bottom: 28px;
+        margin-bottom: 24px;
     }
+
     .no-orders a {
-        background: var(--primary);
+        position: relative;
+        background: var(--gradient);
         color: #ffffff;
-        padding: 16px 32px;
-        border-radius: 10px;
-        font-size: 1.2rem;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-size: 1.1rem;
         font-weight: 600;
         text-decoration: none;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         display: inline-flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
+        overflow: hidden;
     }
+
     .no-orders a:hover {
         transform: scale(1.05);
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
+
     .no-orders a:focus {
-        outline: 3px solid var(--primary);
+        outline: 2px solid var(--primary);
         outline-offset: 2px;
+    }
+
+    .no-orders a::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: var(--ripple);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+    }
+
+    .no-orders a:active::after {
+        width: 200px;
+        height: 200px;
+        opacity: 0.5;
     }
 
     .popup-overlay {
@@ -321,107 +432,165 @@
         z-index: 1000;
         animation: fadeIn 0.5s ease-in;
     }
+
     .popup {
         position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%) scale(1);
-        background: var(--background);
-        border-radius: 16px;
-        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+        background: var(--card-bg);
+        border-radius: 14px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
         max-width: 400px;
         width: 85%;
-        backdrop-filter: blur(5px);
+        backdrop-filter: blur(6px);
         animation: popupIn 0.5s ease-out;
         overflow: hidden;
     }
+
     .popup.hide {
         animation: popupOut 0.5s ease-in forwards;
     }
+
     .popup-header {
-        background: var(--primary);
-        padding: 10px;
+        background: var(--gradient);
+        padding: 12px;
         text-align: center;
         color: #ffffff;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         font-weight: 700;
-        border-top-left-radius: 16px;
-        border-top-right-radius: 16px;
+        border-top-left-radius: 14px;
+        border-top-right-radius: 14px;
     }
+
     .popup-body {
-        padding: 15px;
+        padding: 14px;
         text-align: center;
     }
+
     .popup-body p {
-        font-size: 1rem;
+        font-size: 1.1rem;
         font-weight: 400;
         color: var(--text);
-        margin: 0 0 15px;
+        margin: 0 0 14px;
     }
+
     .popup-buttons {
         display: flex;
         justify-content: center;
-        gap: 12px;
-        padding: 0 15px 15px;
+        gap: 10px;
+        padding: 0 14px 14px;
     }
+
     .popup-buttons a, .popup-buttons button {
         flex: 1;
         padding: 10px;
         border-radius: 8px;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         font-weight: 600;
         cursor: pointer;
         text-decoration: none;
         border: none;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 6px;
+        position: relative;
+        overflow: hidden;
     }
+
     .popup-confirm {
-        background: var(--primary);
+        background: var(--gradient);
         color: #ffffff;
     }
+
     .popup-confirm:hover {
         transform: scale(1.05);
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
+
     .popup-confirm:focus {
-        outline: 3px solid var(--primary);
+        outline: 2px solid var(--primary);
         outline-offset: 2px;
     }
+
+    .popup-confirm::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: var(--ripple);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+    }
+
+    .popup-confirm:active::after {
+        width: 200px;
+        height: 200px;
+        opacity: 0.5;
+    }
+
     .popup-cancel {
         background: var(--danger);
         color: #ffffff;
     }
+
     .popup-cancel:hover {
         transform: scale(1.05);
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
         background: #c82333;
     }
+
     .popup-cancel:focus {
-        outline: 3px solid var(--primary);
+        outline: 2px solid var(--primary);
         outline-offset: 2px;
     }
+
+    .popup-cancel::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: var(--ripple);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+    }
+
+    .popup-cancel:active::after {
+        width: 200px;
+        height: 200px;
+        opacity: 0.5;
+    }
+
     .popup-close {
         position: absolute;
-        top: 10px;
-        right: 10px;
+        top: 12px;
+        right: 12px;
         background: transparent;
         color: #ffffff;
         border: none;
-        font-size: 1rem;
+        font-size: 1.1rem;
         cursor: pointer;
         transition: color 0.3s ease, transform 0.3s ease;
     }
+
     .popup-close:hover {
         color: #f0f0f0;
-        transform: scale(1.15);
+        transform: scale(1.2);
     }
+
     .popup-close:focus {
-        outline: 3px solid var(--primary);
+        outline: 2px solid #ffffff;
         outline-offset: 2px;
     }
 
@@ -430,45 +599,52 @@
         align-items: center;
         justify-content: space-between;
         position: relative;
-        margin: 24px 0;
-        padding: 12px 0;
+        margin: 20px 0;
+        padding: 10px 0;
     }
+
     .status-progress::before {
         content: '';
         position: absolute;
-        top: 20px;
-        left: 40px;
-        right: 40px;
-        height: 6px;
-        background: #e0e0e0;
+        top: 18px;
+        left: 36px;
+        right: 36px;
+        height: 5px;
+        background: #e2e8f0;
         z-index: 1;
     }
+
     .status-progress::after {
         content: '';
         position: absolute;
-        top: 20px;
-        left: 40px;
-        height: 6px;
+        top: 18px;
+        left: 36px;
+        height: 5px;
         background: var(--pre-pending);
         transition: width 0.6s ease, background 0.6s ease;
         z-index: 2;
     }
+
     .status-progress.pre-pending::after {
         width: 0;
         background: var(--pre-pending);
     }
+
     .status-progress.pending::after {
         width: 33%;
         background: var(--pending);
     }
+
     .status-progress.preparing::after {
         width: 66%;
-        background: rgba(153, 24, 13, 0.7);
+        background: var(--primary);
     }
+
     .status-progress.completed::after {
         width: 100%;
         background: var(--success);
     }
+
     .checkpoint {
         display: flex;
         flex-direction: column;
@@ -476,87 +652,104 @@
         width: 80px;
         text-align: center;
         z-index: 3;
+        position: relative;
+        margin: 0;
+        padding: 0;
     }
+
     .checkpoint-circle {
-        width: 40px;
-        height: 40px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
-        background: #e0e0e0;
+        background: #e2e8f0;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         color: #ffffff;
-        transition: background 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+        transition: background 0.4s ease, box-shadow 0.4s ease;
+        position: relative;
+        top: 0;
+        transform: translateY(-50%) scale(1);
     }
+
     .checkpoint.active .checkpoint-circle {
         background: var(--pre-pending);
-        transform: scale(1.15);
         box-shadow: var(--glow);
         animation: pulse 1.5s infinite;
     }
+
     .status-progress.pending .checkpoint.pre-pending .checkpoint-circle,
     .status-progress.pending .checkpoint.pending .checkpoint-circle {
         background: var(--pending);
         box-shadow: var(--glow);
     }
+
     .status-progress.preparing .checkpoint.pre-pending .checkpoint-circle,
     .status-progress.preparing .checkpoint.pending .checkpoint-circle,
     .status-progress.preparing .checkpoint.preparing .checkpoint-circle {
-        background: rgba(153, 24, 13, 0.7);
+        background: var(--gradient);
         box-shadow: var(--glow);
     }
+
     .status-progress.completed .checkpoint .checkpoint-circle {
         background: var(--success);
         box-shadow: var(--glow);
     }
+
     .checkpoint-label {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 500;
-        color: var(--text);
-        margin-top: 10px;
+        color: var(--text-light);
+        margin-top: 8px;
     }
+
     .completed-message {
         display: none;
-        margin: 24px 0;
-        padding: 12px;
-        font-size: 1.3rem;
-        font-weight: 700;
+        margin: 20px 0;
+        padding: 10px;
+        font-size: 1.2rem;
+        font-weight: 600;
         color: var(--success);
         background: rgba(40, 167, 69, 0.1);
-        border: 2px solid #99180d;
-        border-radius: 10px;
+        border: var(--border);
+        border-radius: 8px;
         text-align: center;
         animation: slideInMessage 0.8s ease-out;
     }
+
     .completed-message i {
-        margin-right: 10px;
-        font-size: 1.5rem;
+        margin-right: 8px;
+        font-size: 1.3rem;
         animation: iconBounce 0.8s ease-in-out;
     }
+
     .status-progress.completed + .completed-message {
         display: flex;
         align-items: center;
         justify-content: center;
     }
+
     .pre-pending-message {
         display: none;
-        margin: 24px 0;
-        padding: 12px;
-        font-size: 1.3rem;
-        font-weight: 700;
+        margin: 20px 0;
+        padding: 10px;
+        font-size: 1.2rem;
+        font-weight: 600;
         color: var(--pre-pending);
         background: rgba(0, 123, 255, 0.1);
-        border: 2px solid #99180d;
-        border-radius: 10px;
+        border: var(--border);
+        border-radius: 8px;
         text-align: center;
         animation: slideInMessage 0.8s ease-out;
     }
+
     .pre-pending-message i {
-        margin-right: 10px;
-        font-size: 1.5rem;
+        margin-right: 8px;
+        font-size: 1.3rem;
         animation: iconBounce 0.8s ease-in-out;
     }
+
     .status-progress.pre-pending + .pre-pending-message {
         display: flex;
         align-items: center;
@@ -567,201 +760,269 @@
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
+
     .order-details-table th, .order-details-table td {
-        min-width: 120px;
+        min-width: 100px;
     }
 
     @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
     }
+
     @keyframes slideIn {
-        from { transform: translateY(-40px); opacity: 0; }
+        from { transform: translateY(-30px); opacity: 0; }
         to { transform: translateY(0); opacity: 1; }
     }
-    @keyframes cardReveal {
-        from { transform: translateY(20px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
+
+    @keyframes scaleIn {
+        from { transform: scale(0.95); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
     }
+
     @keyframes popupIn {
-        from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+        from { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
         to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
+
     @keyframes popupOut {
         from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-        to { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+        to { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
     }
+
     @keyframes pulse {
-        0% { transform: scale(1.15); }
-        50% { transform: scale(1.25); }
-        100% { transform: scale(1.15); }
+        0% { transform: translateY(-50%) scale(1); }
+        50% { transform: translateY(-50%) scale(1.1); }
+        100% { transform: translateY(-50%) scale(1); }
     }
+
     @keyframes slideInMessage {
-        from { transform: translateY(20px); opacity: 0; }
+        from { transform: translateY(15px); opacity: 0; }
         to { transform: translateY(0); opacity: 1; }
     }
+
     @keyframes iconBounce {
         0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-4px); }
+        50% { transform: translateY(-3px); }
+    }
+
+    @keyframes underlineGrow {
+        from { width: 0; }
+        to { width: 80px; }
     }
 
     @media (max-width: 767px) {
         .orders-container {
             padding: 40px 15px;
         }
+
         .orders-title {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
         }
+
         .queue-info {
-            padding: 18px;
+            padding: 16px;
             border-radius: 10px;
         }
+
         .queue-position {
-            font-size: 2rem;
+            font-size: 1.4rem;
         }
+
         .queue-position i {
-            font-size: 1.6rem;
-        }
-        .eta {
             font-size: 1.2rem;
         }
+
+        .eta {
+            font-size: 1.1rem;
+        }
+
         .orders-grid {
-            gap: 28px;
+            gap: 24px;
         }
+
         .order-card-header {
-            font-size: 1.3rem;
-            padding: 16px 22px;
+            font-size: 1.2rem;
+            padding: 14px 20px;
         }
+
         .order-card-body {
-            padding: 22px;
+            padding: 20px;
         }
+
         .order-details-table th,
         .order-details-table td {
-            font-size: 0.95rem;
-            padding: 10px 12px;
+            font-size: 0.9rem;
+            padding: 8px 12px;
         }
+
         .order-details-table .items-cell .item-quantity {
             font-size: 0.85rem;
             padding: 3px 8px;
         }
+
         .order-details-table .status-cell .status-badge {
-            font-size: 0.9rem;
-            padding: 6px 12px;
+            font-size: 0.85rem;
+            padding: 5px 10px;
         }
+
         .order-actions {
             flex-direction: column;
             align-items: stretch;
         }
+
         .btn-cancel {
-            font-size: 0.95rem;
-            padding: 10px 20px;
+            font-size: 0.9rem;
+            padding: 8px 16px;
         }
+
         .popup {
-            max-width: 400px;
+            max-width: 360px;
         }
+
         .popup-header {
-            font-size: 1.5rem;
-            padding: 16px;
-        }
-        .popup-body p {
-            font-size: 1.2rem;
-        }
-        .popup-buttons {
-            flex-direction: column;
-            gap: 16px;
-        }
-        .popup-buttons a, .popup-buttons button {
-            font-size: 1rem;
-            padding: 12px;
-        }
-        .popup-close {
-            font-size: 1.3rem;
-        }
-        .status-progress {
-            margin: 20px 0;
-        }
-        .checkpoint {
-            width: 70px;
-        }
-        .checkpoint-circle {
-            width: 34px;
-            height: 34px;
-            font-size: 1.2rem;
-        }
-        .checkpoint-label {
-            font-size: 0.85rem;
-        }
-        .completed-message, .pre-pending-message {
             font-size: 1.2rem;
             padding: 10px;
         }
+
+        .popup-body p {
+            font-size: 1rem;
+        }
+
+        .popup-buttons {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .popup-buttons a, .popup-buttons button {
+            font-size: 0.9rem;
+            padding: 8px;
+        }
+
+        .popup-close {
+            font-size: 1rem;
+        }
+
+        .status-progress {
+            margin: 16px 0;
+        }
+
+        .status-progress::before, .status-progress::after {
+            top: 16px;
+            left: 32px;
+            right: 32px;
+        }
+
+        .checkpoint {
+            width: 70px;
+        }
+
+        .checkpoint-circle {
+            width: 32px;
+            height: 32px;
+            font-size: 1.1rem;
+            top: 0;
+            transform: translateY(-50%) scale(1);
+        }
+
+        .checkpoint-label {
+            font-size: 0.8rem;
+        }
+
+        .completed-message, .pre-pending-message {
+            font-size: 1.1rem;
+            padding: 8px;
+        }
+
         .completed-message i, .pre-pending-message i {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
     }
+
     @media (max-width: 576px) {
         .orders-container {
             padding: 30px 10px;
         }
+
         .orders-title {
-            font-size: 2.4rem;
+            font-size: 2.2rem;
         }
+
         .queue-position {
-            font-size: 1.8rem;
+            font-size: 1.3rem;
         }
+
         .eta {
+            font-size: 1rem;
+        }
+
+        .order-card-header {
             font-size: 1.1rem;
         }
-        .order-card-header {
-            font-size: 1.2rem;
-        }
+
         .order-details-table th,
         .order-details-table td {
-            font-size: 0.9rem;
-            padding: 8px 10px;
+            font-size: 0.85rem;
+            padding: 6px 10px;
         }
+
         .order-details-table .items-cell .item-name,
         .order-details-table .items-cell .item-quantity {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
+
         .order-details-table .status-cell .status-badge {
+            font-size: 0.8rem;
+        }
+
+        .btn-cancel {
             font-size: 0.85rem;
         }
-        .btn-cancel {
-            font-size: 0.9rem;
-        }
+
         .popup {
-            max-width: 340px;
+            max-width: 320px;
         }
+
         .popup-header {
-            font-size: 1.4rem;
-        }
-        .popup-body p {
             font-size: 1.1rem;
         }
-        .popup-buttons a, .popup-buttons button {
+
+        .popup-body p {
             font-size: 0.95rem;
         }
-        .status-progress::before, .status-progress::after {
-            left: 30px;
-            right: 30px;
+
+        .popup-buttons a, .popup-buttons button {
+            font-size: 0.85rem;
         }
+
+        .status-progress::before, .status-progress::after {
+            top: 14px;
+            left: 28px;
+            right: 28px;
+        }
+
         .checkpoint {
             width: 60px;
         }
+
         .checkpoint-circle {
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
+            font-size: 1rem;
+            top: 0;
+            transform: translateY(-50%) scale(1);
+        }
+
+        .checkpoint-label {
+            font-size: 0.75rem;
+        }
+
+        .completed-message, .pre-pending-message {
             font-size: 1rem;
         }
-        .checkpoint-label {
-            font-size: 0.8rem;
-        }
-        .completed-message, .pre-pending-message {
-            font-size: 1.1rem;
-        }
+
         .completed-message i, .pre-pending-message i {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
     }
 </style>
@@ -772,8 +1033,25 @@
             header.addEventListener('click', function () {
                 const targetId = this.getAttribute('data-bs-target');
                 const target = document.querySelector(targetId);
-                target.classList.toggle('show');
-                this.classList.toggle('active');
+                const isActive = target.classList.contains('show');
+
+                // Close all other order cards
+                document.querySelectorAll('.order-card-body.show').forEach(body => {
+                    if (body !== target) {
+                        body.classList.remove('show');
+                        const parentHeader = body.closest('.order-card').querySelector('.order-card-header');
+                        parentHeader.classList.remove('active');
+                    }
+                });
+
+                // Toggle the clicked order card
+                if (!isActive) {
+                    target.classList.add('show');
+                    this.classList.add('active');
+                } else {
+                    target.classList.remove('show');
+                    this.classList.remove('active');
+                }
             });
         });
 
