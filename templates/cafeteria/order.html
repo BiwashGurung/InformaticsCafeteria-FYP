@@ -116,7 +116,7 @@
         animation-delay: calc(var(--order) * 0.1s);
     }
 
-    .order-card:nth-child(1) { --order: 1; }
+    .order-card:nth-child(1) { --GERDorder: 1; }
     .order-card:nth-child(2) { --order: 2; }
     .order-card:nth-child(3) { --order: 3; }
 
@@ -601,7 +601,6 @@
         position: relative;
         margin: 20px 0;
         padding: 10px 0;
-       
     }
 
     .status-progress::before {
@@ -612,7 +611,6 @@
         right: 36px;
         height: 5px;
         background: #e2e8f0;
-    
         z-index: 1;
     }
 
@@ -672,6 +670,10 @@
         transition: background 0.4s ease, box-shadow 0.4s ease;
         position: relative;
         top: 0;
+        transform: translateY(-50%) scale(1);
+    }
+
+    .checkpoint.pre-pending .checkpoint-circle {
         transform: translateY(-50%) scale(1);
     }
 
@@ -927,6 +929,10 @@
             transform: translateY(-50%) scale(1);
         }
 
+        .checkpoint.pre-pending .checkpoint-circle {
+            transform: translateY(-50%) scale(1);
+        }
+
         .checkpoint-label {
             font-size: 0.8rem;
         }
@@ -1015,12 +1021,17 @@
             transform: translateY(-50%) scale(1);
         }
 
+        .checkpoint.pre-pending .checkpoint-circle {
+            transform: translateY(-50%) scale(1);
+        }
+
         .checkpoint-label {
             font-size: 0.75rem;
         }
 
         .completed-message, .pre-pending-message {
             font-size: 1rem;
+            padding: 8px;
         }
 
         .completed-message i, .pre-pending-message i {
@@ -1067,10 +1078,11 @@
                     </div>
                 </div>
                 <div class="pre-pending-message">
-                    <i class="lni lni-information"></i> Awaiting admin confirmation due to large order size.
+                    <i class="lni lni-information"></i> Your order requires confirmation and is currently under review by the cafeteria staff.
+
                 </div>
                 <div class="completed-message">
-                    <i class="lni lni-checkmark-circle"></i> Order Completed! Thank you for your purchase.
+                    <i class="lni lni-checkmark-circle"></i> Your order is ready, enjoy your meal!
                 </div>
                 <div class="table-responsive">
                     <table class="order-details-table">
@@ -1104,7 +1116,6 @@
                                 <td>{{ order.pickup_time|default:'N/A' }}</td>
                                 <td>{{ order.dine_in_time|default:'N/A' }}</td>
                                 <td>{{ order.group_code|default:'N/A' }}</td>
-                             
                                 <td>{{ order.get_payment_method_display }}</td>
                                 <td class="status-cell">
                                     <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span>
