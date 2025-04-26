@@ -5,14 +5,15 @@
 <head>
   <title>{{ category }} - Informatics Cafeteria</title>
   <link rel="stylesheet" href="{% static 'cafeteria_css/food_list.css' %}" />
+
 </head>
 
 <h2 class="menu-title">{{ category }} Menu</h2>
 
 <div class="food-container">
- {% for food in food_items %}
+  {% for food in food_items %}
   <div class="food-item">
-     {% if not food.is_in_stock %}
+    {% if not food.is_in_stock %}
     <p class="out-of-stock">Sold Out</p>  
     {% endif %}
     <img src="{{ food.image.url }}" alt="{{ food.name }}" />
@@ -25,6 +26,7 @@
       <form method="POST" action="{% url 'add_to_cart' food.id %}" class="add-to-cart-form">
         {% csrf_token %}
         <input type="hidden" name="food_id" value="{{ food.id }}">
+        <input type="hidden" name="category" value="{{ category }}">
         <input type="number" name="quantity" value="1" min="1" class="quantity-input" {% if not food.is_in_stock %} disabled {% endif %}>
         <button type="submit" class="btn btn-primary" {% if not food.is_in_stock %} disabled {% endif %}>Add to Cart</button>
       </form>
@@ -35,9 +37,43 @@
   {% endfor %}
 </div>
 
+<div class="popup-overlay" id="cartPopup">
+  <div class="popup-content">
+    <p>Do you want to add another food item?</p>
+    <button class="btn btn-yes" onclick="submitCartForm('yes')">Yes</button>
+    <button class="btn btn-no" onclick="submitCartForm('no')">No</button>
+  </div>
+</div>
+
 <a href="{% url 'orderonline' %}" class="back-link">
   <i class="fa-solid fa-arrow-left"></i> Back to Menus
 </a>
 
-<script src="{% static 'javascript/quantity.js'%}"></script>
+<script src="{% static 'javascript/quantity.js' %}"></script>
+<script>
+  let activeForm = null;
+
+  // Intercept form submission
+  document.querySelectorAll('.add-to-cart-form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      activeForm = this;
+      document.getElementById('cartPopup').style.display = 'flex';
+    });
+  });
+
+  // Submit form with add_another value
+  function submitCartForm(addAnother) {
+    if (activeForm) {
+      // Add hidden input for add_another
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'add_another';
+      input.value = addAnother;
+      activeForm.appendChild(input);
+      activeForm.submit();
+    }
+    document.getElementById('cartPopup').style.display = 'none';
+  }
+</script>
 {% endblock %}

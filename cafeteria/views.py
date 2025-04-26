@@ -147,49 +147,50 @@ def food_list(request, category):
 @login_required
 def view_cart(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
-     # Optimizing Query to fetch related food items
-    cart_items = cart.cart_items.select_related('food_item') 
+    cart_items = cart.cart_items.select_related('food_item')
     total_price = cart.total_price()
     return render(request, 'cafeteria/cart.html', {'cart_items': cart_items, 'total_price': total_price})
 
-# Add Item to Cart
 @login_required
 def add_to_cart(request, food_id):
     if request.method == "POST":
         try:
             food_item = get_object_or_404(FoodItem, id=food_id)
-            # Getting the quantity from the form
-            quantity_input = request.POST.get("quantity", "1").strip()
+            category = request.POST.get("category", "").strip()
+            add_another = request.POST.get("add_another", "").strip()
             
             # Validating the quantity
+            quantity_input = request.POST.get("quantity", "1").strip()
             try:
                 quantity = int(quantity_input)
                 if quantity <= 0 or quantity > 1000:
                     messages.error(request, "Please choose a valid quantity.")
-                    return redirect("orderonline")  
+                    return redirect("food_list", category=category) if category else redirect("orderonline")
             except ValueError:
                 messages.error(request, "Invalid quantity entered. Please enter a number.")
-                return redirect("orderonline")  
+                return redirect("food_list", category=category) if category else redirect("orderonline")
 
-            # Getting the user's cart (Creating one if it doesn't exist)
+            # Getting or creating the user's cart
             cart, created = Cart.objects.get_or_create(user=request.user)
             
-            # Checking if item already exists in the cart or not
+            # Adding or updating the cart item
             cart_item, created = CartItem.objects.get_or_create(cart=cart, food_item=food_item)
-
             if created:
-                # Setting the quantity if it's a new item
                 cart_item.quantity = quantity
             else:
-                # Increasing the quantity if item exists already
                 cart_item.quantity += quantity
-            
             cart_item.save()
             messages.success(request, f"{food_item.name} added to cart successfully!")
+            
+            # Redirecting based on add_another
+            if add_another == "yes" and category:
+                return redirect("food_list", category=category)
+            return redirect("view_cart")
         
         except Exception as e:
+            logger.error(f"Error adding item {food_id} to cart: {str(e)}")
             messages.error(request, "An error occurred while adding the item to the cart. Please try again.")
-            return redirect("orderonline")  
+            return redirect("food_list", category=category) if category else redirect("orderonline")
     
     return redirect("view_cart")
 
