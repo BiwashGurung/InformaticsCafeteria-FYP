@@ -18,9 +18,9 @@ class FoodItemForm(forms.ModelForm):
         ('', 'Select a category'),  
         ('BreakFast', 'BreakFast'),
         ('Appetizer', 'Appetizer'),
-        ('Beverages', 'Beverages'),
+        ('Beverage', 'Beverage'),
         ('Desserts', 'Desserts'),
-        ('Main Course', 'Main Course'),
+        ('MainCourse', 'MainCourse'),
         ('Snacks', 'Snacks'),
     ]
 
