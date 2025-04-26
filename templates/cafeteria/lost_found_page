@@ -5,7 +5,7 @@
 
 
 <head>
-    <title>Informatics Cafeteria - Lost & Found</title>
+    <title>Lost & Found - Informatics Cafeteria</title>
     <link rel="stylesheet" href="{% static 'cafeteria_css/lost_found_page.css' %}" />
 </head>
 
