@@ -73,6 +73,12 @@
     .form-select {
         cursor: pointer;
     }
+    .time-option-input {
+        display: none;
+    }
+    .time-option-input.active {
+        display: block;
+    }
     .grand-total {
         font-size: 1.8rem;
         color: #99180d;
@@ -125,9 +131,6 @@
     }
     .empty-cart a:hover {
         color: #b32118;
-    }
-    .time-option {
-        display: none;
     }
     .messages {
         list-style: none;
@@ -255,7 +258,7 @@
                     {% if item.food_item.image %}
                     <img src="{{ item.food_item.image.url }}" alt="{{ item.food_item.name }}" class="img-fluid" style="width: 80px; height: 80px; object-fit: cover;">
                     {% else %}
-                    <img src="{% static 'Images/default_food.png' %}" alt="Default Food Image" class="img-fluid" style="width: 80px; height: 80px; object-fit: cover;">
+                    <img src="{% static 'Images/default_food.jpg' %}" alt="Default Food Image" class="img-fluid" style="width: 80px; height: 80px; object-fit: cover;">
                     {% endif %}
                 </td>
                 <td>{{ item.food_item.name }}</td>
@@ -316,10 +319,10 @@
                     <option value="pickup" selected>Pickup Time</option>
                     <option value="dine_in">Dine-in Time</option>
                 </select>
-                <div id="pickupTime" class="time-option mt-3">
+                <div id="pickupTime" class="time-option-input mt-3">
                     <input type="time" name="pickup_time" class="form-control" placeholder="Select pickup time" title="Choose a pickup time">
                 </div>
-                <div id="dineInTime" class="time-option mt-3">
+                <div id="dineInTime" class="time-option-input mt-3">
                     <input type="time" name="dine_in_time" class="form-control" placeholder="Select dine-in time" title="Choose a dine-in time">
                 </div>
             </div>
@@ -334,7 +337,7 @@
                     <label class="form-check-label" for="cashPayment">Payment on Delivery</label>
                 </div>
                 <div class="form-check payment-option mb-2">
-                    <input type="radio" name="payment_method" value="Online" class="form-check-input" id="onlinePayment" data-bs-toggle="modal" data-bs-target="#khaltiModal">
+                    <input type="radio" name="payment_method" value="Online" class="form-check-input" id="onlinePayment">
                     <label class="form-check-label" for="onlinePayment">Online Payment</label>
                 </div>
             </div>
@@ -396,22 +399,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const timeOptionSelect = document.getElementById('timeOption');
     const pickupTimeDiv = document.getElementById('pickupTime');
     const dineInTimeDiv = document.getElementById('dineInTime');
+    const pickupTimeInput = pickupTimeDiv.querySelector('input');
+    const dineInTimeInput = dineInTimeDiv.querySelector('input');
     const orderForm = document.getElementById('orderForm');
     const khaltiForm = document.getElementById('khaltiForm');
     const khaltiRemarks = document.getElementById('khaltiRemarks');
     const khaltiPickupTime = document.getElementById('khaltiPickupTime');
     const khaltiDineInTime = document.getElementById('khaltiDineInTime');
+    const onlinePayment = document.getElementById('onlinePayment');
+    const khaltiModal = new bootstrap.Modal(document.getElementById('khaltiModal'));
+    const closeButton = document.querySelector('#khaltiModal .btn-close');
 
     // Function to toggle time input visibility
     function toggleTimeInputs() {
         if (timeOptionSelect.value === 'pickup') {
-            pickupTimeDiv.style.display = 'block';
-            dineInTimeDiv.style.display = 'none';
-            dineInTimeDiv.querySelector('input').value = ''; // Clear dine-in time
+            pickupTimeDiv.classList.add('active');
+            dineInTimeDiv.classList.remove('active');
+            dineInTimeInput.value = ''; // Clear dine-in time
         } else {
-            pickupTimeDiv.style.display = 'none';
-            dineInTimeDiv.style.display = 'block';
-            pickupTimeDiv.querySelector('input').value = ''; // Clear pickup time
+            pickupTimeDiv.classList.remove('active');
+            dineInTimeDiv.classList.add('active');
+            pickupTimeInput.value = ''; // Clear pickup time
         }
     }
 
@@ -421,20 +429,46 @@ document.addEventListener('DOMContentLoaded', function () {
     // Event listener for dropdown change
     timeOptionSelect.addEventListener('change', toggleTimeInputs);
 
+    // Validating the time selection before opening Khalti modal
+    onlinePayment.addEventListener('click', function () {
+        const timeOption = timeOptionSelect.value;
+        const pickupTime = pickupTimeInput.value;
+        const dineInTime = dineInTimeInput.value;
+
+        if (timeOption === 'pickup' && !pickupTime) {
+            alert('Please fill the time');
+            this.checked = false; 
+            document.getElementById('cashPayment').checked = true; 
+        } else if (timeOption === 'dine_in' && !dineInTime) {
+            alert('Please fill the time');
+            this.checked = false; 
+            document.getElementById('cashPayment').checked = true; 
+        } else {
+            khaltiModal.show(); 
+        }
+    });
+
+    // Ensuring the modal close button works
+    if (closeButton) {
+        closeButton.addEventListener('click', function () {
+            khaltiModal.hide(); 
+        });
+    }
+
     // Sync order form data to Khalti form before submission
     if (khaltiForm) {
         khaltiForm.addEventListener('submit', function () {
             khaltiRemarks.value = document.getElementById('remarks').value;
-            khaltiPickupTime.value = document.querySelector('input[name="pickup_time"]').value;
-            khaltiDineInTime.value = document.querySelector('input[name="dine_in_time"]').value;
+            khaltiPickupTime.value = pickupTimeInput.value;
+            khaltiDineInTime.value = dineInTimeInput.value;
         });
     }
 
-    // Prevent form submission if time is not selected
+    // Preventing tjhje form submission if time is not selected
     orderForm.addEventListener('submit', function (event) {
         const timeOption = timeOptionSelect.value;
-        const pickupTime = document.querySelector('input[name="pickup_time"]').value;
-        const dineInTime = document.querySelector('input[name="dine_in_time"]').value;
+        const pickupTime = pickupTimeInput.value;
+        const dineInTime = dineInTimeInput.value;
 
         if (timeOption === 'pickup' && !pickupTime) {
             event.preventDefault();
