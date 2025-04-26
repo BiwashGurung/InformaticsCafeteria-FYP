@@ -70,6 +70,9 @@
     .form-check-input {
         cursor: pointer;
     }
+    .form-select {
+        cursor: pointer;
+    }
     .grand-total {
         font-size: 1.8rem;
         color: #99180d;
@@ -243,7 +246,6 @@
                 <th>Food Item</th>
                 <th>Quantity</th>
                 <th>Unit Price</th>
-             
             </tr>
         </thead>
         <tbody>
@@ -253,12 +255,12 @@
                     {% if item.food_item.image %}
                     <img src="{{ item.food_item.image.url }}" alt="{{ item.food_item.name }}" class="img-fluid" style="width: 80px; height: 80px; object-fit: cover;">
                     {% else %}
-                    <img src="{% static 'Images/default_food.jpg' %}" alt="Default Food Image" class="img-fluid" style="width: 80px; height: 80px; object-fit: cover;">
+                    <img src="{% static 'Images/default_food.png' %}" alt="Default Food Image" class="img-fluid" style="width: 80px; height: 80px; object-fit: cover;">
                     {% endif %}
+                </td>
                 <td>{{ item.food_item.name }}</td>
                 <td>{{ item.quantity }}</td>
                 <td>Rs. {{ item.food_item.price|floatformat:2 }}</td>
-                
             </tr>
             {% endfor %}
         </tbody>
@@ -309,15 +311,11 @@
         <form method="POST" action="{% url 'place_order' %}" id="orderForm">
             {% csrf_token %}
             <div class="mb-4">
-                <label class="form-label">Select Time Option</label>
-                <div class="form-check mb-2">
-                    <input type="radio" name="time_option" value="pickup" class="form-check-input" id="pickupOption" checked>
-                    <label class="form-check-label" for="pickupOption">Pickup Time</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input type="radio" name="time_option" value="dine_in" class="form-check-input" id="dineInOption">
-                    <label class="form-check-label" for="dineInOption">Dine-in Time</label>
-                </div>
+                <label for="timeOption" class="form-label">Select Time Option</label>
+                <select name="time_option" id="timeOption" class="form-control form-select">
+                    <option value="pickup" selected>Pickup Time</option>
+                    <option value="dine_in">Dine-in Time</option>
+                </select>
                 <div id="pickupTime" class="time-option mt-3">
                     <input type="time" name="pickup_time" class="form-control" placeholder="Select pickup time" title="Choose a pickup time">
                 </div>
@@ -393,7 +391,60 @@
     {% endif %}
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const timeOptionSelect = document.getElementById('timeOption');
+    const pickupTimeDiv = document.getElementById('pickupTime');
+    const dineInTimeDiv = document.getElementById('dineInTime');
+    const orderForm = document.getElementById('orderForm');
+    const khaltiForm = document.getElementById('khaltiForm');
+    const khaltiRemarks = document.getElementById('khaltiRemarks');
+    const khaltiPickupTime = document.getElementById('khaltiPickupTime');
+    const khaltiDineInTime = document.getElementById('khaltiDineInTime');
 
-<script src="{% static 'javascript/cartsummary.js'%} "></script>
+    // Function to toggle time input visibility
+    function toggleTimeInputs() {
+        if (timeOptionSelect.value === 'pickup') {
+            pickupTimeDiv.style.display = 'block';
+            dineInTimeDiv.style.display = 'none';
+            dineInTimeDiv.querySelector('input').value = ''; // Clear dine-in time
+        } else {
+            pickupTimeDiv.style.display = 'none';
+            dineInTimeDiv.style.display = 'block';
+            pickupTimeDiv.querySelector('input').value = ''; // Clear pickup time
+        }
+    }
+
+    // Initial state
+    toggleTimeInputs();
+
+    // Event listener for dropdown change
+    timeOptionSelect.addEventListener('change', toggleTimeInputs);
+
+    // Sync order form data to Khalti form before submission
+    if (khaltiForm) {
+        khaltiForm.addEventListener('submit', function () {
+            khaltiRemarks.value = document.getElementById('remarks').value;
+            khaltiPickupTime.value = document.querySelector('input[name="pickup_time"]').value;
+            khaltiDineInTime.value = document.querySelector('input[name="dine_in_time"]').value;
+        });
+    }
+
+    // Prevent form submission if time is not selected
+    orderForm.addEventListener('submit', function (event) {
+        const timeOption = timeOptionSelect.value;
+        const pickupTime = document.querySelector('input[name="pickup_time"]').value;
+        const dineInTime = document.querySelector('input[name="dine_in_time"]').value;
+
+        if (timeOption === 'pickup' && !pickupTime) {
+            event.preventDefault();
+            alert('Please select a pickup time.');
+        } else if (timeOption === 'dine_in' && !dineInTime) {
+            event.preventDefault();
+            alert('Please select a dine-in time.');
+        }
+    });
+});
+</script>
 
 {% endblock %}
