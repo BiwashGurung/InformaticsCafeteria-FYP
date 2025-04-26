@@ -137,7 +137,7 @@
                                 <p class="card-text text-muted mb-3">{{ item.description|truncatewords:12 }}</p>
                                 <ul class="list-unstyled text-dark">
                                     <li><i class="fas fa-map-marker-alt me-2" style="color: #28a745;"></i><strong>Location:</strong> {{ item.location }}</li>
-                                    <li><i class="fas fa-user me-2" style="color: #28a745;"></i><strong>Reported By:</strong> {{ item.user.username }}</li>
+                                    {% comment %} <li><i class="fas fa-user me-2" style="color: #28a745;"></i><strong>Reported By:</strong> {{ item.user.username }}</li> {% endcomment %}
                                     <li><i class="fas fa-calendar-alt me-2" style="color: #28a745;"></i><strong>Resolved On:</strong> {{ item.submitted_at|date:"M d, Y" }}</li>
                                 </ul>
                             </div>
