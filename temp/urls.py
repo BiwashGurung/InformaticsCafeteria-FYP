@@ -27,10 +27,13 @@ urlpatterns = [
     path('cart/remove/<int:cart_item_id>/', remove_from_cart, name='remove_from_cart'),
     path('cart/clear/', clear_cart, name='clear_cart'),
 
+    # Cart Summary
     path('cartsummary/', cart_summary, name='cartsummary'),
     path('checkout/', place_order, name='place_order'),
     path('orders/', order_history, name='order_history'),
     path('order/cancel/<int:order_id>/', views.cancel_order, name='cancel_order'),
+
+    # Profile
     path('profile/', profile_page, name='profile'),
 
     # Khalti
@@ -44,6 +47,7 @@ urlpatterns = [
     # Group Order 
     path('group-order/', views.group_order_page, name='group_order_page'),
     path('group-order/<str:group_code>/', views.group_order_detail, name='group_order_detail'),
+    path('group/item/<int:item_id>/delete/', views.delete_group_item, name='delete_group_item'),
 
     #Feedback
     path('feedback/', views.feedback_page, name='feedback_page'),

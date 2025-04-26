@@ -822,3 +822,23 @@ def group_order_detail(request, group_code):
         'group': group,
         'food_items': food_items
     })
+
+@login_required
+def delete_group_item(request, item_id):
+    try:
+        item = get_object_or_404(GroupOrderItem, id=item_id)
+        group = item.group_order
+        if not group.is_active:
+            messages.error(request, "Cannot delete items from a closed group order.")
+            return redirect('group_order_detail', group_code=group.code)
+        if request.user != item.user and request.user != group.leader:
+            messages.error(request, "You can only delete your own items or items as the group leader.")
+            return redirect('group_order_detail', group_code=group.code)
+        if request.method == "POST":
+            item.delete()
+            messages.success(request, f"Removed {item.food_item.name} from the group order.")
+        return redirect('group_order_detail', group_code=group.code)
+    except Exception as e:
+        logger.error(f"Error deleting group item {item_id}: {str(e)}")
+        messages.error(request, f"Error deleting item: {str(e)}")
+        return redirect('group_order_page')
