@@ -4,13 +4,18 @@
 {% block content %}
 <head>
     <title>Group Order Details - Informatics Cafeteria</title>
-  <link rel="stylesheet" href="{% static 'cafeteria_css/food_list.css' %}" />
+    <link rel="stylesheet" href="{% static 'cafeteria_css/food_list.css' %}" />
 </head>
 
 <div class="container mt-5 px-0">
     <div class="position-relative mb-5 text-center py-5 shadow-sm" style="background: linear-gradient(135deg, rgba(153, 24, 13, 0.9), rgba(217, 83, 79, 0.7)); border-radius: 15px; min-height: 250px;">
         <div class="position-absolute top-50 start-50 translate-middle text-white">
-            <h1 class="display-3 fw-bold animate__animated animate__bounceInDown">Group Order: {{ group.code }}</h1>
+            <h1 class="display-3 fw-bold animate__animated animate__bounceInDown">
+                Group Order: {{ group.code }}
+                <button onclick="copyCode('{{ group.code }}')" style="background: #fff; color: #99180d; border: none; padding: 6px 12px; border-radius: 15px; font-size: 0.9rem; margin-left: 10px; cursor: pointer;" title="Copy Group Code">
+                    <i class="fa-solid fa-copy"></i>
+                </button>
+            </h1>
             <p class="lead animate__animated animate__fadeInUp animate__delay-1s" style="font-size: 1.5rem;">Leader: {{ group.leader.username }} | Total: NPR {{ group.total_price }} | Participants: {{ group.participants_count }}</p>
         </div>
     </div>
@@ -58,6 +63,14 @@
                         <div class="food-actions">
                             <p class="price">Rs. {{ item.subtotal }} /-</p>
                             <p>Quantity: {{ item.quantity }}</p>
+                            {% if request.user == item.user or request.user == group.leader %}
+                                <form method="POST" action="{% url 'delete_group_item' item.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.9rem; border-radius: 15px;" title="Remove Item">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}
@@ -76,14 +89,20 @@
         </section>
     {% endif %}
 
-   
-
     <a href="{% url 'orderonline' %}" class="back-link">
         <i class="fa-solid fa-arrow-left"></i> Back to Menus
     </a>
 </div>
 
-
 <script src="{% static 'javascript/quantity.js' %}"></script>
 
+<script>
+    function copyCode(code) {
+        navigator.clipboard.writeText(code).then(() => {
+            alert('Group code copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy code:', err);
+        });
+    }
+</script>
 {% endblock %}
