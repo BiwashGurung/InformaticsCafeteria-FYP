@@ -805,10 +805,10 @@ def group_order_detail(request, group_code):
                     cart=leader_cart,
                     food_item=group_item.food_item,
                     quantity=group_item.quantity,
-                    username=group_item.user.username
+                    # username=group_item.user.username
                 )
 
-            # Set group_code in session
+            # Setting the group_code in session
             request.session['group_code'] = group.code
 
             messages.success(request, f"Group order {group.code} closed. Please review and confirm your order.")
