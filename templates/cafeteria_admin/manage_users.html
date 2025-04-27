@@ -23,8 +23,8 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Session Key</th>
-                    <th>Expired Date</th>
+                    {% comment %} <th>Session Key</th> {% endcomment %}
+                    {% comment %} <th>Expired Date</th> {% endcomment %}
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -34,8 +34,8 @@
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.phone }}</td>
-                    <td>{{ user.session_key }}</td>
-                    <td>{{ user.expired_date }}</td>
+                    {% comment %} <td>{{ user.session_key }}</td> {% endcomment %}
+                    {% comment %} <td>{{ user.expired_date }}</td> {% endcomment %}
                     <td class="actions">
                         <a href="{% url 'edit_user' user.id %}" class="edit-btn">Edit</a>
                         {% comment %} <a href="{% url 'delete_user' user.id %}" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</a>
