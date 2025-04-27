@@ -75,7 +75,7 @@
                             <strong>{{ reply.user.username }}</strong> - <span>{{ reply.created_at|date:"M d, Y H:i" }}</span>
                             <p class="reply-content">{{ reply.content }}</p>
                             <div class="reply-actions">
-                                <button class="btn btn-warning btn-sm" onclick="editReply('{{ reply.id }}')"><i class="fas fa-edit"></i> Edit</button>
+                                {% comment %} <button class="btn btn-warning btn-sm" onclick="editReply('{{ reply.id }}')"><i class="fas fa-edit"></i> Edit</button> {% endcomment %}
                                 <form method="POST" action="{% url 'admin_delete_reply' reply.id %}" style="display:inline;">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</button>
