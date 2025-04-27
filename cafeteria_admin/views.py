@@ -159,6 +159,14 @@ def edit_user(request, user_id):
         user.username = request.POST['username']
         user.phone = request.POST['phone']
         user.email = request.POST['email']
+
+        if User.objects.filter(username=user.username).exclude(id=user.id).exists():
+            messages.error(request, "Username already exists.")
+            return redirect('manage_users')
+        if User.objects.filter(email=user.email).exclude(id=user.id).exists():
+            messages.error(request, "Email already exists.")
+            return redirect('manage_users')
+
         user.save()
         messages.success(request, 'User updated successfully!')
         #Redirecting after successfully updating the user
