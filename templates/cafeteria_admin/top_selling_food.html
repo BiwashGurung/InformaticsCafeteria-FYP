@@ -8,7 +8,7 @@
 </head>
 
 <div class="dashboard-content">
-    <h2> Top-Selling Food Items</h2>
+    <h2>Top-Selling Food Items</h2>
 
     {% if messages %}
         <div class="messages">
@@ -69,6 +69,7 @@
                     <th>Food Item</th>
                     <th>Category</th>
                     <th>Total Quantity Sold</th>
+                    <th>Unit Price (Rs.)</th>
                     <th>Sales (Rs.)</th>
                 </tr>
             </thead>
@@ -78,12 +79,13 @@
                         <td>{{ item.food_item__name }}</td>
                         <td>{{ item.food_item__category }}</td>
                         <td>{{ item.total_quantity }}</td>
-                        <td>{{ item.total_revenue|floatformat:2 }}</td>
+                        <td>Rs. {{ item.food_item__price|floatformat:2 }}</td>
+                        <td>Rs. {{ item.total_revenue|floatformat:2 }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <p class="text-end">Total Sales: Rs.{{ total_sales|floatformat:2 }}</p>
+        <p class="text-end">Total Sales: Rs. {{ total_sales|floatformat:2 }}</p>
     {% else %}
         <p class="text-center">
             No sales data available

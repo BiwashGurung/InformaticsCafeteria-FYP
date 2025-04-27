@@ -513,11 +513,10 @@ class TopSellingForm(forms.Form):
                 raise forms.ValidationError('End date must be after start date.')
         return cleaned_data
 
-# Top-Selling Food Tracking
+# View for top-selling food items
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def top_selling_food(request):
     try:
-        
         default_end = timezone.now().date()
         default_start = default_end - timedelta(days=30)
         initial_data = {'period': 'month', 'start_date': default_start, 'end_date': default_end}
@@ -535,7 +534,7 @@ def top_selling_food(request):
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date']
 
-            # Set date range
+            # Setting the date range
             if period == 'week':
                 start_date = default_end - timedelta(days=7)
                 end_date = default_end
@@ -546,11 +545,11 @@ def top_selling_food(request):
                 start_date = default_end - timedelta(days=365)
                 end_date = default_end
 
-            # Converting to timezone-aware datetimes
+            # Converting the to timezone-aware datetimes
             start_datetime = timezone.make_aware(datetime.combine(start_date, datetime.min.time()))
             end_datetime = timezone.make_aware(datetime.combine(end_date, datetime.max.time()))
 
-            # Building tje query
+            # Building the query
             query = OrderItem.objects.filter(
                 order__order_date__range=[start_datetime, end_datetime]
             )
@@ -559,7 +558,9 @@ def top_selling_food(request):
 
             logger.debug(f"Querying OrderItem for {food_name or 'all items'}, {start_datetime} to {end_datetime}")
             top_items = query.values(
-                'food_item__name', 'food_item__category'
+                'food_item__name',
+                'food_item__category',  
+                'food_item__price' 
             ).annotate(
                 total_quantity=Sum('quantity'),
                 total_revenue=Sum('price')
