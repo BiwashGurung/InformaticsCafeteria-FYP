@@ -55,6 +55,7 @@
                         <td>Rs. {{ order.total_price }}</td>
                         <td>{{ order.get_payment_method_display }}</td>
                         <td>{{ order.order_date|date:"M d, Y" }}</td>
+                        
                     </tr>
                     {% endfor %}
                 </tbody>
