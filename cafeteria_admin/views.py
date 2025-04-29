@@ -131,11 +131,6 @@ def delete_event(request, event_id):
     return redirect('view_event_history')
 
 
-
-    
-
-
-
 @user_passes_test(is_admin, login_url='/cafeteria_admin/admin_login/')
 def manage_users(request):
     #Getting search query from GET parameters
